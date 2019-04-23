@@ -1,0 +1,457 @@
+var MJInfo = cc.Layer.extend(
+    {
+        tag: "MJInfo",
+        _cur_time: 0,
+        publicCardEffectBg: [null, null, null, null],
+        publicCardEffectFg: null,
+        daojishi25D: null,
+        daojishi2D: null,
+        cur_pos: -1,
+        my_seat: -1,
+        roomType:-1,
+        info25D: null,
+        info2D: null,
+        card_left_nums_25d: null,
+        card_left_nums_2d: null,
+
+        rootNode2D: null,
+        rootNode25D: null,
+        ctor: function () {
+            this._super();
+            this.setIgnoreAnchorPointForPosition(false);
+            this.setAnchorPoint(cc.p(0.0, 0.0));
+
+            this.info25D = new cc.Node();
+            this.info25D.setPosition(0, 0);
+            this.addChild(this.info25D);
+            this.info25D.setVisible(MJModel.mj_bg_use == 0);
+
+            this.info2D = new cc.Node();
+            this.info2D.setPosition(0, 0);
+            this.addChild(this.info2D);
+            this.info2D.setVisible(MJModel.mj_bg_use == 1);
+
+            this.init();
+        },
+        init: function () {
+            this.info2D.removeAllChildren();
+            this.info25D.removeAllChildren();
+            this.rootNode2D = null;
+            this.rootNode25D = null;
+            this.card_left_nums_2d = null;
+            this.card_left_nums_25d = null;
+            this.daojishi25D = null;
+            this.daojishi2D = null;
+            this.init25D();
+            this.init2D();
+            this.my_seat = MJModel.seatid;
+            this.roomType = MJModel.mj_roomType;
+        },
+        init25D: function () {
+            this.daojishi25D = new cc.LabelAtlas(__String.createWithFormat("%1", 0), getResPath("RoomMJ/zhishiqi/time_num.png"), 20, 30, '0');
+            this.daojishi25D.setAnchorPoint(cc.p(0.5, 0.5));
+            this.daojishi25D.setPosition(cc.p(MJConfig.getInfoPos()));
+            this.daojishi25D.setName("time");
+            this.info25D.addChild(this.daojishi25D, 10);
+        },
+        getCardLeftPosition: function () {
+            var size = cc.director.getWinSize();
+            return cc.p(48, size.height - 120);
+        },
+        init2D: function () {
+            this.daojishi2D = new cc.LabelAtlas(__String.createWithFormat("%1", 0), getResPath("RoomMJ/zhishiqi/time_num.png"), 20, 30, '0');
+            this.daojishi2D.setAnchorPoint(cc.p(0.5, 0.5));
+            this.daojishi2D.setPosition(cc.p(MJConfig.getInfoPos()));
+            this.daojishi2D.setName("time");
+            this.info2D.addChild(this.daojishi2D, 10);
+        },
+        curCardNums:0,
+        showCardNums: function (nums) {
+            this.curCardNums = nums;
+            MJModel.mj_table.roomPublic.showCardNum(this.isVisible() ? nums : -1);
+        },
+        showTime: function (time) {
+            this.setTimeVisible(true);
+            this._cur_time = time;
+            if (this.daojishi25D) {
+                this.daojishi25D.setString(time + "");
+            }
+
+            if (this.daojishi2D) {
+                this.daojishi2D.setString(time + "");
+            }
+
+            if (this._cur_time > 0) this.schedule(this.updateTime, 1.0);
+        },
+        stopTime: function () {
+            this.unschedule(this.updateTime);
+            if (this.daojishi25D) {
+                this.daojishi25D.setString("0");
+            }
+            if (this.daojishi2D) {
+                this.daojishi2D.setString("0");
+            }
+        },
+        setBaseMoney: function (bm) {
+        },
+        getInfoRes: function (type) {
+            var myseat = 0;
+            if (MJModel.seatid != -1) {
+                myseat = MJModel.seatid;
+            }
+            var playerNum = 4;
+            if (MJModel.mj_roomType == 1) {
+                playerNum = 3;
+            }else if (MJModel.mj_roomType == 2) {
+                playerNum = 2;
+            }
+
+            if(type == 0){
+                return "RoomMJ/zhishiqi/info1_" + playerNum + "_" + myseat + ".json";
+            }else {
+                return "RoomMJ/zhishiqi2d/info1_" + playerNum + "_" + myseat + ".json";
+            }
+        },
+        showDirectionTip: function (pos) {
+            var isNeedReload = this.my_seat != MJModel.seatid || this.roomType != MJModel.mj_roomType;
+            this.showDiretion25D(pos , isNeedReload);
+            this.showDiretion2D(pos , isNeedReload);
+            this.cur_pos = pos;
+        },
+        showDiretion25D: function (pos , isNeedReload) {
+            if (isNeedReload || this.rootNode25D == null) {
+                this.info25D.removeChildByName("directionSp");
+                var res = this.getInfoRes(0);
+                cc.log("info res:" + res);
+                var uiJson = ccs.load(getResPath(res));
+                this.rootNode25D = uiJson.node;
+                this.rootNode25D.setName("directionSp");
+                this.rootNode25D.setPosition(MJConfig.getInfoPos());
+                this.info25D.addChild(this.rootNode25D);
+            }
+            if (this.rootNode25D) {
+                for (var i = 0; i < 4; i++) {
+                    if (MJModel.mj_roomType == 1 && i == 2) {
+                        continue;
+                    }
+                    if (MJModel.mj_roomType == 2 && (i == 1 || i == 3)) {
+                        continue;
+                    }
+                    this.rootNode25D.getChildByName("dir_" + i).setVisible(false);
+                    this.rootNode25D.getChildByName("dir_" + i).stopAllActions();
+                }
+                if (pos != -1) {
+                    this.rootNode25D.getChildByName("dir_" + pos).runAction(this.getDirectionAction());
+                }
+            }
+        },
+        showDiretion2D: function (pos , isNeedReload) {
+            if (isNeedReload || this.rootNode2D == null) {
+                this.info2D.removeChildByName("directionSp");
+                var res = this.getInfoRes(1);
+                cc.log("info res:" + res);
+                var uiJson = ccs.load(getResPath(res));
+                this.rootNode2D = uiJson.node;
+                this.rootNode2D.setName("directionSp");
+                this.rootNode2D.setPosition(MJConfig.getInfoPos());
+                this.info2D.addChild(this.rootNode2D);
+            }
+            if (this.rootNode2D) {
+                for (var i = 0; i < 4; i++) {
+                    if (MJModel.mj_roomType == 1 && i == 2) {
+                        continue;
+                    }
+                    if (MJModel.mj_roomType == 2 && (i == 1 || i == 3)) {
+                        continue;
+                    }
+                    this.rootNode2D.getChildByName("dir_" + i).setVisible(false);
+                    this.rootNode2D.getChildByName("dir_" + i).stopAllActions();
+                }
+                if (pos != -1) {
+                    this.rootNode2D.getChildByName("dir_" + pos).runAction(this.getDirectionAction());
+                }
+            }
+        },
+        getDirectionAction: function() {
+            if(MJModel.orderType == 1){
+                return cc.show();
+            }else {
+                return cc.RepeatForever.create(cc.blink(1, 1));
+            }
+        },
+        hideAllDiretionTip: function () {
+        },
+
+        setOnDirectionChangeCallback: function (callback) {
+        },
+
+        reflashDirection: function () {
+        },
+
+        gdmj_showFengQuan: function (seatid) {
+        },
+
+        updateTime: function (dt) {
+            if (this._cur_time > 0) {
+                this._cur_time = this._cur_time - 1;
+                if (this.daojishi25D) {
+                    this.daojishi25D.setString(this._cur_time + "");
+                }
+
+                if (this.daojishi2D) {
+                    this.daojishi2D.setString(this._cur_time + "");
+                }
+
+                if (this._cur_time == 0) {
+                    this.stopTime();
+                }
+
+                if (MJModel.cur_seat == MJModel.seatid) {
+                    if (this._cur_time == 3) {
+                        PlatformHelper.vibrate();
+                    }
+                }
+            }
+        },
+
+        getDirectionSprite_tip: function (pos) {
+
+        },
+
+        getDirectionSprite_hight: function (pos) {
+        },
+        getPublicCardEffectRes: function (res) {
+            return getResPath("RoomMJ/publiccardeffect/" + res);
+        },
+        reflash: function () {
+            this.info25D.setVisible(MJModel.mj_bg_use == 0);
+            this.info2D.setVisible(MJModel.mj_bg_use == 1);
+
+            if (this.daojishi25D)this.daojishi25D.setPosition(MJConfig.getInfoPos());
+            if (this.rootNode25D)this.rootNode25D.setPosition(MJConfig.getInfoPos());
+            if (this.rootNode2D)this.rootNode2D.setPosition(MJConfig.getInfoPos());
+            if (this.daojishi2D)this.daojishi2D.setPosition(MJConfig.getInfoPos());
+        },
+        showPublicCardEffect: function () {
+            var cardList = MJModel.mj_public_nums;
+            this.info25D.removeChildByName("publicCardEffect");
+            var size = cc.director.getWinSize();
+            var layer = new cc.Layer();
+            layer.setName("publicCardEffect");
+            this.info25D.addChild(layer, -10);
+
+            this.publicCardEffectBg = [null, null, null, null];
+            this.publicCardEffectFg = null;
+            {
+                var clipper = this.createPublicEffect(0, 605, 129, 10, -40, cardList[0], 0, -50);
+                layer.addChild(clipper, 50);
+            }
+
+            {
+                var clipper = this.createPublicEffect(1, 998, 354, -30, -25, cardList[1], -60, 0);
+                layer.addChild(clipper, 40);
+            }
+
+            {
+                var clipper = this.createPublicEffect(2, 667, 622, 0, -40, cardList[2], 0, -50);
+                layer.addChild(clipper, 30);
+            }
+
+            {
+                var clipper = this.createPublicEffect(3, 292, 399, 30, -30, cardList[3], 50, 0);
+                layer.addChild(clipper, 10);
+            }
+
+            var fg = new cc.Sprite(this.getPublicCardEffectRes("fg.png"));
+            fg.setPosition(640, 360);
+            layer.addChild(fg, 45);
+            fg.setOpacity(0);
+
+            this.publicCardEffectFg = fg;
+        },
+        createPublicEffect: function (pos, px, py, dx, dy, nums, ddx, ddy) {
+            var size = cc.director.getWinSize();
+
+            var p = new cc.Sprite(this.getPublicCardEffectRes(__String.createWithFormat("b%1.png", pos)));
+            p.setOpacity(0);
+
+            var b = new cc.Sprite(this.getPublicCardEffectRes(__String.createWithFormat("%1.png", pos)));
+            b.runAction(cc.sequence(cc.moveBy(0.0, cc.p(dx, dy)), cc.delayTime(0.0 + 0), cc.moveBy(0.3, cc.p(-dx, -dy))));
+            b.setOpacity(0);
+
+            this.publicCardEffectBg[pos] = b;
+            var clipper = new cc.ClippingNode();
+            clipper.setContentSize(size);
+            clipper.ignoreAnchorPointForPosition(false);
+            clipper.setAnchorPoint(cc.p(0.0, 0.0));
+            clipper.setPosition(cc.p(0, 0));
+
+            var stencil = new cc.DrawNode();
+            var rectangle = [cc.p(px - p.getContentSize().width / 2, py - p.getContentSize().height / 2), cc.p(px + clipper.width, py - p.getContentSize().height / 2),
+                cc.p(px + clipper.width, py - p.getContentSize().height / 2 + clipper.height),
+                cc.p(px - p.getContentSize().width / 2, py - p.getContentSize().height / 2 + clipper.height)];
+
+            var white = cc.color(255, 255, 255, 255);
+            stencil.drawPoly(rectangle, white, 1, white);
+            clipper.setStencil(stencil);
+
+            p.setAnchorPoint(cc.p(0.5, 0.5));
+            p.setPosition(cc.p(px, py));
+            clipper.addChild(p, 0);
+
+            b.setAnchorPoint(cc.p(0.5, 0.5));
+            b.setPosition(cc.p(px, py));
+            clipper.addChild(b, 0);
+
+            for (var i = 0; i < nums; i++) {
+                var card = new MJCard();
+                card.setValue(0, pos, CardType.Card_Public, i);
+                var pp = MJConfig.getPublicCardPos(pos, i);
+                pp.x = pp.x + dx;
+                pp.y = pp.y + dy;
+                pp.x = pp.x + ddx;
+                pp.y = pp.y + ddy;
+                card.setMyPosition(pp);
+                card.runAction(cc.sequence(cc.delayTime(0.0), cc.moveBy(0.0, cc.p(-ddx, -ddy)), cc.delayTime(0.0), cc.moveBy(0.17, cc.p(-dx, -dy))));
+                clipper.addChild(card, 100 + MJConfig.getPublicCardOrder(pos, i));
+            }
+
+            return clipper;
+        },
+        setTimeVisible: function (v) {
+            if (this.daojishi25D)this.daojishi25D.setVisible(v);
+            if (this.daojishi2D)this.daojishi2D.setVisible(v);
+            if (v) {
+                this.info25D.removeChildByName("shaizi_effect");
+                this.info25D.removeChildByName("shaizi_effect");
+                this.info25D.removeChildByName("shaizi_effect");
+            }
+        },
+        showShaiZiEffect: function () {
+            this.setTimeVisible(false);
+
+            this.info25D.removeChildByName("shaizi_effect");
+            this.info25D.removeChildByName("shaizi_effect");
+            this.info25D.removeChildByName("shaizi_effect");
+
+            var size = cc.director.getWinSize();
+
+            var banker_pos = MJModel.getPosBySeatid(MJModel.banker_seatid);
+            //var uiJson = ccs.load(getResPath(__String.createWithFormat("MJ2.5/handeffect/hand%1_out.json", banker_pos)));
+            //var uiNode = uiJson.node;
+            //uiNode.setPosition(MJConfig.getInfoPos());
+            //MJModel.mj_table.addChild(uiNode, 1000);
+
+            var self = this;
+            var showShaizi = cc.CallFunc(function () {
+                //uiNode.removeFromParent(true);
+                ccs.armatureDataManager.addArmatureFileInfo(getResPath("RoomMJ/effect/shaizi/effects_xssaizik.ExportJson"));
+                var armature = new ccs.Armature("effects_xssaizik");
+                //armature.setScale(1.2);
+                armature.setName("shaizi_effect");
+
+                if (armature != null) {
+                    animation = armature.getAnimation();
+                    if (animation) {
+                        if (typeof animation.playWithIndex === "function") {
+                            animation.playWithIndex(0);
+                        }
+                    }
+                    armature.setPosition(MJConfig.getInfoPos());
+                    self.info25D.addChild(armature, 10000);
+
+                    var removeEffect = cc.CallFunc(function () {
+                        self.info25D.removeChildByName("shaizi_effect");
+                    });
+                    var callback = cc.CallFunc(function () {
+                        var sp1 = new cc.Sprite(__String.createWithFormat(getResPath("RoomMJ/effect/shaizi/%1.png"), MJModel.mj_public_sz1));
+                        var sp2 = new cc.Sprite(__String.createWithFormat(getResPath("RoomMJ/effect/shaizi/%1.png"), MJModel.mj_public_sz2));
+                        var radius = 15;
+                        var M_PI = 3.14159;
+                        var rotation = Utils.Random(0, 360);
+                        sp1.setPosition(size.width / 2 + radius * Math.cos((-90.0 + rotation) / 180.0 * M_PI), 404 + radius * Math.sin((-90.0 + rotation) / 180.0 * M_PI));
+                        sp2.setPosition(size.width / 2 + radius * Math.cos((-90.0 + rotation + 180) / 180.0 * M_PI), 404 + radius * Math.sin((-90.0 + rotation + 180) / 180.0 * M_PI));
+                        sp1.setName("shaizi_effect");
+                        sp2.setName("shaizi_effect");
+                        self.info25D.addChild(sp1, 10000);
+                        self.info25D.addChild(sp2, 10000);
+                        //sp1.setScale(1.2);
+                        //sp2.setScale(1.2);
+                    });
+                    self.runAction(cc.sequence(cc.delayTime(0.5), removeEffect, callback));
+                    Sound.getInstance().playEffect(__String.createWithFormat(getResPath("RoomMJ/sound/touzi.mp3")));
+                }
+            });
+            //this.runAction(cc.sequence(cc.delayTime(0.3 + (banker_pos == 3 ? 0.05 : 0) + (banker_pos == 2 ? -0.05 : 0)), showShaizi));
+            this.runAction(cc.sequence(cc.delayTime(0), showShaizi));
+        },
+
+        showShaiZiEffect2D: function () {
+            this.setTimeVisible(false);
+
+            this.info2D.removeChildByName("shaizi_effect");
+            this.info2D.removeChildByName("shaizi_effect");
+            this.info2D.removeChildByName("shaizi_effect");
+
+            var size = cc.director.getWinSize();
+
+            var banker_pos = MJModel.getPosBySeatid(MJModel.banker_seatid);
+            //var uiJson = ccs.load(getResPath(__String.createWithFormat("MJ2.5/handeffect/hand%1_out.json", banker_pos)));
+            //var uiNode = uiJson.node;
+            //uiNode.setPosition(MJConfig.getInfoPos());
+            //MJModel.mj_table.addChild(uiNode, 1000);
+
+            var self = this;
+            var showShaizi = cc.CallFunc(function () {
+                //uiNode.removeFromParent(true);
+                ccs.armatureDataManager.addArmatureFileInfo(getResPath("RoomMJ/effect/shaizi/effects_xssaizik.ExportJson"));
+                var armature = new ccs.Armature("effects_xssaizik");
+                //armature.setScale(1.2);
+                armature.setName("shaizi_effect");
+
+                if (armature != null) {
+                    animation = armature.getAnimation();
+                    if (animation) {
+                        if (typeof animation.playWithIndex === "function") {
+                            animation.playWithIndex(0);
+                        }
+                    }
+                    armature.setPosition(MJConfig.getInfoPos());
+                    self.info2D.addChild(armature, 10000);
+
+                    var removeEffect = cc.CallFunc(function () {
+                        self.info2D.removeChildByName("shaizi_effect");
+                    });
+                    var callback = cc.CallFunc(function () {
+                        var sp1 = new cc.Sprite(__String.createWithFormat(getResPath("RoomMJ/effect/shaizi/%1.png"), MJModel.mj_public_sz1));
+                        var sp2 = new cc.Sprite(__String.createWithFormat(getResPath("RoomMJ/effect/shaizi/%1.png"), MJModel.mj_public_sz2));
+                        var radius = 15;
+                        var M_PI = 3.14159;
+                        var rotation = Utils.Random(0, 360);
+                        sp1.setPosition(size.width / 2 + radius * Math.cos((-90.0 + rotation) / 180.0 * M_PI), 404 + radius * Math.sin((-90.0 + rotation) / 180.0 * M_PI));
+                        sp2.setPosition(size.width / 2 + radius * Math.cos((-90.0 + rotation + 180) / 180.0 * M_PI), 404 + radius * Math.sin((-90.0 + rotation + 180) / 180.0 * M_PI));
+                        sp1.setName("shaizi_effect");
+                        sp2.setName("shaizi_effect");
+                        self.info2D.addChild(sp1, 10000);
+                        self.info2D.addChild(sp2, 10000);
+                        //sp1.setScale(1.2);
+                        //sp2.setScale(1.2);
+                    });
+                    var removeEffect2 = cc.CallFunc(function () {
+                        self.info2D.removeChildByName("shaizi_effect");
+                        self.info2D.removeChildByName("shaizi_effect");
+                    });
+                    self.runAction(cc.sequence(cc.delayTime(0.5), removeEffect, callback, cc.delayTime(1), removeEffect2));
+                    Sound.getInstance().playEffect(__String.createWithFormat(getResPath("RoomMJ/sound/touzi.mp3")));
+                }
+            });
+            //this.runAction(cc.sequence(cc.delayTime(0.3 + (banker_pos == 3 ? 0.05 : 0) + (banker_pos == 2 ? -0.05 : 0)), showShaizi));
+            this.runAction(cc.sequence(cc.delayTime(0), showShaizi));
+        },
+
+        resetPublicCard: function () {
+            this.publicCardEffectBg = [null, null, null, null];
+            this.publicCardEffectFg = null;
+            this.info25D.removeChildByName("publicCardEffect");
+        }
+    });

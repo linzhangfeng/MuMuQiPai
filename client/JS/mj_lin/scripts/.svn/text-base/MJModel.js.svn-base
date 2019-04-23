@@ -1,0 +1,655 @@
+var PlayerModel = cc.Class.extend({
+    seatid: -1,
+    sex: 0,
+    uid: 0,
+    name: "",
+    avatar: "",
+    money: 0,
+    ready: 0,
+    start_money: 0,
+    zhuan_surplustime: 0,
+
+    reset: function () {
+        this.uid = -1;
+        this.ready = 0;
+
+        this.name = "";
+        this.sex = 0;
+        this.avatar = "";
+        this.money = 0;
+        this.zhuan_surplustime = 0;
+    },
+});
+
+var MJModel =
+{
+    //***************通用数据*****************//
+    curRoomID: 0,
+    players: [],
+    seatid: -1,
+    tempSeatid: -1,
+    lackType: -1,
+    state: 0,
+    cur_seat: -1,
+    isEnterWait: false,
+    waitUpdate: false,
+    base_money: 0,
+    stand_money: 0,
+    take_in: 0,
+    isTimeEnd: false,
+    isEnd: false,
+    testCount: 0,
+    outCardTime: 0,
+    oprateTime: 0,
+    lackTime: 0,
+    changeTime: 0,
+    piaoTime: 0,
+    pauseCount: 0,
+    isFapai: false,
+    canTouchCard: false,
+    canChoiceMore: false,
+    canChoiceMoreType: 0,//0：自由选择模式 1: 选择杠牌模式
+    gang_info: [],
+    bu_info: [], //湖南麻将特有的补张操作
+    peng_info: [],//湖南
+    chi_info: [],
+    isGangOutOp: false,//湖南
+    gangMoPai: false,
+    listen_info: [],
+    listen_info2: [],
+    final_listen_info: [],
+    operator_info: [],
+    curOperate: 0,
+    curOperate2: 0,
+    curOperateID: 0,
+    curOperateCard: 0,
+    isAutoOutCard: false,
+    isOutCard: false,
+    lastHeartBeatTime: -1,
+    lastSendHeartTime: -1,
+    netDely: -1,
+    lastLoginTime: -1,
+    lastSceneInfoReqTime: -1,
+    zhuanReadyTime: 0,
+    isZhuanZhuan: false,
+    banker_seatid: -1,
+    curGameType: 0,
+    isBaoting: false,
+    JiPaicardList: [],
+    isHanBaoDou: false,
+    IsMyHasBaoting: false,
+    isOnVideo: false,
+    TouPiaoING: false,
+    mj_public_style: 0,//0：用平台的 1:用js的
+    isNeedChangeCard: false,
+    isNeedSearchHuazhuDajiao: false,
+    scmjType: 0,
+    gdmj_fengquan: -1,
+    gdmj_playid: 0,
+    valueGuiPai: 0,
+    guiPaiFlag: 0,//鬼牌标识 ，0：显示鬼牌icon 1：显示赖子icon
+    mj_roomType: 0, //0:普通房间 ； 1:三人两房 ; 2:二人房
+    mj_layout: 0, //麻将布局 0：正常布局 1：多牌布局(两人)
+    mj_infoStyle: 0,//麻将记牌器样式  0:正常布局，带东南西北 1:东南西北去掉，改为指针显示
+    scmj_listenType: 0,
+    tangPai_flags: {},
+    mj_table: null,//MJTable做一个全局的引用
+    Play_num: 4,
+
+    roomData: null,
+    jiangma: 0,
+    chi_layout: 0,//吃的布局 0：按顺序摆放 1：吃的牌放中间 2:吃的牌放中间 而且吃的牌跟碰的牌 非暗杠的牌要盖黑牌透明 3:吃的牌放中间 而且所有的吃碰扛 用箭头指向
+    outPlayerList: [],//离开的玩家列表
+
+    mj_suport_fangyan: 0,//使用支持方言 0:不支持 1:支持
+    mj_suport_change_bg: 1,//使用支持换背景 0:不支持 1:支持
+    mj_sound_use: 1,//声音使用 0:普通话 1:方言
+    mj_bg_color: 1,
+
+    mj_touch_tip: 0,//触摸麻将提示同种牌 0：不提示 ，1：提示
+
+    roomState: 0,//牌局状态 0:未开始 1:进行中 2:已结束 3:已解散
+    seriveId: -1,
+    bigface_lastSendTime: -1,
+    otherOutCardEffect: false,//true:其他人显示插牌动画
+    outCardEffect_style: 0,//0:显示牌飞行轨迹 1：不显示飞行轨迹
+    use_hand_effect: 0,
+    toupiaoTipsType: 0,//0:默认不同意解散 1：默认同意解散
+    needTipWhenPass: 0,//有扛胡的时候 点过是否需要二次确认
+    needSpecialAnim: false, //是否需要打牌特别动画
+    needOutCardEffectWait: true, //在展示出牌动画时，是否需要等
+    mj_double_click_style: 0,//双击出牌的模式 0:快速双击 1:点击已经提起的牌 自动打出去
+    mj_card_lib_type: 1,//麻将牌库类型 会影响出牌区的布局  0:只有条万筒 102张牌  1:条万筒 带字牌 130张牌
+    mj_chat_style: 0,//0默认的公共模块的 1:单独移动聊天按钮 2:移动聊天按钮 使用游戏自己的回调 4:右侧滑动聊天 5:跟4一样的界面 只是不移动桌面
+    mj_offline_tip: 0, //离线提示
+    mj_self_outCard_type: 0,//0：不等服务器结果 先把牌出来 1:等待服务器结果再出牌
+    ip_list: [],
+    port: 0,
+    cur_ip_index: 0,
+
+    RoomCountSum: 1,//总局数
+    currentCount: 1,//当前第几局
+    Is_yipaoduoxiang: true,//是否支持一炮多响
+    mj_chatInfoList: [],
+    mj_fastChat: ["我等的花都谢了", "让我再想想", "我们交个朋友吧", "我有一百种办法胡你", "下次咱们再玩吧", "怎么又断线了", "我要离开一会儿"],
+    hudong_on_off: [1, 1, 1, 1],
+
+    gpsInfo: null,
+    gpsData: [],
+    chatInfo: null,
+
+    cardConfig_P2: {},
+    cardConfig_P3: {},
+    mj_public_sz1: 0,
+    mj_public_sz2: 0,
+    mj_public_begin_pos: -1,
+    mj_public_begin_nums: -1,
+    cardLibNums: 108,
+    buCardNums: 0,
+    mj_public_nums: [28, 26, 28, 26],
+
+    mj_hu_type: 0,//胡牌类型 0普通胡牌 一胡牌就结束  1多人胡牌 一人胡其他人继续打
+    mj_hu_flag: [0, 0, 0, 0],//各个位置的胡牌标志 断线重连恢复状态有大用
+
+    vidoeSeatID: -1,
+    cardConfig: null,
+    RoomConfigID: [],
+    mj_lockcard_type: 0, //0不锁 1:锁不能听的牌 2:锁非摸的牌
+    mj_mo_cards: [],
+    mj_listenLayer_autoshow: false,
+    mj_listenLayer_need_autoshow: true,
+    mj_gps_type: 0,//0:走平台gps 1:走服务器模式
+    mj_roominfo_type: 0,//0:走平台接口刷新 1:走服务器数据刷新
+    hasUpLoad: false,
+    hasUpLoadNull: false,
+    play_id_str: [],
+    isLiangPai: 0,
+    mj_speed: 5,
+    speeds: [0.2, 0.15, 0.1, 0.05, 0], //速度的五个档位
+
+    // mj_font: "yuanrun",
+    mj_font: "xieshi",
+
+    mj_fontSize: "dahao",
+    // mj_light: "yewan",
+    mj_light: "baitian",
+    //排版 横:horizontal 竖:vertical
+    mj_paiban: "horizontal",
+    //桌面
+    mj_table_view: "25d",
+    mj_bg_use: 1,//桌面 1:2d 0:25d
+
+    mj_style: "shishang",
+    fangyan: "putonghua",
+    yinyue: "jingdian", //jingdian,jingkuai,suhuan
+
+    hudong: 1,
+    newTip: 0,
+
+    has_hu_layout: 0, //是否有胡牌区
+
+    orderType: 1,//中间指示提示 0:闪烁 ， 1：长亮不闪
+
+    outtimeplayers: [],
+    outtimecount: 0,
+
+    firstEnterGame: false,
+    firstConnectTime: 0,
+
+    changMode: 0,//0:不能切  1：可切2人 2：可切3人 3:可切2、3人模式
+    isDaQuan: false, //游戏是打圈数  还是打局数
+    shareType: 0, //0:微信分享  1:选择微信/乡聊分享
+
+    isSupportRealTimeVoices: false,// 是否支持实时语音
+    isJoinRealTimeVoice: false, // 实时语音 避免重复加入频道
+    rtvMicIndex: 1,     // 实时语音能否听到其他玩家     0:no 1:yes
+    rtvSpkIndex: 1,     // 实时语音其他玩家能否听到自己 0:no 1:yes
+    isSupportOnlineYaoqing: true,// 是否支持在线邀请
+
+    changeTcpIp: function () {
+        this.cur_ip_index++;
+        if (this.cur_ip_index >= this.ip_list.length || this.ip_list[this.cur_ip_index] == "") {
+            this.cur_ip_index = 0;
+        }
+        cc.log("changeTcpIp:" + this.ip_list[this.cur_ip_index]);
+        this.setHostPort();
+    },
+
+    //检测登录地址是否为域名
+    isDomain: function (host) {
+        var ipReg = new RegExp("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$"); //匹配IP
+        return !ipReg.test(host);
+    },
+
+    setHostPort: function (isDomainFirst) {
+        if (isDomainFirst == undefined) isDomainFirst = false;
+
+        if (isDomainFirst) {
+            for (var i = 0; i < this.ip_list.length; i++) {
+                if (this.isDomain(this.ip_list[i])) {
+                    this.cur_ip_index = i;
+                    cc.log("domain first:" + this.ip_list[i]);
+                }
+            }
+        }
+
+        var host = this.ip_list[this.cur_ip_index];
+        var needChangeIp = false;
+        if (this.isDomain(host)) {
+            cc.log("domain login start:" + host);
+            //不是IP地址，需要解析出IP
+            if (PlatformHelper.decodeIPWithHost) {
+                var ip = JSON.parse(PlatformHelper.decodeIPWithHost(host));
+                if (ip == null || ip["ips"] == null) {
+                    //解析失败，直接跳下一个
+                    needChangeIp = true;
+                    cc.log("get domain error------ ");
+                } else {
+                    host = ip["ips"][0];
+                    cc.log("get domain success : " + host);
+                }
+            } else {
+                //不支持域名解析，直接跳下一个
+                needChangeIp = true;
+                cc.log("do not support get domain!");
+            }
+        }
+        if (needChangeIp) {
+            this.changeTcpIp();
+        } else {
+            CCTcpClient.getInstance(MJModel.curRoomID).set_host_port(host, this.port);
+        }
+    },
+    init: function () {
+        for (var i = 0; i < this.Play_num; i++) {
+            var player = new PlayerModel();
+            player.seatid = i;
+            this.players[i] = player;
+            this.mj_mo_cards.push(-1);
+        }
+        this.initParam();
+    },
+    initParam: function () {
+        try {
+            var sound_use = getItem("mj_sound_use");
+            if (sound_use)this.mj_sound_use = sound_use;
+
+            // var bg_use = getItem("mj_bg_use");
+            // if (bg_use)this.mj_bg_use = bg_use;
+
+            var bg_color = getItem("mj_bg_color");
+            if (bg_color)this.mj_bg_color = bg_color;
+
+            var sound = getItem("sound");
+            if (sound) {
+                cc.audioEngine.setEffectsVolume(sound);
+                ZJHModel.getInstance().sound = sound;
+            }
+
+            var bgMusic = getItem("bgMusic");
+            if (bgMusic) {
+                cc.audioEngine.setMusicVolume(bgMusic);
+                ZJHModel.getInstance().bgMusic = bgMusic;
+            }
+
+            var vibrate = getItem("vibrate");
+            if (vibrate)ZJHModel.getInstance().vibrate = vibrate;
+
+            var audio = getItem("audio");
+            if (audio)SoundModel.getInstance().can_play = audio;
+
+            var yinyue = getItem("mj_yinyue");
+            if (yinyue)this.yinyue = yinyue;
+
+            var fangyan = getItem("mj_fangyan");
+            if (fangyan)this.fangyan = fangyan;
+
+            var hudong = getItem("mj_hudong");
+            if (hudong)this.hudong = hudong;
+
+            var newTip = getItem("mj_newtip");
+            if (newTip)this.newTip = newTip;
+
+            var speed = getItem("mj_speed");
+            if (speed)this.mj_speed = parseInt(speed);
+
+            this.readGameSetting();
+        } catch (e) {
+
+        }
+    },
+
+    readGameSetting: function () {
+        var mj_font = getItem("mj_font_new");
+        if (mj_font)this.mj_font = mj_font;
+
+        var mj_fontSize = getItem("mj_fontSize");
+        if (mj_fontSize)this.mj_fontSize = mj_fontSize;
+
+        var mj_light = getItem("mj_light");
+        if (mj_light)this.mj_light = mj_light;
+
+        var mj_style = getItem("mj_style");
+        if (mj_style)this.mj_style = mj_style;
+
+        var mj_paiban = getItem("mj_paiban");
+        if (mj_paiban)this.mj_paiban = mj_paiban;
+
+        var mj_table_view = getItem("mj_table_view");
+        if (mj_table_view)this.mj_table_view = mj_table_view;
+
+        if (this.mj_table_view == "2d") {
+            this.mj_bg_use = 1;
+        } else {
+            this.mj_bg_use = 0;
+        }
+    },
+    saveGameSetting: function () {
+        if (this.mj_table_view == "2d") {
+            this.mj_bg_use = 1;
+        } else {
+            this.mj_bg_use = 0;
+        }
+        setItem("mj_font_new", this.mj_font);
+        setItem("mj_fontSize", this.mj_fontSize);
+        setItem("mj_light", this.mj_light);
+        setItem("mj_style", this.mj_style);
+        setItem("mj_paiban", this.mj_paiban);
+        setItem("mj_table_view", this.mj_table_view);
+    },
+
+    //重置属性
+    reset: function () {
+        //玩家信息初始化
+        for (var p in this.players) {
+            this.players[p].reset();
+        }
+        this.cur_seat = -1;
+        this.state = -1;
+        this.isEnterWait = false;
+        this.isZhuanZhuan = false;
+        this.zhuanReadyTime = 0;
+        this.mj_lockcard_type = 0;
+        this.preGame();
+    },
+    preGame: function () {
+        this.listen_info = [];
+        this.gang_info = [];
+        this.bu_info = [];
+        this.final_listen_info = [];
+        this.isAutoOutCard = false;
+        this.canTouchCard = false;
+        this.lackType = -1;
+
+        this.isEnterWait = false;
+        this.isBaoting = false;
+        this.curOperateCard = 0;
+        this.curOperate = -1;
+        this.isHanBaoDou = false;
+        this.IsMyHasBaoting = false;
+
+        this.TouPiaoING = false;
+
+        this.tangPai_flags = {};
+
+        this.baoting_test = -1;
+
+        this.outPlayerList = [];
+        this.operator_info = [];
+
+        this.mj_public_begin_pos = -1;
+        this.mj_public_begin_nums = -1;
+        this.mj_lockcard_type = 0;
+        this.isLiangPai = 0;
+        this.outtimeplayers = [];
+        try {
+            MJModel.mj_table.removeChildByName("tingpai_layer");
+        } catch (e) {
+            Log(this, e);
+        }
+    },
+    release: function () {
+        for (var i in this.players) {
+            this.players[i].release();
+        }
+        this.players = {};
+    },
+
+    //该座位ID是否是我
+    isMyPlayer: function (seatID) {
+        return seatID == this.seatid;
+    },
+    isMyPos: function (pos) {
+        if (pos == 0 && this.seatid != -1)return true;
+        return false;
+    },
+    canQuxiaoZhun: function () {
+        return false;
+    },
+    //获取玩家
+    getPlayerByUID: function (uid) {
+        for (var p in this.players) {
+            if (this.players[p].uid == uid) {
+                return this.players[p];
+            }
+        }
+        return null;
+    },
+    getPosByUID: function (uid) {
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].uid == uid) {
+                return this.getPosBySeatid(i);
+            }
+        }
+        return -1;
+    },
+    getPlayerBySeatID: function (seatid) {
+        if (this.players.hasOwnProperty(seatid)) {
+            return this.players[seatid];
+        }
+        return null;
+    },
+    getPlayerByPos: function (pos) {
+        var seatid = this.getSeatIDByPos(pos);
+
+        if (this.players.hasOwnProperty(seatid)) {
+            return this.players[seatid];
+        }
+        cc.log("getPlayerByPos erro:" + seatid);
+        return null;
+    },
+    //座位ID转换当前位置
+    getPosBySeatid: function (seatid) {
+        if (seatid == 255 || seatid == -1) return -1;//服务器默认值有些是255 坑爹的服务器
+        var rePos = 0;
+
+        if (this.seatid == -1) {
+            if (this.tempSeatid != -1) {
+                var index = seatid - this.tempSeatid;
+                if (index >= 0) {
+                    rePos = index;
+                } else {
+                    rePos = index + this.Play_num;
+                }
+
+            } else {
+                rePos = seatid;
+            }
+        } else {
+            var index = seatid - this.seatid;
+            if (index >= 0) {
+                rePos = index;
+            } else {
+                rePos = index + this.Play_num;
+            }
+        }
+
+        if (this.mj_roomType == 1) {
+            if (rePos == 2) {
+                if (this.seatid == -1) {
+                    rePos = 3;
+                } else {
+                    if (this.seatid == 0) {
+                        rePos = 3;
+                    } else if (this.seatid == 2) {
+                        rePos = 1;
+                    }
+                }
+            }
+        } else if (this.mj_roomType == 2) {
+            if (rePos == 1 || rePos == 3) {
+                rePos = 2;
+            }
+        }
+
+        //防错措施 避免闪退
+        if (rePos < 0 || rePos > 3) {
+            rePos = 0;
+        }
+        return rePos;
+
+    },
+    getIndexFromBanker: function (seatid) {
+        var dseatid = seatid - MJModel.banker_seatid;
+        if (dseatid < 0) {
+            if (MJModel.mj_roomType == 2) dseatid += 2;
+            if (MJModel.mj_roomType == 1) dseatid += 3;
+            if (MJModel.mj_roomType == 0) dseatid += 4;
+        }
+        return dseatid;
+    },
+    getNextSeat: function (seatid) {
+        var dseatid = seatid + 1;
+        var pn = 4;
+        if (MJModel.mj_roomType == 2) pn = 2;
+        if (MJModel.mj_roomType == 1) pn = 3;
+        if (dseatid >= pn) {
+            dseatid = 0;
+        }
+        return dseatid;
+    },
+    getPreSeat: function (seatid) {
+        var dseatid = seatid - 1;
+        var pn = 4;
+        if (MJModel.mj_roomType == 2) pn = 2;
+        if (MJModel.mj_roomType == 1) pn = 3;
+        if (dseatid < 0) {
+            dseatid = pn - 1;
+        }
+        return dseatid;
+    },
+    isState: function (status) {
+        if (this.state == status) {
+            return true;
+        }
+        return false;
+    },
+    getTempPosBySeatid: function (seatid, temp) {
+        if (temp == -1) {
+            return seatid;
+        }
+        var index = seatid - temp;
+        if (index >= 0)
+            return index;
+        return index + this.Play_num;
+    },
+    //当前位置转换座位ID
+    getSeatidByPos: function (pos) {
+        var reSeatId = 0;
+
+        if (this.seatid == -1) {
+            if (this.tempSeatid != -1) {
+                var seatid = pos + this.tempSeatid;
+                if (seatid >= this.Play_num) {
+                    reSeatId = seatid - this.Play_num;
+                } else {
+                    reSeatId = seatid;
+                }
+
+            } else {
+                reSeatId = pos;
+            }
+        } else {
+            var seatid = pos + this.seatid;
+            if (seatid >= this.Play_num) {
+                reSeatId = seatid - this.Play_num;
+            } else {
+                reSeatId = seatid;
+            }
+
+        }
+
+        if (this.mj_roomType == 1) {
+            if (reSeatId == 3) {
+                if (this.seatid == -1) {
+                    reSeatId = 2;
+                } else {
+                    if (this.seatid == 0) {
+                        reSeatId = 2;
+                    } else if (this.seatid == 2) {
+                        reSeatId = 0;
+                    }
+                }
+            }
+        } else if (this.mj_roomType == 2) {
+            if (reSeatId == 2) {
+                reSeatId = 1;
+            } else if (reSeatId == 3) {
+                reSeatId = 0;
+            }
+        }
+        //防错措施 避免闪退
+        if (reSeatId < 0 || reSeatId > 3) {
+            reSeatId = 0;
+        }
+        return reSeatId;
+    },
+
+    setTangPaiFlag: function (pos, tangPai_flag) {
+        this.tangPai_flags[pos] = tangPai_flag;
+    },
+
+    getTangPaiFlag: function (pos) {
+        return this.tangPai_flags[pos];
+    },
+
+    isProtobufCJJ3: function () {
+        return false;
+    },
+
+    addOutPlayer: function (player) {
+        for (var i = 0; i < this.outPlayerList.length; i++) {
+            var outPlayer = this.outPlayerList[i];
+            if (outPlayer.uid == player.uid) {
+                return;
+            }
+        }
+        this.outPlayerList.push(player);
+    },
+
+    removeOutPlayer: function (player) {
+        for (var i = 0; i < this.outPlayerList.length; i++) {
+            var outPlayer = this.outPlayerList[i];
+            if (outPlayer.uid == player.uid) {
+                this.outPlayerList.splice(i, 1);
+            }
+        }
+    },
+
+    getOutPlayerTips: function () {
+        if (this.outPlayerList.length > 0) {
+            var start = "玩家 ";
+            var mid = "";
+            for (var i = 0; i < this.outPlayerList.length; i++) {
+                var outPlayer = this.outPlayerList[i];
+                mid += outPlayer.name + " ";
+            }
+            var end = "离开游戏，请等待！";
+            return start + mid + end;
+        }
+        return "";
+    },
+};
+
+
+

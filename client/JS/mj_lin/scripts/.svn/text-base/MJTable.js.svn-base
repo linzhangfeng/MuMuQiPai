@@ -1,0 +1,3496 @@
+var MJTable = cc.Layer.extend({
+    tag: "RoomMJTable",
+    players: [],
+    room_Card: null,
+    room_Tip: null,
+    room_Info: null,
+    room_Action: null,
+    room_EndTouPiao: null,
+    roomPublic: null,
+    mjType: null,
+    room_Action_video: null,
+
+    bg: null,
+
+    pre_scene: null,
+    ctor: function () {
+        this._super();
+        MJModel.mj_table = this;
+        if (ZJHModel.getInstance().isOnVideo) {
+            this.initOnVideo();
+        }
+        else {
+            this.init();
+        }
+
+        if (!MJModel.isOnVideo) {
+            if (MJModel.roomState == 0) {
+                var self = this;
+                this.pre_scene = new MJPreTable();
+                this.pre_scene.setCallback(function (v, evt) {
+                    self.actionCallBack(v, evt);
+                });
+                this.addChild(this.pre_scene, 200);
+            }
+        }
+
+        var top = new MJPublic();
+        this.roomPublic = top;
+        this.addChild(top, 1000);
+    },
+    initOnVideo: function () {
+
+        MJModel.init();
+        MJModel.reset();
+        MJModel.curGameType = ZJHModel.getInstance().curGameType;
+        MJModel.isOnVideo = true;
+
+        this.initRoom();
+    },
+    init: function () {
+        var self = this;
+        //监听联网状态
+        if (true) {
+            this.schedule(this.updateGame, 0.0);
+            this.schedule(this.gameHeartBeat, 3.0);
+        }
+        else {
+            this.schedule(this.test, 1.0);
+        }
+        var size = cc.director.getWinSize();
+
+        MJModel.init();
+        MJModel.reset();
+        MJModel.roomData = JSON.parse(ZJHModel.getInstance().getRoomData());
+        MJModel.curRoomID = ZJHModel.getInstance().curRoomID;
+        MJModel.curGameType = ZJHModel.getInstance().curGameType;
+        MJModel.take_in = MJModel.roomData["gameRoom"]["takeIn"];
+
+        this.initRoom();
+    },
+
+    onEnter: function () {
+        this._super();
+        //部分事件监听
+        var self = this;
+        this._listenerGameOver = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "notify_against_room_end",
+            callback: function (evt) {
+                Log(self, "notify_against_room_end");
+                self.GameTimeEndNotify(null);
+            }
+        });
+        cc.eventManager.addListener(this._listenerGameOver, this);
+
+        this._listenerExit = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "will_exit_room",
+            callback: function (evt) {
+                self.release();
+                Log(self, "will_exit_room");
+            }
+        });
+        cc.eventManager.addListener(this._listenerExit, this);
+
+        //客户端切入到后台时通知一下服务器
+        this._listenerHome = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "game_on_hide",
+            callback: function (evt) {
+                sendGoHome();
+                Log(self, "game_on_hide");
+            }
+        });
+        cc.eventManager.addListener(this._listenerHome, this);
+
+        //局数通知
+        var _listenerChat2 = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "notify_game_count_change1",
+            callback: function (evt) {
+                var json = JSON.parse(JsUtils.decodeBase64(evt.getUserData()));
+                MJModel.RoomCountSum = json["count"];
+                MJModel.currentCount = json["currentCount"];
+
+            }
+        });
+        cc.eventManager.addListener(_listenerChat2, this);
+
+        if (MJModel.isSupportRealTimeVoices && !MJModel.isOnVideo) {
+            // 实时语音监听事件
+            var self = this;
+            var voiceNotify = cc.EventListener.create({
+                event: cc.EventListener.CUSTOM,
+                eventName: "voice_notify1",
+                callback: function (evt) {
+                    var jsonData = JsUtils.decodeBase64(evt.getUserData());
+                    var json = JSON.parse(jsonData);
+                    switch (json["rtcEvent"]) {
+                        case 1: // 加入频道回调
+                            MJModel.isJoinRealTimeVoice = true;
+                            self.initRealTimeVoice();
+                            self.initRealTimeVoiceStatus();
+
+                            var x = MJModel.rtvMicIndex == 1;
+                            var y = MJModel.rtvSpkIndex == 1;
+                            PlatformHelper.openMic(MJModel.rtvMicIndex == 1); // 别人说话声音开关
+                            PlatformHelper.openSpeaker(MJModel.rtvSpkIndex == 1); // 自己说话声音开关
+
+                            // 将自己的状态发送给服务器
+                            sendRealTimeVoiceStatus(MJModel.rtvSpkIndex == 1 ? 0 : -1);
+                            break;
+                        case 2: // 离开频道回调
+                            MJModel.isJoinRealTimeVoice = false;
+                            sendRealTimeVoiceStatus(-1); // 转发实时语音状态
+                            break;
+                        case 3: // 其他用户加入当前频道回调
+                            break;
+                        case 4: // 其他用户离开当前频道回调
+                            break;
+                        case 5: // 说话声音音量提示回调
+                            break;
+                        case 6: // 错误码
+                            var errorCode = parseInt(json["error_code"]);
+                            if (errorCode == 1027) { // 通道被占用
+                                PlatformHelper.showToast("录音正在被其他程序使用，请关闭该程序后再尝试!");
+                            }
+                            if (errorCode == 1019) {// 没有权限
+                                PlatformHelper.showToast("没有录音权限，请在设置中添加权限!");
+                            }
+
+                            if (errorCode > 0) {
+                                sendRealTimeVoiceStatus(errorCode);// 转发实时语音状态
+                            }
+                            break;
+                    }
+
+                }
+            });
+            cc.eventManager.addListener(voiceNotify, this);
+        }
+
+    },
+    initRealTimeVoice: function () {
+        var self = this;
+        // 实时语音本地数据获取
+        MJModel.rtvMicIndex = cc.sys.localStorage.getItem("rtvMicIndex");
+        if (MJModel.rtvMicIndex == null) {
+            MJModel.rtvMicIndex = 1;
+            cc.sys.localStorage.setItem("rtvMicIndex", MJModel.rtvMicIndex);
+        }
+
+        MJModel.rtvSpkIndex = cc.sys.localStorage.getItem("rtvSpkIndex");
+        if (MJModel.rtvSpkIndex == null) {
+            MJModel.rtvSpkIndex = 1;
+            cc.sys.localStorage.setItem("rtvSpkIndex", MJModel.rtvSpkIndex);
+        }
+
+        // 实时语音按钮初始化
+        this.realTimeVoiceBtn = new RealTimeVoices();
+        this.realTimeVoiceBtn.setVisible(false);
+        this.realTimeVoiceBtn.addClickEventListener(function (node) {
+            var name = node.getName();
+            var btn = self.realTimeVoiceBtn.getChildByName(name);
+            if (btn) {
+                if (name == "micBtn") {
+                    var selectedState = self.realTimeVoiceBtn.micBtn.isSelected();
+                    MJModel.rtvMicIndex = !selectedState ? 1 : 0;
+                    cc.sys.localStorage.setItem("rtvMicIndex", MJModel.rtvMicIndex);
+                    try {
+                        PlatformHelper.openMic(!selectedState);
+                    } catch (e) {
+                        Log(this, Utils.formatError(e));
+                    }
+                } else if (name == "spkBtn") {
+                    var selectedState = self.realTimeVoiceBtn.spkBtn.isSelected();
+                    MJModel.rtvSpkIndex = !selectedState ? 1 : 0;
+                    cc.sys.localStorage.setItem("rtvSpkIndex", MJModel.rtvSpkIndex);
+                    sendRealTimeVoiceStatus(!selectedState ? 0 : -1);
+                    try {
+                        PlatformHelper.openSpeaker(!selectedState);
+                    } catch (e) {
+                        Log(this, Utils.formatError(e));
+                    }
+                }
+            }
+        });
+        this.addChild(this.realTimeVoiceBtn, 200);
+    },
+    initRealTimeVoiceStatus: function () {
+        // 处理右上角按钮
+        var x = MJModel.rtvMicIndex == 0;
+        var y = MJModel.rtvSpkIndex == 0;
+        this.realTimeVoiceBtn.micBtn.setSelected(MJModel.rtvMicIndex == 0);
+        this.realTimeVoiceBtn.spkBtn.setSelected(MJModel.rtvSpkIndex == 0);
+
+        var morepos = this.room_Action.btns["more"].getPosition();
+        this.realTimeVoiceBtn.setPosition(cc.p(morepos.x - this.realTimeVoiceBtn.spkBtn.getContentSize().width - 2,
+            morepos.y - 90));
+        this.realTimeVoiceBtn.setVisible(true);
+
+        // 隐藏语音按钮
+        this.room_Action.hideSound();
+
+        // 处理头像上图标
+        var num = 4;
+        if (MJModel.mj_roomType == 1) {
+            num = 3;
+        }
+        for (var i = 1; i < num; i++) {
+            if (this.players[i]) {
+                this.players[i].hideSoundFlag();
+            }
+        }
+    },
+    release: function () {
+        SoundModel.getInstance().can_play = 1;
+        this.unscheduleAllCallbacks();
+        ccs.ArmatureDataManager.destroyInstance();
+        cc.spriteFrameCache.removeSpriteFrames();
+        cc.textureCache.removeAllTextures();
+        jsb.fileUtils.purgeCachedEntries();
+    },
+    onExit: function () {
+        this.release();
+        this._super();
+        if (MJModel.isSupportRealTimeVoices && !MJModel.isOnVideo) {
+            // 退出实时语音
+            try {
+                PlatformHelper.quitRoom(ZJHModel.getInstance().uid, "");
+            } catch (e) {
+                Log(this, Utils.formatError(e));
+            }
+        }
+    },
+    getBgStr: function () {
+        if (MJModel.mj_style != "shishang" && MJModel.mj_style != "huaijiu" && MJModel.mj_style != "jingdian") {
+            MJModel.mj_style = "shishang";
+        }
+        if (MJModel.mj_table_view != "25d" && MJModel.mj_table_view != "2d") {
+            MJModel.mj_table_view = "25d";
+        }
+        return __String.createWithFormat("RoomMJ/bgs/%1_%2.png", MJModel.mj_style, MJModel.mj_table_view);
+    },
+    updateBg: function (isInit) {
+        if (isInit == undefined)isInit = false;
+        var size = cc.director.getWinSize();
+        if (this.bg == null) {
+            this.bg = new ccui.ImageView(getResPath(this.getBgStr()));
+            this.bg.setAnchorPoint(cc.p(0.5, 0.5));
+            this.bg.setContentSize(size);
+            this.bg.setScale9Enabled(true);
+            this.bg.setPosition(size.width / 2, size.height / 2);
+            this.addChild(this.bg, -100);
+        } else {
+            this.bg.loadTexture(getResPath(this.getBgStr()));
+        }
+        Utils.addCardSprites(__String.createWithFormat("RoomMJ/cards/%1_%2_%3_debug", MJModel.mj_font, MJModel.mj_fontSize, MJModel.mj_table_view));
+
+        if (MJModel.mj_roomType == 2) {
+            this.loadCardConfig(MJModel.mj_bg_use == 0 ? "RoomMJ/config/card_config_2ren.json" : "RoomMJ/config/card_config2d_2ren.json");
+        } else {
+            this.loadCardConfig(MJModel.mj_bg_use == 0 ? "RoomMJ/config/card_config.json" : "RoomMJ/config/card_config2d.json");
+        }
+
+        if (isInit)return;
+
+        this.room_Card.reflashAllCardUI();
+        for (var i = 0; i < 4; i++) {
+            this.players[i].setPosition(MJConfig.getPlayerPos(i));
+            this.players[i].reflashNameMoneyPosition();
+        }
+        if (this.room_Info)this.room_Info.reflash();
+
+        if (this.pre_scene) {
+            this.pre_scene.updateBg();
+        }
+    },
+
+    reflashBgMusic: function () {
+        this.playBgSound();
+    },
+
+    reflashSetting: function (isInit) {
+        this.updateBg(isInit);
+    },
+
+    preLoadCardConfig: function (path) {
+        try {
+            Log(this, "loadCardConfig:" + path);
+            var uiNode = this.getChildByName(path);
+            if (uiNode == null) {
+                var uiJson = ccs.load(getResPath(path));
+                var uiNode = uiJson.node;
+                Utils.doLayer(uiNode);
+                Utils.doLayer(uiNode.getChildByName("player"));
+                Utils.doLayer(uiNode.getChildByName("op"));
+                Utils.doLayer(uiNode.getChildByName("outting"));
+                uiNode.setName(path);
+                uiNode.setVisible(false);
+                this.addChild(uiNode, -1000);
+            }
+        } catch (e) {
+            Log(this, e);
+            MJModel.mj_table.release();
+            ZJHModel.getInstance().roomToHall();
+            ERROR(this, "loadCardConfig error: uid" + ZJHModel.getInstance().uid);
+            PlatformHelper.showToast("文件加载出错，请重新进入房间!");
+        }
+    },
+    loadCardConfig: function (path) {
+        try {
+            Log(this, "loadCardConfig:" + path);
+            var uiNode = this.getChildByName(path);
+            if (uiNode == null) {
+                var uiJson = ccs.load(getResPath(path));
+                var uiNode = uiJson.node;
+                Utils.doLayer(uiNode);
+                try {
+                    Utils.doLayer(uiNode.getChildByName("player"));
+                    Utils.doLayer(uiNode.getChildByName("op"));
+                    Utils.doLayer(uiNode.getChildByName("outting"));
+                } catch (e) {
+                    Log(this, e);
+                }
+                uiNode.setName(path);
+                uiNode.setVisible(false);
+                this.addChild(uiNode, -1000);
+            }
+            MJModel.cardConfig = uiNode;
+        } catch (e) {
+            Log(this, e);
+            MJModel.mj_table.release();
+            ZJHModel.getInstance().roomToHall();
+            ERROR(this, "loadCardConfig error: uid" + ZJHModel.getInstance().uid + e);
+            PlatformHelper.showToast("文件加载出错，请重新进入房间!");
+        }
+    },
+    //初始化界面
+    initRoom: function () {
+        MJModel.initParam();
+        this.reflashSetting(true);
+        var size = cc.director.getWinSize();
+        var self = this;
+        var mjType = new cc.Sprite(this.getMjTypePath());
+        if (mjType != null) {
+            mjType.setPosition(cc.p(size.width / 2, size.height / 2 + 170));
+            this.addChild(mjType, 0);
+        }
+
+        this.mjType = mjType;
+
+        var self = this;
+        this.room_Info = new MJInfo();
+        this.room_Info.setVisible(false);
+        this.addChild(this.room_Info);
+
+        //桌上玩家初始化
+        for (var i = 0; i < 4; i++) {
+            var player = new MJPlayer();
+            player.setVisible(false);
+            player.setId(i);
+            player.setPosition(MJConfig.getPlayerPos(i));
+            player.reflashNameMoneyPosition();
+            this.addChild(player, 10);
+            this.players[i] = player;
+            player.setClickCallback(function (pos) {
+                self.playerClickCallback(pos);
+            });
+        }
+
+        var card = new cc.Layer();
+        card.setTag(13);
+        this.addChild(card, 1);
+
+        this.room_Card = new MJCards();
+        this.room_Card.setPosition(cc.p(size.width / 2, size.height / 2));
+        card.addChild(this.room_Card);
+
+        this.room_Card.setOutCardSoundCallback(function (sex, card) {
+            self.handler_out_card_sound(sex, card);
+        });
+
+        this.room_Tip = new MJTips();
+        this.room_Tip.setPosition(cc.p(size.width / 2, size.height / 2));
+        this.addChild(this.room_Tip, 100);
+
+        this.room_Action = new MJAction();
+        this.addChild(this.room_Action, 150);
+        if (this.room_Action) this.room_Action.setCallback(function (v, evt) {
+            self.actionCallBack(v, evt);
+        });
+
+        if (MJModel.isOnVideo && this.isSupportVideoAction()) {
+            this.room_Action_video = new MJActionVideo();
+            this.addChild(this.room_Action_video, 150);
+            this.room_Action.setVisible(false);
+        }
+
+        if (MJModel.newTip == 0 && !MJModel.isOnVideo) {
+            //新手提示
+            var btn = new ccui.Button();
+            btn.setTag(0);
+            btn.loadTextures(getResPath("RoomMJ/newtip/new_tip0.png"), getResPath("RoomMJ/newtip/new_tip0.png"), "");
+            btn.addClickEventListener(function (sender, evt) {
+
+                var tag = btn.getTag();
+                if (tag == 0) {
+                    btn.loadTextures(getResPath("RoomMJ/newtip/new_tip1.png"), getResPath("RoomMJ/newtip/new_tip1.png"), "");
+                    btn.setTag(1);
+                    MJModel.newTip = 1;
+                    setItem("mj_newtip", MJModel.newTip);
+                } else {
+                    btn.removeFromParent(true);
+                }
+            });
+            btn.setPosition(cc.p(size.width / 2, size.height / 2));
+            this.addChild(btn, 10000);
+            Utils.scaleToSize(btn, size.width, size.height);
+        }
+
+        this.playBgSound();
+    },
+
+    isSupportVideoAction: function () {
+        return true;
+    },
+
+    isSupportPublicCard: function () {
+        return true;
+    },
+
+    playBgSound: function () {
+        if (MJModel.yinyue == "jingkuai") {
+            Sound.getInstance().PlayBgSound(getResPath("RoomMJ/sound/csmj1.mp3"));
+        } else if (MJModel.yinyue == "suhuan") {
+            Sound.getInstance().PlayBgSound(getResPath("RoomMJ/sound/csmj2.mp3"));
+        } else {
+            Sound.getInstance().PlayBgSound(getResPath("RoomMJ/sound/csmj.mp3"));
+        }
+    },
+
+    setTouPiaoTips: function () {
+        if (MJModel.toupiaoTipsType == 1) {
+            var tips = "若您超时未选择，则系统默认为\"同意解散\"";
+            try {
+                this.room_EndTouPiao.setDefaultTips(tips);
+            } catch (e) {
+                Log(this, e);
+            }
+        }
+    },
+
+    getMjTypePath: function () {
+        return getResPath("RoomMJ/mj_type_") + MJModel.curGameType + ".png";
+    },
+
+    test: function (d) {
+
+    },
+    reconnectTime: -1,
+    loginFial: function (code) {
+        if (code == 20103 || code == 100) {
+            PlatformHelper.showToast("人数已满，无法加入");
+        } else {
+            PlatformHelper.showToast("进入房间失败，请重试[" + code + "]");
+        }
+        ZJHModel.getInstance().roomToHall(true);
+    },
+    updateGame: function (dt) {
+        var curTime = time(null);
+        if (MJModel.firstEnterGame) {
+            if (curTime - MJModel.firstConnectTime > 20 * 1000) {
+                this.loginFial(-1);
+                return;
+            }
+            if (curTime - MJModel.firstConnectTime > 5 * 1000) {
+                this.room_Tip.showTextTip("正在登录房间");
+            }
+        }
+
+        if (this.reconnectTime != -1 && curTime - this.reconnectTime > 3 * 1000 && MJModel.ip_list.length > 1) {
+            MJModel.changeTcpIp();//每3秒钟切一次
+            this.reConnect("网络连接异常，正在重试");
+            return;
+        }
+
+        if (MJModel.lastLoginTime != -1 && curTime - MJModel.lastLoginTime > 3 * 1000) {
+            this.reConnect("登录异常，正在重新登录");
+            return;
+        }
+
+        if (MJModel.lastSceneInfoReqTime != -1 && curTime - MJModel.lastSceneInfoReqTime > 3 * 1000) {
+            this.reConnect("游戏场景异常，正在重置");
+            return;
+        }
+
+        if (MJModel.lastHeartBeatTime != -1 && curTime - MJModel.lastHeartBeatTime > 10 * 1000) {
+            Log(this, "心跳异常，重连了");
+            var tips = "";
+            if (!MJModel.firstChongLian) tips = "网络连接异常，正在重试";
+            this.reConnect(tips);
+            return;
+        }
+
+        if (MJModel.isEnterWait) {
+            Log(this, "MJModel.isEnterWait");
+            return;
+        }
+
+        var response = CCTcpClient.getInstance(MJModel.curRoomID).get();
+
+        if (response) {
+            // Log(this, "cmd=" + response.cmd + " id=" + response.id + " data=" + response.data);
+            if (response.cmd == TCPCMD.DISCONNECT_RES || response.cmd == TCPCMD.CONNECT_ERROR_RES || response.cmd == TCPCMD.SEND_DATA_ERROR_RES || response.cmd == TCPCMD.RECV_DATA_ERROR_RES) //关闭
+            {
+                if (MJModel.firstEnterGame) {
+                    CCTcpClient.getInstance(MJModel.curRoomID).reset_response_queue();
+                    CCTcpClient.getInstance(MJModel.curRoomID).connect();
+                    this.reconnectTime = time(null);
+                    return;
+                }
+                MJModel.roomConnectFail++;
+                var tip = "";
+                if (MJModel.roomConnectFail >= 60 * 1) {
+                    tip = "网络连接异常，正在重试";
+                }
+                if (this.reconnectTime == -1) {
+                    this.reconnectTime = time(null);
+                }
+                this.reConnect(tip, true, this.reconnectTime);
+            }
+            else if (response.cmd == TCPCMD.CONNECT_OK_RES) {
+                if (MJModel.firstEnterGame) {
+                    sendLogin();
+                    return;
+                }
+                this.reconnectTime = -1;
+                sendLogin();
+                MJModel.lastLoginTime = curTime;
+            }
+            else if (response.cmd == TCPCMD.RECV_DATA_OK_RES) {
+                if (!MJModel.firstEnterGame) {
+                    MJModel.roomConnectFail = 0;
+                    MJModel.lastHeartBeatTime = time(null);
+                }
+                this.handler_cmd(response.id, response.data, true, response.seqNo);
+            }
+            response.release();
+        } else {
+        }
+    },
+
+    reConnect: function (tips, showTip, reconnectTime) {
+        cc.log("---------------reConnect---------------");
+        if (tips == null || tips == undefined) {
+            tips = "";
+        }
+
+        if (showTip == undefined) showTip = true;
+
+        CCTcpClient.getInstance(MJModel.curRoomID).reset_response_queue();
+        CCTcpClient.getInstance(MJModel.curRoomID).connect();
+        if (showTip && MJModel.firstEnterGame == false) this.room_Tip.showTextTip(tips);
+        if (reconnectTime == undefined) reconnectTime = time(null);
+        this.reconnectTime = reconnectTime;
+        MJModel.lastLoginTime = -1;
+        MJModel.lastSceneInfoReqTime = -1;
+        MJModel.lastHeartBeatTime = -1;
+        MJModel.firstChongLian = false;
+        MJModel.isEnterWait = false;
+    },
+
+    resetPlayer: function () {
+        for (var i = 0; i < 4; i++) {
+            var rp = this.players[i];
+            var player = MJModel.players[i];
+            if (player) {
+                player.isTimeOut = 0;
+                player.isTuoGuan = 0;
+            }
+            rp.reset();
+        }
+    },
+    stopAllTimer: function () {
+    },
+    _has_check_ip: false,
+    handler_cmd: function (cmd, jpacket, canDelay, svrid) {
+        if (MJModel.waitUpdate && cmd != CMD.SERVER_GAME_SCENE
+            && cmd != CMD.SERVER_TABLE_INFO_UC) {
+            return 0;
+        }
+
+        switch (cmd) {
+            case  CMD.SERVER_OPERATE_RESULT2:
+                this.handler_server_operate_notify_bc2(jpacket, canDelay);
+                break;
+
+            case  CMD.SERVER_PLAYER_GPS:
+                this.handler_player_gps(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_LOGIN_SUCC_UC:
+                this.handler_server_login_succ_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_LOGIN_SUCC_BC:
+                this.handler_server_login_succ_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_LOGIN_ERR_UC:
+                this.handler_server_login_err_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_REBIND_UC:
+                this.handler_server_rebind_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_LOGOUT_SUCC_BC:
+                this.handler_server_logout_succ_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_LOGOUT_ERR_UC:
+                this.handler_server_logout_err_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_TABLE_INFO_UC:
+                //把tableData缓存起来，等收到scene_info后一起刷新
+                this.tableData = jpacket;
+                MJModel.lastSceneInfoReqTime = time(null);
+                break;
+
+            case CMD.SERVER_GAME_SCENE:
+                //先处理当前缓存的 tableData
+                this.handlerTableInfo(this.tableData);
+                var ackGameFree = parsePacket("proto.game.AckGameScene", jpacket);
+                this.handler_server_scene_info_uc(ackGameFree, canDelay);
+                break;
+
+            case CMD.SERVER_USER_READY:
+                this.handler_server_ready_succ_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_READY_ERR_UC:
+                this.handler_server_ready_err_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_GAME_START:
+                this.handler_server_game_start_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_FIRST_HANDCARD:
+                this.handler_server_game_start_bc2(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_VIDEO_FIRST_HANDCARD:
+                this.handler_server_game_start_bc_onvideo(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_USER_GETCARD:
+                this.handler_server_mo_card_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_USER_OUTCARD:
+                this.handler_server_out_card_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_OPERATE_NOTIFY:
+                this.handler_server_operate_notify_bc(jpacket, canDelay);
+                break;
+
+            /* 广播玩家操作 */
+            case CMD.SERVER_OPERATE_RESULT:
+                this.handler_server_peng_kang_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_LISTEN_NOTIFY:
+                this.handler_server_tingpai_notify(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_GAME_END:
+                var ackGameEnd = parsePacket("proto.game.AckGameEnd", jpacket);
+                this.handler_server_game_end_bc(ackGameEnd, canDelay);
+                break;
+
+            case CMD.SERVER_GAME_PREREADY_BC:
+                this.handler_server_game_preready_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_EMOTION_BC:
+                this.handler_server_bigface_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_UPDATE_USERINFO:
+                this.handler_server_update_info_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_UPTABLE_SUCCC_BC:
+                this.handler_server_up_table_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_DOWNTABLE_SUCC_BC:
+                this.handler_server_down_table_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_DZ_GAME_START_RES:
+                this.handler_game_time_over_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_UPDATE_TIMER:
+                this.handler_game_time_out_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_HEART_BEAT_RESP:
+                this.handler_game_heartbeat_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_APPLY_DISSOLVE_ROOM_ERR_UC:
+                this.handler_server_end_room_req_fail_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_APPLY_DISSOLVE_ROOM_SUCC_BC:
+                this.handler_server_end_room_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_DISSOLVE_ACTION_SUCC_BC:
+                this.handler_server_end_room_action_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_DISSOLVE_ROOM_RESULT_BC:
+                this.handler_server_end_room_result_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_USER_OFFLINE_BC:
+                this.handler_server_player_offline_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_OVERTIME_USER:
+                this.handler_server_player_timeout_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_UPTABLE_INFO_UC:
+                this.handler_server_uptable_info_uc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_SEND_MESSAGE:
+                this.handler_server_get_msg(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_HALL_LOGOUT:
+                this.handler_server_die(jpacket, canDelay, svrid);
+                break;
+
+            case CMD.SERVER_LOGOUT_TO_HALL:
+                this.handler_server_belogout_succ_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_PLAYER_WAIT_BC:
+                this.handler_server_player_wait_bc(jpacket, canDelay);
+                break;
+
+            case CMD.SERVER_CHAT_BC:
+                this.handler_server_game_chat(jpacket, canDelay);
+                break;
+            case CMD.SERVER_GAME_ALL_RECORD:
+                this.handler_server_all_records(jpacket, canDelay);
+                break;
+            case CMD.SERVER_VEDIE_OP_NOTIFY:
+                this.handler_server_game_opNotify_video(jpacket, canDelay);
+                break;
+            case CMD.SERVER_ACK_CHANGE_MODE:
+                this.handler_change_mode_bc(jpacket, canDelay);
+                break;
+            case CMD.SERVER_REAL_TIME_SPEECH: // 实时语音
+                this.handler_server_realTimeSpeech(jpacket, canDelay);
+                break;
+            default:
+                Log(this, "no handler of cmd:" + cmd);
+        }
+
+        return 0;
+    },
+    handler_server_realTimeSpeech: function (jpacket, canDelay) {
+        var data = parsePacket("proto.game.RealTimeSpeechAck", jpacket);
+        var code = data.code;
+        for (var i = 0; i < code.length; i++) {
+            var pos = MJModel.getPosBySeatid(i);
+            if (this.players[pos]) {
+                if (code[i] == 0) {
+                    this.players[pos].showSoundFlag();
+                } else if (code[i] == -1) {
+                    this.players[pos].hideSoundFlag();
+                }
+            }
+        }
+    },
+    handler_server_game_opNotify_video: function (data, canDelay) {
+        if (!this.isSupportVideoAction()) {
+            return;
+        }
+        var opNotify = parsePacket("proto.login.AckOpNotifyVedio", data);
+        var opTypes = opNotify.OpType;
+        if (opTypes && opTypes.length > 0) {
+            for (var i = 0; i < opTypes.length; i++) {
+                var pos = MJModel.getPosBySeatid(i);
+                var opType = opTypes[i];
+                if (this.room_Action_video) this.room_Action_video.setOperator(pos, opType);
+            }
+        }
+    },
+
+    handler_server_game_chat: function (data, canDelay) {
+        var chatInfo = parsePacket("proto.login.AckChatBC", data);
+        var seatid = chatInfo.seatid;
+        var pos = MJModel.getPosBySeatid(seatid);
+        var player = this.players[pos];
+        var json = {};
+        json["uid"] = player.uid;
+        json["name"] = player.name;
+        json["content"] = chatInfo.charmsg;
+        cc.eventManager.dispatchCustomEvent("notify_room_chat", JSON.stringify(json));
+    },
+
+    handler_server_die: function (jpacket, canDelay, svrid) {
+        if (MJModel.isProtobufCJJ3() && isNewVesion()) {
+            //if (svrid != MJModel.curGameType) {
+            if (svrid != MJModel.seriveId) {
+                return;
+            }
+        }
+        this.reConnect("");
+    },
+    handler_server_login_succ_uc: function (data, canDelay) {
+        Log(this, "handler_server_login_succ_uc");
+        MJModel.lastLoginTime = -1;
+        MJModel.lastSceneInfoReqTime = time(null);
+    },
+    handler_server_login_succ_bc: function (data, canDelay) {
+        Log(this, "handler_server_login_succ_bc");
+    },
+    handler_server_login_err_uc: function (data, canDelay) {
+        var packet = parsePacket("proto.login.AckLoginError", data);
+        var code = packet.code;
+        if (MJModel.firstEnterGame) {
+            this.loginFial(code);
+            return;
+        }
+        if (code == 100024) {
+            //对局房间已结束
+            this.exitRoom();
+        } else {
+            this.reConnect("登录异常，正在重新登录");
+        }
+    },
+    handler_server_rebind_uc: function (data, canDelay) {
+    },
+    handler_server_logout_succ_bc: function (data, canDelay) {
+        Log(this, "handler_server_logout_succ_bc");
+        var jpacket = parsePacket("proto.login.AckLogoutBc", data);
+        var uid = jpacket.uid;
+        var type = jpacket.type;
+        if (uid == ZJHModel.getInstance().uid) {
+            MJModel.mj_table.release();
+            ZJHModel.getInstance().roomToHall();
+        }
+    },
+    handler_server_belogout_succ_bc: function (data, canDelay) {
+        Log(this, "handler_server_belogout_succ_bc");
+        ZJHModel.getInstance().roomToHall();
+    },
+    handler_server_logout_err_uc: function (data, canDelay) {
+    },
+
+    tableData: null,
+
+    handlerTableInfo: function (data) {
+        MJModel.reset();
+        this.stopAllActions();
+        this.room_Tip.showTextTip("");
+
+        this.resetGame();
+
+        for (var i = 0; i < 4; i++) {
+            var mjPlayer = this.players[i];
+            mjPlayer.logout();
+        }
+
+        var tableInfo = parsePacket("proto.login.AckTableInfo", data);
+        Log(this, tableInfo);
+        MJModel.seatid = -1;
+        ZJHModel.getInstance().mySeatid = -1;
+
+        if (tableInfo.cardPoolNums) MJModel.cardLibNums = tableInfo.cardPoolNums;
+        if (tableInfo.game_player != null && tableInfo.game_player != 0) {
+            var mj_roomType = MJModel.mj_roomType;
+            if (tableInfo.game_player == 2)MJModel.mj_roomType = 2;
+            if (tableInfo.game_player == 3)MJModel.mj_roomType = 1;
+            if (tableInfo.game_player == 4)MJModel.mj_roomType = 0;
+            this.room_Info.init();
+            if (mj_roomType != MJModel.mj_roomType) {
+                this.updateBg(false);
+            }
+        }
+
+        if (MJModel.cardLibNums == 64) {
+
+            MJModel.mj_public_nums = [16, 16, 16, 16];
+
+        } else if (MJModel.cardLibNums == 72) {
+
+            MJModel.mj_public_nums = [18, 18, 18, 18];
+
+        } else if (MJModel.cardLibNums == 76) {
+
+            MJModel.mj_public_nums = [20, 18, 20, 18];
+
+        } else if (MJModel.cardLibNums == 96) {
+
+            MJModel.mj_public_nums = [24, 24, 24, 24];
+
+        } else if (MJModel.cardLibNums == 100) {
+
+            MJModel.mj_public_nums = [26, 26, 24, 24];
+
+        } else if (MJModel.cardLibNums == 108) {
+
+            MJModel.mj_public_nums = [28, 26, 28, 26];
+
+        } else if (MJModel.cardLibNums == 112) {
+
+            MJModel.mj_public_nums = [28, 28, 28, 28];
+
+        } else if (MJModel.cardLibNums == 116) {
+
+            MJModel.mj_public_nums = [30, 30, 28, 28];
+
+        } else if (MJModel.cardLibNums == 120) {
+
+            MJModel.mj_public_nums = [30, 30, 30, 30];
+
+        } else if (MJModel.cardLibNums == 136) {
+
+            MJModel.mj_public_nums = [34, 34, 34, 34];
+
+        } else if (MJModel.cardLibNums == 144) {
+
+            MJModel.mj_public_nums = [36, 36, 36, 36];
+
+        }
+
+        MJModel.mj_public_sz1 = tableInfo.TouZiInfo[0];
+        MJModel.mj_public_sz2 = tableInfo.TouZiInfo[1];
+        MJModel.buCardNums = tableInfo.GCrdFrmLstNum;
+
+        MJModel.state = tableInfo.state;
+
+        var len = tableInfo.players.length;
+
+
+        for (var i = 0; i < len; i++) {
+            var seatid = tableInfo.players[i].seatid;
+            var uid = tableInfo.players[i].uid;
+            if (uid == ZJHModel.getInstance().uid) {
+                MJModel.seatid = seatid;
+                ZJHModel.getInstance().mySeatid = seatid;
+                break;
+            }
+        }
+        if (MJModel.isOnVideo) {
+            if (MJModel.seatid == -1 && MJModel.vidoeSeatID == -1)MJModel.seatid = 0;
+            if (MJModel.vidoeSeatID != -1)MJModel.seatid = MJModel.vidoeSeatID;
+        }
+
+        var selfhasgps = false;
+        var gpsnums = 0;
+        for (var i = 0; i < len; i++) {
+            var seatid = tableInfo.players[i].seatid;
+            var player = MJModel.players[seatid];
+
+            player.seatid = seatid;
+            player.uid = tableInfo.players[i].uid;
+            player.name = tableInfo.players[i].name;
+            player.money = tableInfo.players[i].money;
+            player.ready = tableInfo.players[i].ready;
+            player.sex = tableInfo.players[i].sex;
+            player.avatar = tableInfo.players[i].avatar;
+            player.start_money = player.money * 2;//乘2 做简单的加密
+            if (tableInfo.players[i].GPS) {
+                this.checkUpdateGPS(tableInfo.players[i].GPS);
+                if (player.uid == ZJHModel.getInstance().uid) {
+                    selfhasgps = true;
+                }
+                gpsnums++;
+            }
+        }
+
+        var roomGolden = tableInfo.roomGolden;
+        if (roomGolden > 0) {
+            MJModel.take_in = roomGolden;
+        }
+
+        if (this.pre_scene) this.pre_scene.handler_server_table_info_uc();
+
+        if (MJModel.mj_gps_type == 1) {
+            MJModel.hasUpLoad = false;
+            this.checkUploadMyGPS();
+            if (gpsnums > 1) {
+                this.checkGPSWarning(false);
+            }
+        } else {
+            if (this._has_check_ip == false) {
+                this.checkIpAndDistance();
+                this.checkGPSWarning();
+            }
+            this._has_check_ip = true;
+        }
+        MJModel.firstEnterGame = false;
+    },
+
+    handler_change_mode_bc: function (data, canDelay) {
+        var packet = parsePacket("proto.game.AckChangeMode", data);
+        var seatid = packet.chairid;
+        var pos = MJModel.getPosBySeatid(seatid);
+        var v = packet.num;
+        if (this.pre_scene) this.pre_scene.showSelectMode(pos, v);
+    },
+
+    handler_shaoren_mode: function (ackGameFree) {
+        if ((!MJModel.isOnVideo && MJModel.roomState != 0) || !ackGameFree.userchangemode)return;
+        cc.log("handler_shaoren_mode");
+        for (var i = 0; i < ackGameFree.userchangemode.length; i++) {
+            var select_mode = ackGameFree.userchangemode[i];
+            var pos = MJModel.getPosBySeatid(i);
+            if (this.pre_scene) this.pre_scene.showSelectMode(pos, select_mode);
+            if (MJModel.isMyPlayer(i)) {
+                if (this.pre_scene) this.pre_scene.resetMode(select_mode != 0);
+            }
+        }
+    },
+
+    handler_server_scene_info_uc: function (ackGameFree, canDelay) {
+        Log(this, "handler_server_scene_info_uc");
+        MJModel.RoomConfigID = ackGameFree.RoomConfigID;
+        if (ackGameFree.totalcount != null && ackGameFree.totalcount != 0) {
+            MJModel.RoomCountSum = ackGameFree.totalcount;
+            MJModel.currentCount = ackGameFree.currentcount;
+            MJModel.mj_roominfo_type = 1;
+        } else {
+            MJModel.mj_roominfo_type = 0;
+        }
+        MJModel.lastSceneInfoReqTime = -1;
+        var sceneStatus = ackGameFree.SceneStatus;
+        MJModel.state = sceneStatus;
+        if (sceneStatus == 10) {
+            //房间已经结束
+            this.exitRoom();
+            return;
+        }
+
+        //邀请
+        if (MJModel.roomState == 0 && sceneStatus == 0) {
+            if (this.room_Action.actions["yaoqing"]) {
+                this.room_Action.actions["yaoqing"].setVisible(true);
+            }
+
+            if (this.room_Action.actions["copyshare"]) {
+                this.room_Action.actions["copyshare"].setVisible(true);
+            }
+        } else {
+            if (this.room_Action.actions["yaoqing"]) {
+                this.room_Action.actions["yaoqing"].setVisible(false);
+            }
+
+            if (this.room_Action.actions["copyshare"]) {
+                this.room_Action.actions["copyshare"].setVisible(false);
+            }
+
+            if (this.pre_scene) {
+                this.pre_scene.removeFromParent(true);
+                this.pre_scene = null;
+            }
+        }
+
+        this.removeChildByName("RoomMJSCEndCheck");
+        this.removeChildByName("RoomMJResultDetail");
+
+        //出牌时间
+        MJModel.outCardTime = ackGameFree.outcardtime;
+
+        //底分
+        MJModel.base_money = ackGameFree.basescore;
+
+        //底分
+        MJModel.stand_money = ackGameFree.stand_money;
+
+        //操作时间
+        MJModel.oprateTime = ackGameFree.operatetime;
+
+        MJModel.outtimecount = ackGameFree.auto_disband_time;
+
+        this.room_Info.setBaseMoney(MJModel.base_money);
+
+        MJModel.waitUpdate = false;
+        this.initPlayer();
+
+        if (this.room_Action) this.room_Action.setUpTableVisible(MJModel.seatid == -1);
+
+        //is end room state
+        if (ackGameFree.isDisbandroom == 1 && MJModel.seatid != -1) {
+            var json = {};
+
+            var owner_seatid = ackGameFree.Disbandinfo.ApplyChairid;
+            var time = ackGameFree.Disbandinfo.Waittime;
+            var alltime = ackGameFree.Disbandinfo.totaltime;
+            var player = MJModel.players[owner_seatid];
+            if (player != undefined) {
+                json["ownerid"] = player.uid;
+                json["ownername"] = player.name;
+                json["time_left"] = time;
+                json["time_all"] = alltime;
+                json["players"] = [];
+                for (var i = 0; i < ackGameFree.Disbandinfo.onlinechairid.length; i++) {
+                    var seatid = ackGameFree.Disbandinfo.onlinechairid[i];
+                    var p = MJModel.players[seatid];
+                    var d = {};
+                    d["uid"] = p.uid;
+                    d["name"] = p.name + "";
+                    d["avatar"] = p.avatar;
+                    d["state"] = 0;
+
+
+                    for (var j = 0; j < ackGameFree.UserDisbandstate.length; j++) {
+                        var sid = ackGameFree.UserDisbandstate[j].chairid;
+                        var ac = ackGameFree.UserDisbandstate[j].Choosestate;
+                        if (sid == seatid) {
+                            d["state"] = ac;
+                            break;
+                        }
+                    }
+
+                    json["players"].push(d);
+                }
+
+                if (MJModel.mj_public_style == 0) {
+                    this.room_EndTouPiao = RoomHEndTouPiao.create();
+                } else {
+                    this.room_EndTouPiao = new EndRoomLayer();
+                    if (MJModel.gpsInfo) {
+                        MJModel.gpsInfo.removeFromParent();
+                        MJModel.gpsInfo = null;
+                    }
+                }
+                this.room_EndTouPiao.initWithJsonStr(JSON.stringify(json));
+                this.setTouPiaoTips();
+                if (MJModel.mj_public_style == 0) {
+                    this.addChild(this.room_EndTouPiao, 10000000);
+                } else {
+                    this.addChild(this.room_EndTouPiao, 300);
+                }
+
+                MJModel.TouPiaoING = true;
+
+                this.room_EndTouPiao.setCallback(function (str) {
+                    if (str == "ok") {
+                        sendEndRoomResult(1);
+                    }
+                    else if (str == "no") {
+                        sendEndRoomResult(2);
+                    }
+                });
+            }
+
+        }
+
+        if (ackGameFree.UserOnlinestate) {
+            for (var i = 0; i < ackGameFree.UserOnlinestate.length; i++) {
+                var seatid = ackGameFree.UserOnlinestate[i].chairid;
+                var state = ackGameFree.UserOnlinestate[i].state;
+                var pos = MJModel.getPosBySeatid(seatid);
+                this.players[pos].setOffline(state == 1);
+                if (state == 2) {
+                    //离开游戏
+                    MJModel.addOutPlayer(this.players[pos]);
+                } else {
+                    MJModel.removeOutPlayer(this.players[pos]);
+                }
+            }
+            this.room_Tip.showTextTip(MJModel.getOutPlayerTips());
+        }
+
+        //ready
+        if (this.room_Action) this.room_Action.setReadyVisible(false);
+
+        if (MJModel.isSupportRealTimeVoices && !MJModel.isOnVideo) {
+            try {
+                var msg = ackGameFree.msg;
+                var public_channel_id = msg.public_channel_id;
+                var m_voice_status = msg.m_voice_status;
+                if (!MJModel.isJoinRealTimeVoice && msg.voice_room) {
+                    PlatformHelper.joinRoom(ZJHModel.getInstance().uid, public_channel_id);
+                }
+            } catch (e) {
+                Log(this, Utils.formatError(e));
+            }
+        }
+
+        Log(this, "curState:" + sceneStatus);
+        if (sceneStatus == MJ_STATUS.MJ_GAME_FREE) {
+            var nums = 0;
+            var selfIsReady = true;
+            //当前玩家是否准备
+            for (var i = 0; i < 4; i++) {
+                var pm = MJModel.players[i];
+                if (pm.uid != -1) {
+                    if (pm.ready) {
+                        var pos = MJModel.getPosBySeatid(pm.seatid);
+                        var mp = this.players[pos];
+                        mp.setReadyFlag(true);
+                        if (pm.uid == ZJHModel.getInstance().uid && MJModel.roomState == 0) {
+                            if (this.room_Action) this.room_Action.setQuxiaoReadyVisible(true);
+                        }
+                    }
+                    else {
+                        if (pm.uid == ZJHModel.getInstance().uid) {
+                            if (this.room_Action) this.room_Action.setReadyVisible(true);
+                            selfIsReady = false;
+                        }
+                    }
+
+                    nums++;
+                }
+            }
+            this.handlerAutoUpTableReady(nums, selfIsReady);
+            this.handler_shaoren_mode(ackGameFree);
+            return;
+        }
+
+        MJModel.roomState = 1;
+
+        //恢复庄家标志
+        {
+            var banker_seatid = ackGameFree.BankerChairid;
+            var banker_pos = MJModel.getPosBySeatid(banker_seatid);
+            var player = this.players[banker_pos];
+            MJModel.banker_seatid = banker_seatid;
+
+            var pos = MJModel.getPosBySeatid(MJModel.banker_seatid);
+            var player = this.players[pos];
+            if (player) {
+                player.setBankerFlag(true);
+            }
+        }
+
+        if (ackGameFree.UserOvertime) {
+            for (var i = 0; i < ackGameFree.UserOvertime.length; i++) {
+                var seatid = ackGameFree.UserOvertime[i].chairid;
+                var state = ackGameFree.UserOvertime[i].state;
+                if (state == 1) {
+                    var pos = MJModel.getPosBySeatid(seatid);
+                    this.players[pos].setTimeOut(true);
+                }
+                else if (state == 2) {
+                    this.room_Tip.showTextTip("等待玩家操作");
+                }
+            }
+        }
+
+        this.room_Info.setVisible(true);
+
+        JsUtils.postNotifi("notify_game_check_end");//为了刷新局数 或者  开始倒计时
+
+        var curMoPaiPos = -1;
+
+        var cardList = [];
+
+        if (ackGameFree.UserCard && ackGameFree.UserCard.stFixedCards) {
+            var fixedCardSize = ackGameFree.UserCard.stFixedCards.length;
+//我碰杠胡的牌
+            for (var i = 0; i < fixedCardSize; i++) {
+                var specialCard = ackGameFree.UserCard.stFixedCards[i].SpecialCard;
+                var cardData = ackGameFree.UserCard.stFixedCards[i].CardData;
+                var opChairid = ackGameFree.UserCard.stFixedCards[i].chairID;
+                var state = ackGameFree.UserCard.stFixedCards[i].state;
+                var cardList_gang = ackGameFree.UserCard.stFixedCards[i].OpCards;
+                var LaiziNum = ackGameFree.UserCard.stFixedCards[i].LaiziNum;
+                var out_pos = MJModel.getPosBySeatid(opChairid);
+                if ((state & ActionType.TYPE_PENG) == ActionType.TYPE_PENG) {
+                    this.room_Card.addPengCard(0, PengType.Peng_Peng, cardData, out_pos, state, specialCard, LaiziNum, cardList_gang);
+                }
+                else if ((state & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+                    this.room_Card.addPengCard(0, PengType.Peng_AnKang, cardData, out_pos, state, specialCard, LaiziNum, cardList_gang);
+                }
+                else if ((state & ActionType.TYPE_LEFT_CHI) == ActionType.TYPE_LEFT_CHI) {
+                    this.room_Card.addPengCard(0, PengType.Chi_L, cardData, out_pos, state, specialCard, LaiziNum, cardList_gang);
+                }
+                else if ((state & ActionType.TYPE_CENTER_CHI) == ActionType.TYPE_CENTER_CHI) {
+                    this.room_Card.addPengCard(0, PengType.Chi_M, cardData, out_pos, state, specialCard, LaiziNum, cardList_gang);
+                }
+                else if ((state & ActionType.TYPE_RIGHT_CHI) == ActionType.TYPE_RIGHT_CHI) {
+                    this.room_Card.addPengCard(0, PengType.Chi_R, cardData, out_pos, state, specialCard, LaiziNum, cardList_gang);
+                }
+                else {
+                    this.room_Card.addPengCard(0, PengType.Peng_Kang, cardData, out_pos, state, specialCard, LaiziNum, cardList_gang);
+                }
+            }
+        }
+
+//当前玩家手牌
+        if (ackGameFree.UserCard && ackGameFree.UserCard.ChangeableCards) {
+            var changeable_Size = ackGameFree.UserCard.ChangeableCards.length;
+
+            for (var i = 0; i < changeable_Size; i++) {
+                cardList.push(ackGameFree.UserCard.ChangeableCards[i]);
+            }
+            this.room_Card.initHandCard(0, cardList, ackGameFree.encrypt_code);
+            this.room_Card.reflashHandCard(0, true);
+        }
+
+        var huCard = 0;
+        if (cardList.length % 3 == 2) {
+            if (MJModel.mj_hu_type == 1) {
+                if (MJModel.mj_hu_flag[0] == 0) {
+                    curMoPaiPos = 0;
+                } else {
+                    if (ackGameFree.HuInfo && ackGameFree.HuInfo.length >= MJModel.seatid && ackGameFree.HuInfo[MJModel.seatid] && ackGameFree.HuInfo[MJModel.seatid].hu.length > 0) {
+                        huCard = ackGameFree.HuInfo[MJModel.seatid].hu[0].HuCard;
+                        this.room_Card.removeHandCard(0, huCard);
+                        this.room_Card.initMoCard(0, huCard, true);
+                    }
+                }
+            } else {
+                curMoPaiPos = 0;
+            }
+        }
+
+        cc.log("curMoPaiPos:" + curMoPaiPos);
+//其他玩家手牌
+        var handcardnums_size = ackGameFree.HandCardNums.length;
+        for (var i = 0; i < handcardnums_size; i++) {
+            if (!MJModel.isMyPlayer(i)) {
+                cardList = [];
+                var otherCars = ackGameFree.HandCardNums[i];
+                for (var j = 0; j < otherCars; j++) {
+                    cardList.push(0);
+                }
+                var pos = MJModel.getPosBySeatid(i);
+                this.room_Card.initHandCard(pos, cardList);
+                this.room_Card.reflashHandCard(pos, true);
+
+                if (cardList.length % 3 == 2) {
+                    if (MJModel.mj_hu_type == 1) {
+                        if (MJModel.mj_hu_flag[pos] == 0) {
+                            curMoPaiPos = pos;
+                        } else {
+                            if (ackGameFree.HuInfo && ackGameFree.HuInfo.length >= i && ackGameFree.HuInfo[i] && ackGameFree.HuInfo[i].hu.length > 0) {
+                                huCard = ackGameFree.HuInfo[i].hu[0].HuCard;
+                                this.room_Card.removeHandCard(pos, 0);
+                                this.room_Card.initMoCard(pos, 0, true);
+                            }
+                        }
+                    } else {
+                        curMoPaiPos = pos;
+                    }
+                }
+            }
+        }
+
+//各个玩家碰杠牌
+        var groupcard_size_id = ackGameFree.GroupCard.length;
+        for (var i = 0; i < groupcard_size_id; i++) {
+
+            if (!MJModel.isMyPlayer(i)) {
+                var groupcard_size = ackGameFree.GroupCard[i].FixedCard.length;
+                var pos = MJModel.getPosBySeatid(i);
+
+                for (var j = 0; j < groupcard_size; j++) {
+                    var specialCard = ackGameFree.GroupCard[i].FixedCard[j].SpecialCard;
+                    var cardData = ackGameFree.GroupCard[i].FixedCard[j].CardData;
+                    var state = ackGameFree.GroupCard[i].FixedCard[j].state;
+                    var chairId = ackGameFree.GroupCard[i].FixedCard[j].chairID;
+                    var LaiziNum = ackGameFree.GroupCard[i].FixedCard[j].LaiziNum;
+                    var out_pos = MJModel.getPosBySeatid(chairId);
+                    var cardList = ackGameFree.GroupCard[i].FixedCard[j].OpCards;
+
+                    if ((state & ActionType.TYPE_PENG) == ActionType.TYPE_PENG) {
+                        this.room_Card.addPengCard(pos, PengType.Peng_Peng, cardData, out_pos, state, specialCard, LaiziNum, cardList);
+                    }
+                    else if ((state & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+                        this.room_Card.addPengCard(pos, PengType.Peng_AnKang, cardData, out_pos, state, specialCard, LaiziNum, cardList);
+                    }
+                    else if ((state & ActionType.TYPE_LEFT_CHI) == ActionType.TYPE_LEFT_CHI) {
+                        this.room_Card.addPengCard(pos, PengType.Chi_L, cardData, out_pos, state, specialCard, LaiziNum, cardList);
+                    }
+                    else if ((state & ActionType.TYPE_CENTER_CHI) == ActionType.TYPE_CENTER_CHI) {
+                        this.room_Card.addPengCard(pos, PengType.Chi_M, cardData, out_pos, state, specialCard, LaiziNum, cardList);
+                    }
+                    else if ((state & ActionType.TYPE_RIGHT_CHI) == ActionType.TYPE_RIGHT_CHI) {
+                        this.room_Card.addPengCard(pos, PengType.Chi_R, cardData, out_pos, state, specialCard, LaiziNum, cardList);
+                    }
+                    else {
+                        this.room_Card.addPengCard(pos, PengType.Peng_Kang, cardData, out_pos, state, specialCard, LaiziNum, cardList);
+                    }
+                }
+            }
+        }
+
+//各个方位的出牌
+        {
+            var showCardSize = ackGameFree.ShowCard.length;
+            for (var i = 0; i < showCardSize; i++) {
+                var outCardLen = ackGameFree.ShowCard[i].OutCard.length;
+                cardList = [];
+                var pos = MJModel.getPosBySeatid(i);
+                for (var j = 0; j < outCardLen; j++) {
+                    cardList.push(ackGameFree.ShowCard[i].OutCard[j]);
+                }
+                this.room_Card.initOutCard(pos, cardList);
+            }
+        }
+
+//点击出来有听操作提示
+        if (ackGameFree.ListenInfo.length > 0) {
+            MJModel.listen_info = [];
+            MJModel.final_listen_info = [];
+            var listeninfo_size = ackGameFree.ListenInfo.length;
+
+            for (var i = 0; i < listeninfo_size; i++) {
+                var tli = Utils.clone(tagListenInfo);
+
+                tli.OutCard = ackGameFree.ListenInfo[i].OutCard;
+                var huinfoLen = ackGameFree.ListenInfo[i].HuInfo.length;
+                tli.HuInfoLen = huinfoLen;
+                for (var j = 0; j < huinfoLen; j++) {
+                    var huInfo = Utils.clone(tagHuInfo);
+                    huInfo.Card = ackGameFree.ListenInfo[i].HuInfo[j].Card;
+                    huInfo.LeftNum = ackGameFree.ListenInfo[i].HuInfo[j].LeftNum;
+                    huInfo.HuFanNum = ackGameFree.ListenInfo[i].HuInfo[j].HuFanNum;
+                    tli.HuInfo.push(huInfo);
+                }
+                MJModel.listen_info.push(tli);
+
+                if (this.room_Card.isDuoPai(0) == false) {
+                    MJModel.final_listen_info = tli.HuInfo;
+                }
+            }
+            if (this.room_Action) this.room_Action.checkTingPaiVis();
+        }
+
+//可以扛的牌
+        if (ackGameFree.GangInfo.length > 0) {
+            MJModel.gang_info = [];
+            var gang_size = ackGameFree.GangInfo.length;
+            for (var i = 0; i < gang_size; i++) {
+                var tgInfo = Utils.clone(tagGangInfo);
+                tgInfo.curCard = ackGameFree.GangInfo[i].Card;
+                tgInfo.state = ackGameFree.GangInfo[i].state;
+                MJModel.gang_info.push(tgInfo);
+            }
+        }
+
+        //可以操作的提示
+        if (ackGameFree.cardList && ackGameFree.cardList.length > 0) {
+            MJModel.operator_info = [];
+            var gang_size = ackGameFree.cardList.length;
+            for (var i = 0; i < gang_size; i++) {
+                var tgInfo = Utils.clone(tagOpInfo);
+                tgInfo.OpType = ackGameFree.cardList[i].OpType;
+                for (var j = 0; j < ackGameFree.cardList[i].card.length; j++) {
+                    tgInfo.Cards.push(ackGameFree.cardList[i].card[j]);
+                }
+
+                MJModel.operator_info.push(tgInfo);
+            }
+        }
+
+//恢复操作时间
+        {
+            var LeftTime = ackGameFree.LeftTime;
+            this.room_Info.showTime(LeftTime);
+            // if (LeftTime > MJModel.oprateTime && LeftTime > MJModel.outCardTime) {
+            //     this.room_Tip.showTextTip("等待玩家重连");
+            // }
+        }
+
+//恢复剩余牌数
+        {
+            var leftCardNum = ackGameFree.PoolCardLeftNums;
+            this.room_Info.showCardNums(leftCardNum);
+        }
+
+//恢复最后一张出的牌的标志
+        {
+            var curOutCardUser = ackGameFree.CurOutCardUser;
+            var curOutCard = ackGameFree.curOutCard;
+            var curOutCardPos = MJModel.getPosBySeatid(curOutCardUser);
+            this.room_Card.initCurOutCardTip(curOutCardPos, curOutCard);
+
+            var opType = ackGameFree.OpType;
+            var curMoPaiCard = ackGameFree.Card;
+            MJModel.curOperateCard = curMoPaiCard;
+            MJModel.curOperate = opType;
+            MJModel.curOperate2 = ackGameFree.OpType2;
+            MJModel.curOperateID = ackGameFree.operateid;
+
+            //服务器错误拦截 部分情况下服务器断线重连回来 有操作 但是没有Card数据
+            if (MJModel.curOperate > 0 && MJModel.curOperateCard == 0) {
+                MJModel.curOperateCard = curOutCard;
+            }
+            this.check_tip_operate_card(MJModel.curOperate, MJModel.curOperateCard);
+        }
+
+//方向指示恢复 如果有人要出牌 则指向该人 否则 必然有人在选择 碰扛胡操作
+        {
+            if (curMoPaiPos != -1) {
+                this.room_Info.showDirectionTip(curMoPaiPos);
+            }
+            else {
+                this.room_Info.showDirectionTip(-1);
+            }
+        }
+
+//是否处于自动胡牌
+        var isAutoHu = ackGameFree.IsAutoHu;
+        {
+            MJModel.isAutoOutCard = isAutoHu == 1;
+            if (this.room_Action) this.room_Action.setAutoOutCardVis(MJModel.isAutoOutCard);
+            this.room_Card.setAutoOutCard(MJModel.isAutoOutCard);
+        }
+
+//自己状态恢复 如果有操作选项 就只显示操作选项  没有操作选项 看是不是自己要出牌 是的话 打开出牌功能 否则关闭
+        {
+            this.myselfCloseOutCard();
+
+            if ((opType & ActionType.TYPE_LISTEN) == ActionType.TYPE_LISTEN) {
+                opType = opType - ActionType.TYPE_LISTEN;
+            }
+
+            if (curMoPaiPos != -1) {
+                var mopai_seatid = MJModel.getSeatidByPos(curMoPaiPos);
+                MJModel.cur_seat = mopai_seatid;
+
+                if (MJModel.isMyPlayer(MJModel.cur_seat)) {
+                    var is_ok = this.room_Card.removeHandCard(0, curMoPaiCard);
+                    if (is_ok) this.room_Card.initMoCard(0, curMoPaiCard, true);
+                    if (opType <= 0) this.myselfOpenOutCard(true);
+                }
+            }
+
+            if (opType > 0) {
+                if (this.room_Action) {
+                    this.room_Action.setOperator(-1);
+                    this.room_Action.setOperator(opType, ackGameFree.OpType2);
+                }
+            }
+            else {
+                if (this.room_Action) this.room_Action.setOperator(-1);
+            }
+        }
+
+        if (ackGameFree.auto_disband_state && ackGameFree.auto_disband_state != 0) {
+            for (var i = 0; i < ackGameFree.auto_disband_chairids.length; i++) {
+                MJModel.outtimeplayers.push(ackGameFree.auto_disband_chairids[i]);
+                this.room_Tip.startAutoEndRoomTip(ackGameFree.auto_disband_remaintime, this.room_Card.isDuoPai(0) == false && MJModel.curOperate <= 0, ackGameFree.auto_disband_chairids[i]);
+            }
+        } else {
+            this.room_Tip.setAutoEndRoomVis(false);
+        }
+
+        // p还原排队
+        this.setPublicCardScene(ackGameFree);
+
+        this.room_Card.checkCardSafe(ackGameFree.md5);
+    },
+
+    //场景还原牌堆
+    setPublicCardScene: function (ackGameFree) {
+        this.room_Card.initPublicCard(true);
+        this.room_Card.removePublicCardByNums(MJModel.cardLibNums - ackGameFree.PoolCardLeftNums - MJModel.buCardNums, false);
+        this.room_Card.removePublicCardByNums(MJModel.buCardNums, true);
+    },
+
+    initPlayer: function () {
+        var totalSeat = 4;
+        if (MJModel.mj_roomType == 1) {
+            totalSeat = 3;
+        } else if (MJModel.mj_roomType == 2) {
+            totalSeat = 2;
+        }
+
+        for (var i = 0; i < totalSeat; i++) {
+            var player = MJModel.players[i];
+            if (player.uid > 0) {
+                var pos = MJModel.getPosBySeatid(i);
+                var mjPlayer = this.players[pos];
+                mjPlayer.login(i);
+            }
+        }
+    },
+
+    handlerAutoUpTableReady: function (nums, selfIsReady) {
+        //if (MJModel.seatid == -1 && nums < 4) {
+        //    this.actionCallBack("uptable");
+        //}
+        //else if (selfIsReady == false) {
+        //    if (MJModel.canQuxiaoZhun()) {
+        //        if (MJModel.roomState != 0) this.actionCallBack("ready");
+        //    } else {
+        //        this.actionCallBack("ready");
+        //    }
+        //}
+    },
+
+    handler_server_ready_succ_bc: function (data, canDelay) {
+        var ackUserReady = parsePacket("proto.game.AckUserReady", data);
+        var ready_size = ackUserReady.ready.length;
+        for (var i = 0; i < ready_size; i++) {
+            var ready = ackUserReady.ready[i];
+
+            var pos = MJModel.getPosBySeatid(i);
+            var player = MJModel.players[i];
+            player.ready = ready;
+            if (player.uid != -1) {
+                var mp = this.players[pos];
+                if (mp.getReadyState() == ready) {
+                    //和之前的状态相同
+                    continue;
+                }
+                if (ready != 0) {
+                    mp.setReadyFlag(true);
+                } else {
+                    mp.setReadyFlag(false);
+                }
+            }
+            if (player.uid == ZJHModel.getInstance().uid) {
+                if (ready != 0) {
+                    if (this.room_Action) this.room_Action.setReadyVisible(false);
+                    if (MJModel.roomState == 0) {
+                        if (this.room_Action) this.room_Action.setQuxiaoReadyVisible(true);
+                    }
+                } else {
+                    if (this.room_Action) this.room_Action.setReadyVisible(true);
+                }
+            }
+        }
+        if (this.pre_scene) this.pre_scene.handler_server_ready_succ_bc(data, canDelay);
+    },
+    handler_server_ready_err_uc: function (data, canDelay) {
+    },
+    handler_server_game_start_bc: function (data, canDelay) {
+        MJModel.roomState = 1;
+        this.resetGame(false);
+        this.room_Info.setVisible(true);
+        if (this.room_Action.actions["yaoqing"]) {
+            this.room_Action.actions["yaoqing"].setVisible(false);
+        }
+        if (this.room_Action.actions["copyshare"]) {
+            this.room_Action.actions["copyshare"].setVisible(false);
+        }
+
+        if (this.pre_scene) {
+            this.pre_scene.removeFromParent(true);
+            this.pre_scene = null;
+        }
+
+        if (canDelay) this.room_Tip.ShowGameState(1);
+        MJModel.state = MJ_STATUS.MJ_GAME_PLAYING;
+        var gameStart = parsePacket("proto.game.AckGameStart", data);
+        MJModel.banker_seatid = gameStart.ChairID;
+        MJModel.mj_public_sz1 = gameStart.TouZiInfo[0];
+        MJModel.mj_public_sz2 = gameStart.TouZiInfo[1];
+        if (gameStart.totalcount != null && gameStart.totalcount != 0) {
+            MJModel.RoomCountSum = gameStart.totalcount;
+            MJModel.currentCount = gameStart.currentcount;
+            MJModel.mj_roominfo_type = 1;
+        } else {
+            MJModel.mj_roominfo_type = 0;
+        }
+        if (canDelay && MJModel.mj_bg_use == 0 && this.room_Card.isSupportPublicCard()) {
+            var self = this;
+            var show_public_card_effect = cc.callFunc(function () {
+                self.room_Info.showPublicCardEffect();
+            });
+
+            var show_shaizi_effect = cc.callFunc(function () {
+                self.room_Info.showShaiZiEffect();
+            });
+
+            var init_public_Card = cc.callFunc(function () {
+                self.room_Info.resetPublicCard();
+                self.room_Card.initPublicCard();
+            });
+
+            MJModel.isEnterWait = true;
+            var callback2 = cc.callFunc(function () {
+                MJModel.isEnterWait = false;
+            });
+            this.runAction(cc.sequence(show_public_card_effect, cc.delayTime(0.5), show_shaizi_effect, cc.delayTime(0), init_public_Card, cc.delayTime(0), callback2));
+        } else {
+            this.room_Card.initPublicCard();
+        }
+
+        var pos = MJModel.getPosBySeatid(MJModel.banker_seatid);
+        var player = this.players[pos];
+        if (player) {
+            player.setBankerFlag(true);
+        }
+
+        JsUtils.postNotifi("notify_game_check_end");//为了刷新局数 或者  开始倒计时
+    },
+
+    handler_server_game_start_bc2: function (data, canDelay) {
+        if (data == "")return;
+        var firstHandCard = parsePacket("proto.game.AckFirstHandCard", data);
+
+        var cardNum = firstHandCard.CardNum;
+        if (cardNum > 0) {
+            this.room_Info.showCardNums(cardNum);
+        }
+
+        var cardData = [];
+        if (firstHandCard.UserCard && firstHandCard.UserCard.ChangeableCards) {
+            var changeable_Size = firstHandCard.UserCard.ChangeableCards.length;
+            for (var i = 0; i < changeable_Size; i++) {
+                var cardDataNum = firstHandCard.UserCard.ChangeableCards[i];
+                cardData.push(cardDataNum);
+            }
+        }
+
+        if (firstHandCard.HandCardNums) {
+            var handcardnumsSize = firstHandCard.HandCardNums.length;
+            //当前玩家手牌长度
+            for (var i = 0; i < handcardnumsSize; i++) {
+                var pos = MJModel.getPosBySeatid(i);
+                var carNums = firstHandCard.HandCardNums[i];
+                if (MJModel.isMyPlayer(i)) {
+                    this.room_Card.initHandCard(0, cardData, firstHandCard.encrypt_code);
+                    this.room_Card.reflashHandCard(0, false);
+                } else {
+                    var cardlist = [];
+                    for (var j = 0; j < carNums; j++) {
+                        cardlist.push(0);
+                    }
+
+                    this.room_Card.initHandCard(pos, cardlist);
+                    this.room_Card.reflashHandCard(pos, true);
+                }
+            }
+        }
+        if (MJModel.seatid != -1) {
+            MJModel.isEnterWait = true;
+            this.room_Card.fapai();
+        }
+        PlatformHelper.vibrate();
+
+        if (firstHandCard.first_get_card) {
+            MJModel.mj_mo_cards[0] = firstHandCard.first_get_card;
+        }
+
+        if (MJModel.isSupportRealTimeVoices && !MJModel.isOnVideo) {
+            try {
+                var public_channel_id = firstHandCard.public_channel_id;
+                if (!MJModel.isJoinRealTimeVoice && firstHandCard.voice_room) {
+                    PlatformHelper.joinRoom(ZJHModel.getInstance().uid, public_channel_id);
+                }
+            } catch (e) {
+                Log(this, Utils.formatError(e));
+            }
+        }
+        this.room_Card.checkCardSafe(firstHandCard.md5);
+    },
+    handler_server_game_start_bc_onvideo: function (data, canDelay) {
+        var firstHandCard = parsePacket("proto.game.VideoFirstHandCard", data);
+        for (var i = 0; i < firstHandCard.UserCard.length; i++) {
+            var pos = MJModel.getPosBySeatid(i);
+            var changeable_Size = firstHandCard.UserCard[i].ChangeableCards.length;
+            var cardList = [];
+
+            //手里的牌
+            for (var j = 0; j < changeable_Size; j++) {
+                cardList.push(firstHandCard.UserCard[i].ChangeableCards[j]);
+            }
+            this.room_Card.initHandCard(pos, cardList);
+            this.room_Card.reflashHandCard(pos, true);
+            this.room_Card.removePublicCardByNums(changeable_Size, false);
+        }
+    },
+    handler_server_mo_card_bc: function (data, canDelay) {
+        MJModel.outtimeplayers = [];
+        this.room_Tip.setAutoEndRoomVis(false);
+        var userGetCard = parsePacket("proto.game.AckUserGetCard", data);
+        var seatId = userGetCard.ChairID;
+        var card = userGetCard.Card;
+        var operate = userGetCard.OpType;
+        var operate2 = userGetCard.OpType2;
+        var leftCardNum = userGetCard.LeftCardNum;
+        var encrypt_code = userGetCard.encrypt_code;
+        if (card == null)encrypt_code = 0;
+
+        var fcard = Utils.getFCardValue(card, encrypt_code);
+        if (fcard != 255) this.room_Card.removePublicCardByNums(1, userGetCard.OpType2 == 1 || userGetCard.GetCardDir == 1);
+        if (this.room_Action && this.resetGetCardOperator()) this.room_Action.setOperator(-1);
+        MJModel.cur_seat = seatId;
+        if (MJModel.isMyPlayer(seatId))MJModel.curOperateID = userGetCard.operateid;
+        if (leftCardNum != null) this.room_Info.showCardNums(leftCardNum);
+        this.room_Info.showDirectionTip(MJModel.getPosBySeatid(seatId));
+        this.room_Info.showTime(MJModel.outCardTime);
+
+        var pos = MJModel.getPosBySeatid(seatId);
+
+        if (this.room_Action_video) {
+            this.room_Action_video.reset();
+            this.room_Action_video.setOperator(pos, operate);
+        }
+
+        if (fcard != 255) this.room_Card.reflashHandCard(pos, true, false, true);
+        if (canDelay == false) {
+            this.room_Card.initMoCard(pos, card, true, encrypt_code);
+            return;
+        }
+
+        if (fcard != 255 && this.room_Card.isDuoPai(pos)) {
+            this.reConnect();
+            ERROR(this, "error client has more cards", fcard, JSON.stringify(this.room_Card.hand_card[pos]));
+            return;
+        }
+
+        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/effect/mo_card.mp3"));
+
+        if (MJModel.isMyPlayer(seatId)) {
+            MJModel.curOperateCard = fcard;
+            MJModel.curOperate = operate;
+            MJModel.curOperate2 = operate2;
+            this.room_Card.initMoCard(pos, card, false, encrypt_code);
+            this.room_Card.checkCardSafe(userGetCard.md5);
+            this.check_tip_operate_card(operate, fcard);
+            //my operate action
+            {
+                MJModel.gang_info = [];
+                MJModel.listen_info = [];
+                MJModel.operator_info = [];
+                MJModel.listen_info2 = userGetCard.ListenInfo1;
+                //点击出来有听操作提示
+                if (userGetCard.ListenInfo.length > 0) {
+                    var listeninfo_size = userGetCard.ListenInfo.length;
+
+                    for (var i = 0; i < listeninfo_size; i++) {
+                        var tli = Utils.clone(tagListenInfo);
+                        tli.HuInfo = [];
+
+                        tli.OutCard = userGetCard.ListenInfo[i].OutCard;
+                        var huinfoLen = userGetCard.ListenInfo[i].HuInfo.length;
+                        tli.HuInfoLen = huinfoLen;
+                        for (var j = 0; j < huinfoLen; j++) {
+                            var huInfo = Utils.clone(tagHuInfo);
+                            huInfo.Card = userGetCard.ListenInfo[i].HuInfo[j].Card;
+                            huInfo.LeftNum = userGetCard.ListenInfo[i].HuInfo[j].LeftNum;
+                            huInfo.HuFanNum = userGetCard.ListenInfo[i].HuInfo[j].HuFanNum;
+                            tli.HuInfo.push(huInfo);
+                        }
+                        MJModel.listen_info.push(tli);
+                    }
+                }
+
+                if (userGetCard.GangInfo.length > 0) {
+                    var gang_size = userGetCard.GangInfo.length;
+
+                    for (var i = 0; i < gang_size; i++) {
+                        var tgInfo = Utils.clone(tagGangInfo);
+                        tgInfo.curCard = userGetCard.GangInfo[i].Card;
+                        tgInfo.state = userGetCard.GangInfo[i].state;
+
+                        MJModel.gang_info.push(tgInfo);
+                    }
+                }
+
+                if (userGetCard.cardList && userGetCard.cardList.length > 0) {
+                    MJModel.operator_info = [];
+                    var gang_size = userGetCard.cardList.length;
+                    for (var i = 0; i < gang_size; i++) {
+                        var tgInfo = Utils.clone(tagOpInfo);
+                        tgInfo.OpType = userGetCard.cardList[i].OpType;
+                        for (var j = 0; j < userGetCard.cardList[i].card.length; j++) {
+                            tgInfo.Cards.push(userGetCard.cardList[i].card[j]);
+                        }
+
+                        MJModel.operator_info.push(tgInfo);
+                    }
+                }
+
+                if (( operate & ActionType.TYPE_LISTEN) == ActionType.TYPE_LISTEN) {
+                    operate = operate - ActionType.TYPE_LISTEN;
+                }
+
+                //是否有碰杠胡的操作
+                if (operate > 0) {
+                    if (this.room_Action) {
+                        this.room_Action.setOperator(operate, operate2);
+                        this.room_Action.setTingPaiVis(false);
+                        this.autoHuCard();
+                    }
+                    return;
+                }
+                else {
+                    this.myselfOpenOutCard(true);
+                }
+            }
+        }
+        else {
+            this.room_Card.initMoCard(pos, card, false, encrypt_code);
+        }
+    },
+
+    resetGetCardOperator: function () {
+        return true;
+    },
+
+    handler_server_out_card_bc: function (data, canDelay) {
+        MJModel.outtimeplayers = [];
+        this.room_Tip.setAutoEndRoomVis(false);
+        this.unschedule(this.autoOutCardTimeOut);
+        this.unschedule(this.autoHuCardTimeOut);
+
+        this.room_Info.stopTime();
+        this.room_Tip.showTextTip("");
+        var userOutCard = parsePacket("proto.game.AckUserOutCard", data);
+        var seatId = userOutCard.ChairID;
+        var card = userOutCard.Card;
+
+        MJModel.cur_seat = -1;
+
+        var pos = MJModel.getPosBySeatid(seatId);
+
+        if (this.room_Action_video) this.room_Action_video.reset();
+
+        MJModel.mj_mo_cards[pos] = -1;
+        if (canDelay == false) {
+            this.room_Card.addOutCard(pos, card);
+            this.room_Card.removeHandCard(pos, card);
+            return;
+        }
+
+        this.players[pos].setTimeOut(false);
+        this.players[pos].setOffline(false);
+        this.room_Tip.showOutCardEffect(false);
+        this.room_Card.outHandCard(pos, card);
+
+        if (this.room_Action) this.room_Action.setOperator(-1);
+
+        if (MJModel.isMyPlayer(seatId)) {
+            MJModel.isLiangPai = 0;
+            MJModel.final_listen_info = [];
+            //检测出的牌是否在听牌里边 不在的话就清楚听牌信息
+            for (var i = 0; i < MJModel.listen_info.length; i++) {
+                var lsi = MJModel.listen_info[i];
+                if (lsi.OutCard == card) {
+                    MJModel.final_listen_info = lsi.HuInfo;
+                    break;
+                }
+            }
+
+            MJModel.listen_info = [];
+
+            //可以听牌  可以选择自动胡牌
+            if (MJModel.final_listen_info.length > 0) {
+                if (this.room_Action) this.room_Action.checkAutoOutCardVis();
+                this.room_Card.setAutoOutCard(MJModel.isAutoOutCard);
+            }
+            else {
+                if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+                this.room_Card.setAutoOutCard(false);
+                MJModel.isAutoOutCard = false;
+            }
+
+            this.myselfCloseOutCard();
+        }
+
+        this.room_Card.checkCardSafe();
+
+        var player = MJModel.players[seatId];
+        if (player && (!MJModel.isMyPlayer(seatId))) {
+            this.handler_out_card_sound(player.sex, card);
+        }
+    },
+
+    handler_out_card_sound: function (sex, card) {
+        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/operator/luopai.mp3"));
+        Sound.getInstance().playEffect(__String.createWithFormat(getResPath("RoomMJ/sound/chupai/%1_%2.mp3"), sex == SEX_ID.SEX_MAN ? "m" : "w", Utils.toHex2(card)));
+    },
+
+    handler_server_operate_notify_bc: function (data, canDelay) {
+
+        // this.room_Info.showTime(MJModel.oprateTime);
+        // this.room_Info.showDirectionTip(-1);
+
+        var ackOpNotify = parsePacket("proto.game.AckOpNotify", data);
+        var seatid = ackOpNotify.ChairID;
+        var optype = ackOpNotify.OpType;
+        var optype2 = ackOpNotify.OpType2;
+        var card = ackOpNotify.Card;
+
+        MJModel.cur_seat = -1;
+        if (this.room_Action_video) {
+            var pos = MJModel.getPosBySeatid(seatid);
+            this.room_Action_video.reset();
+            this.room_Action_video.setOperator(pos, optype);
+        }
+
+        if (MJModel.isMyPlayer(seatid)) {
+            MJModel.gang_info = [];
+            MJModel.operator_info = [];
+            if (ackOpNotify.Gang.length > 0) {
+                var gang_size = ackOpNotify.Gang.length;
+                for (var i = 0; i < gang_size; i++) {
+                    var tgInfo = Utils.clone(tagGangInfo);
+                    tgInfo.curCard = ackOpNotify.Gang[i].Card;
+                    tgInfo.state = ackOpNotify.Gang[i].state;
+                    MJModel.gang_info.push(tgInfo);
+                }
+            }
+
+            if (ackOpNotify.cardList && ackOpNotify.cardList.length > 0) {
+                MJModel.operator_info = [];
+                var gang_size = ackOpNotify.cardList.length;
+                for (var i = 0; i < gang_size; i++) {
+                    var tgInfo = Utils.clone(tagOpInfo);
+                    tgInfo.OpType = ackOpNotify.cardList[i].OpType;
+                    for (var j = 0; j < ackOpNotify.cardList[i].card.length; j++) {
+                        tgInfo.Cards.push(ackOpNotify.cardList[i].card[j]);
+                    }
+
+                    MJModel.operator_info.push(tgInfo);
+                }
+            }
+
+            MJModel.curOperateCard = card;
+            MJModel.curOperate = optype;
+            MJModel.curOperateID = ackOpNotify.operateid;
+
+            this.autoHuCard();
+
+            MJModel.cur_seat = seatid;
+            if (optype > 0) {
+                MJModel.canTouchCard = false;
+            }
+            this.check_tip_operate_card(optype, card);
+            if (this.room_Action) this.room_Action.setOperator(-1);
+            if (this.room_Action) this.room_Action.setOperator(optype, optype2);
+            if (this.room_Action_video) this.room_Action_video.setOperator(MJModel.getPosBySeatid(seatid), optype);
+        }
+    },
+    handler_gang_scores: function (scores, OpType, OpType2, canDelay) {
+        for (var j = 0; j < scores.length; j++) {
+            var seadid = j;
+            var pos = MJModel.getPosBySeatid(j);
+            var s = scores[seadid];
+            var myPlayer = MJModel.players[seadid];
+            if (myPlayer) {
+                myPlayer.money += s;
+                this.players[pos].updateInfo();
+                if (canDelay) this.showScoreEffect(pos, s);
+            }
+        }
+    },
+    handler_server_peng_kang_bc: function (data, canDelay) {
+        this.room_Tip.showTextTip("");
+        this.check_tip_operate_card(0, 0);
+        var ackBcOpResult = parsePacket("proto.game.AckBcOpResult", data);
+        this.unschedule(this.autoOutCardTimeOut);
+        this.unschedule(this.autoHuCardTimeOut);
+
+        var seatid = ackBcOpResult.ChairID;
+        var out_seatid = ackBcOpResult.OutCardChairID;
+        var OpType = ackBcOpResult.OpType;
+        var OpType2 = ackBcOpResult.OpType2;
+        var card = ackBcOpResult.Card;
+        var cardList = ackBcOpResult.OpCards;
+        var removeHandcards1 = ackBcOpResult.cardDel;
+        var specialCard = ackBcOpResult.SpecialCard;
+        var LaiziNum = ackBcOpResult.LaiziNum;
+
+
+        var scores = ackBcOpResult.Score;
+        this.handler_gang_scores(scores, OpType, OpType2, canDelay);
+
+        if (MJModel.isMyPlayer(seatid)) {
+            if (this.room_Action) this.room_Action.setOperator(-1);
+        }
+
+        if (this.room_Action_video) this.room_Action_video.reset();
+
+        var pos = MJModel.getPosBySeatid(seatid);
+        var out_pos = MJModel.getPosBySeatid(out_seatid);
+
+        this.players[pos].setTimeOut(false);
+        this.players[pos].setOffline(false);
+        if (MJModel.outtimeplayers.length > 1 && MJModel.outtimeplayers.indexOf(seatid) != -1) {
+            MJModel.outtimeplayers.splice(MJModel.outtimeplayers.indexOf(seatid), 1);
+        }
+
+        if ((OpType & ActionType.TYPE_PASS) == ActionType.TYPE_PASS) {
+
+            if (MJModel.isMyPlayer(seatid) && seatid == out_seatid && this.room_Card.isDuoPai(0))//如果是我自己摸的牌  自己过 则放开选牌功能
+            {
+                this.room_Info.showTime(MJModel.outCardTime);
+                MJModel.cur_seat = seatid;
+                this.myselfOpenOutCard(true);
+            }
+
+            return;
+        }
+
+        var needRemoveOutCard = false;
+        var needOpenOutCard = false;
+        var removeHandcards2 = [];
+        if ((OpType & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+            var ok = this.room_Card.addPengCard(pos, PengType.Peng_AnKang, card, out_pos, OpType, specialCard, LaiziNum, cardList);
+            if (!ok)return;
+            //this.room_Card.removeHandCard(pos, card, 4);
+            removeHandcards2.push(card);
+            removeHandcards2.push(card);
+            removeHandcards2.push(card);
+            removeHandcards2.push(card);
+        }
+        else if ((OpType & ActionType.TYPE_PENG) == ActionType.TYPE_PENG) {
+            this.room_Card.addPengCard(pos, PengType.Peng_Peng, card, out_pos, OpType, specialCard, LaiziNum, cardList);
+            this.room_Card.removeHandCard(pos, card, 2);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_ZHIGANG) == ActionType.TYPE_ZHIGANG) {
+            var ok = this.room_Card.addPengCard(pos, PengType.Peng_Kang, card, out_pos, OpType, specialCard, LaiziNum, cardList);
+            if (!ok)return;
+            //this.room_Card.removeHandCard(pos, card, 3);
+            removeHandcards2.push(card);
+            removeHandcards2.push(card);
+            removeHandcards2.push(card);
+            needRemoveOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_WANGANG) == ActionType.TYPE_WANGANG) {
+            var ok = this.room_Card.changPengCard(pos, PengType.Peng_Kang, card, out_pos, OpType, specialCard, LaiziNum, cardList);
+            if (!ok)return;
+            //this.room_Card.removeHandCard(pos, card, 1);
+            removeHandcards2.push(card);
+        }
+        else if ((OpType & ActionType.TYPE_LEFT_CHI) == ActionType.TYPE_LEFT_CHI) {
+            this.room_Card.addPengCard(pos, PengType.Chi_L, card, out_pos, OpType, specialCard, LaiziNum, cardList);
+            //this.room_Card.removeHandCard(pos, card + 1, 1);
+            //this.room_Card.removeHandCard(pos, card + 2, 1);
+            removeHandcards2.push(card + 1);
+            removeHandcards2.push(card + 2);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_CENTER_CHI) == ActionType.TYPE_CENTER_CHI) {
+            this.room_Card.addPengCard(pos, PengType.Chi_M, card, out_pos, OpType, specialCard, LaiziNum, cardList);
+            //this.room_Card.removeHandCard(pos, card - 1, 1);
+            //this.room_Card.removeHandCard(pos, card + 1, 1);
+            removeHandcards2.push(card - 1);
+            removeHandcards2.push(card + 1);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_RIGHT_CHI) == ActionType.TYPE_RIGHT_CHI) {
+            this.room_Card.addPengCard(pos, PengType.Chi_R, card, out_pos, OpType, specialCard, LaiziNum, cardList);
+            //this.room_Card.removeHandCard(pos, card - 1, 1);
+            //this.room_Card.removeHandCard(pos, card - 2, 1);
+            removeHandcards2.push(card - 1);
+            removeHandcards2.push(card - 2);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_HU) == ActionType.TYPE_HU) {
+            this.room_Info.showDirectionTip(-1);
+            this.room_Info.stopTime();
+            MJModel.canTouchCard = false;
+            //抢弯杠
+            if ((OpType2 && OpType2 == 5)) {
+                this.room_Card.changeWanGang(out_pos, PengType.Peng_Peng, card);
+                if (this.room_Card.isDuoPai(out_pos)) this.room_Card.removeHandCard(out_pos, card, 1);
+            }
+            //抢直杠
+            if ((OpType2 && OpType2 == 11)) {
+                var ok = this.room_Card.changeZhiGang(out_pos, PengType.Peng_Peng, card);
+                if (ok) {
+                    this.room_Card.initMoCard(out_pos, (out_pos == 0 || MJModel.isOnVideo ) ? card : 0);
+                    this.room_Card.initMoCard(out_pos, (out_pos == 0 || MJModel.isOnVideo ) ? card : 0);
+                    this.room_Card.initMoCard(out_pos, (out_pos == 0 || MJModel.isOnVideo ) ? card : 0);
+                    this.room_Card.reflashHandCard(out_pos, true, false);
+                }
+            }
+
+            if ((OpType2 && OpType2 == 5) || (OpType2 && OpType2 == 11)) {
+                //避免双抢杠的时候 会出两次牌
+                if (this.room_Card.out_card[out_pos].length == 0 || this.room_Card.out_card[out_pos][this.room_Card.out_card[out_pos].length - 1].getValue() != card) {
+                    this.room_Card.addOutCard(out_pos, card);
+                }
+            }
+        } else {
+            return;
+        }
+
+        if (removeHandcards2.length > 0) {
+            if (removeHandcards1 && removeHandcards1.length > 0) {
+                for (var i = 0; i < removeHandcards1.length; i++) {
+                    this.room_Card.removeHandCard(pos, removeHandcards1[i], 1);
+                }
+            } else {
+                for (var i = 0; i < removeHandcards2.length; i++) {
+                    this.room_Card.removeHandCard(pos, removeHandcards2[i], 1);
+                }
+            }
+        }
+
+        if (MJModel.isMyPlayer(seatid)) {
+            if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+            MJModel.isAutoOutCard = false;
+            this.room_Card.setAutoOutCard(false);
+        }
+
+        if (needRemoveOutCard) {
+            MJModel.cur_seat = seatid;
+            var isok = this.room_Card.removeOutCard(out_pos, card, canDelay);
+            this.room_Card.setCurCardTip(false);
+            if (isok == false) {
+                try {
+                    ERROR(this, "removeOutCard error card:" + card + "lastoutcard:" + this.room_Card.out_card[out_pos][this.room_Card.out_card[out_pos].length - 1].getValue());
+                } catch (e) {
+                    ERROR(this, "needRemoveOutCard" + e);
+                }
+                this.reConnect("", false);
+            }
+        }
+
+        if (needOpenOutCard) {
+            this.room_Info.showDirectionTip(pos);
+            if (MJModel.isMyPlayer(seatid)) {
+                this.myselfOpenOutCard();
+            }
+        }
+
+        var player = MJModel.players[seatid];
+        if (player && canDelay) {
+
+            var effect = "gang";
+            if ((OpType & ActionType.TYPE_HU) == ActionType.TYPE_HU) {
+                var zimo = this.room_Card.isDuoPai(pos);
+                effect = "hu";
+                if (zimo) {
+                    effect = "zimo";
+                }
+
+                if (OpType2 == 5 || OpType2 == 11) {
+                    effect = "qiangganghu";
+                }
+            }
+            else if ((OpType & ActionType.TYPE_PENG) == ActionType.TYPE_PENG) {
+                effect = "peng";
+            }
+            else if ((OpType & ActionType.TYPE_LEFT_CHI) == ActionType.TYPE_LEFT_CHI || (OpType & ActionType.TYPE_CENTER_CHI) == ActionType.TYPE_CENTER_CHI || (OpType & ActionType.TYPE_RIGHT_CHI) == ActionType.TYPE_RIGHT_CHI) {
+                effect = "chi";
+            }
+
+            this.handler_op_sound(pos, player.sex, OpType, OpType2, effect);
+            this.handler_op_effect(pos, out_pos, player.sex, OpType, OpType2, effect);
+        }
+
+        this.room_Card.checkCardSafe();
+    },
+
+    handler_op_effect: function (pos, out_pos, sex, OpType, OpType2, effect) {
+        // this.room_Tip.showEffect(pos, OpType, this.room_Card.isDuoPai(pos));
+        // this.room_Tip.showEffect1(pos, out_pos, OpType, effect);
+        this.room_Tip.showSimpleEffect(pos, out_pos, OpType, effect);
+    },
+    handler_op_sound: function (pos, sex, OpType, OpType2, effect) {
+        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/give.mp3"));
+        this.handler_op_sound_putonghua(pos, sex, OpType, OpType2, effect);
+    },
+
+    handler_op_sound_putonghua: function (pos, sex, OpType, OpType2, effect) {
+        if (effect == "qiangganghu") {
+            effect = "hu";
+        }
+        Sound.getInstance().playEffect(__String.createWithFormat(getResPath("RoomMJ/sound/operator/%1_%2.mp3"), sex == SEX_ID.SEX_MAN ? "m" : "w", effect));
+    },
+
+    handler_server_tingpai_notify: function (data, canDelay) {
+        var ackListenNotify = parsePacket("proto.game.AckListenNotify", data);
+        var OpType = ackListenNotify.OpType;
+
+        MJModel.listen_info2 = ackListenNotify.ListenInfo1;
+        //点击出来有听操作提示
+        if (ackListenNotify.ListenInfo.length > 0) {
+            var listeninfo_size = ackListenNotify.ListenInfo.length;
+            this.room_Card.setTingPaiFlag(false);
+            MJModel.listen_info = [];
+            for (var i = 0; i < listeninfo_size; i++) {
+                var tli = Utils.clone(tagListenInfo);
+                tli.HuInfo = [];
+
+                tli.OutCard = ackListenNotify.ListenInfo[i].OutCard;
+                var huinfoLen = ackListenNotify.ListenInfo[i].HuInfo.length;
+                tli.HuInfoLen = huinfoLen;
+                for (var j = 0; j < huinfoLen; j++) {
+                    var huInfo = Utils.clone(tagHuInfo);
+                    huInfo.Card = ackListenNotify.ListenInfo[i].HuInfo[j].Card;
+                    huInfo.LeftNum = ackListenNotify.ListenInfo[i].HuInfo[j].LeftNum;
+                    huInfo.HuFanNum = ackListenNotify.ListenInfo[i].HuInfo[j].HuFanNum;
+                    tli.HuInfo.push(huInfo);
+                }
+                MJModel.listen_info.push(tli);
+            }
+            if (MJModel.isMyPlayer(MJModel.cur_seat)) {
+                this.room_Card.setTingPaiFlag(true);
+                if (this.room_Action) this.room_Action.setTingPaiVis(false);
+            }
+        }
+        else {
+            MJModel.listen_info = [];
+            this.room_Card.setTingPaiFlag(false);
+            if (this.room_Action) this.room_Action.setTingPaiVis(false);
+        }
+
+        if (MJModel.isMyPlayer(MJModel.cur_seat)) {
+            if ((OpType & ActionType.TYPE_LISTEN) == ActionType.TYPE_LISTEN)OpType -= ActionType.TYPE_LISTEN;
+            cc.log("OpType & ActionType.TYPE_LISTEN:" + OpType);
+            if (OpType > 0) {
+                this.myselfCloseOutCard();
+                this.room_Action.setOperator(OpType);
+            }
+        }
+    },
+
+    handler_server_game_end_bc: function (ackGameEnd, canDelay) {
+        Log(this, "handler_server_game_end_bc");
+        try {
+            var self = this;
+            this.room_Card.setAutoOutCard(false);
+            if (this.room_Action) this.room_Action.setTingPaiVis(false);
+            if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+            if (this.room_Action) this.room_Action.setOperator(-1);
+            this.room_Info.stopTime();
+            this.room_Tip.hideOutCardTip();
+
+            var show_all_handcard = cc.callFunc(function () {
+                self.gameend_showAllHandCard(ackGameEnd);
+            });
+
+            var state = ackGameEnd.EndState;
+            var show_liuju = cc.callFunc(function () {
+                if (ackGameEnd.EndState == 1) {
+                    //流局
+                    self.room_Tip.ShowGameState(3);
+                }
+            });
+
+            var show_end_score = cc.callFunc(function () {
+                self.gameend_showAllScoreEffect(ackGameEnd);
+            });
+
+            var update_all_money = cc.callFunc(function () {
+                self.gameend_updatePlayersInfo(ackGameEnd);
+            });
+
+            var game_end_reset = cc.callFunc(function () {
+                self.gameend_showFinalGameEnd(ackGameEnd);
+            });
+
+            var show_all_public_card = cc.callFunc(function () {
+                self.gameend_showAllPublicCard(ackGameEnd);
+            });
+
+            if (MJModel.isOnVideo && canDelay == false) {
+                this.runAction(cc.sequence(show_all_public_card, show_all_handcard, cc.delayTime(2), update_all_money));
+                return;
+            }
+
+            this.runAction(cc.sequence(show_all_public_card, show_all_handcard, cc.delayTime(2.5), show_liuju, cc.delayTime(1), show_end_score, cc.delayTime(1), update_all_money, cc.delayTime(1), game_end_reset));
+        } catch (e) {
+            ERROR(this, "handler_server_game_end_bc" + e);
+        }
+    },
+    handler_server_bigface_bc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.login.AckEmotionBC", data);
+        var from_seat = jpacket.seatid;
+        var to_seat = jpacket.target_seatid;
+        var type = jpacket.type;
+
+        var bpos = MJModel.getPosBySeatid(from_seat);
+        var epos = MJModel.getPosBySeatid(to_seat);
+
+        if (bpos == epos) {
+            this.room_Tip.showFaceSelf(type, bpos);
+            return;
+        }
+
+        if (MJModel.hudong == 0) {
+            return;
+        }
+
+        if (MJModel.isMyPlayer(to_seat) && MJModel.hudong_on_off[from_seat] == 0) {
+            return;
+        }
+        if (MJModel.isMyPlayer(from_seat) == false) this.room_Tip.showBigFace(bpos, epos, type, MJModel.players[from_seat].sex);
+    },
+    handler_server_update_info_uc: function (data, canDelay) {
+        var ackUpdateUserInfo = parsePacket("proto.game.AckUpdateUserInfo", data);
+        var seadid = ackUpdateUserInfo.chairid;
+        var myPlayer = MJModel.players[seadid];
+        var uid = ackUpdateUserInfo.uid;
+        var pos = MJModel.getPosBySeatid(seadid);
+        if (myPlayer && uid == myPlayer.uid) {
+            myPlayer.money = ackUpdateUserInfo.money;
+            myPlayer.rmb = ackUpdateUserInfo.rmb;
+            this.players[pos].updateInfo();
+        }
+    },
+
+    handler_server_up_table_bc: function (data, canDelay) {
+        if (MJModel.waitUpdate == false) Sound.getInstance().playEffect(getResPath("RoomMJ/sound/enter.mp3"));
+        var ackUpTableSuccess = parsePacket("proto.login.AckUpTableSuccess", data);
+        var seatid = ackUpTableSuccess.seatid;
+
+        var player = MJModel.players[seatid];
+        player.reset();
+
+        player.seatid = seatid;
+        player.uid = ackUpTableSuccess.uid;
+        player.name = ackUpTableSuccess.name;
+        player.money = ackUpTableSuccess.money;
+        player.ready = ackUpTableSuccess.ready;
+        player.sex = ackUpTableSuccess.sex;
+        player.avatar = ackUpTableSuccess.avatar;
+        player.start_money = player.money * 2;//乘2 做简单的加密
+
+        if (player.uid == ZJHModel.getInstance().uid) {
+            MJModel.waitUpdate = true;
+            CCTcpClient.getInstance(MJModel.curRoomID).reset_response_queue();
+            sendTableInfoReq();
+        }
+        else {
+            var pos = MJModel.getPosBySeatid(seatid);
+            var rPlayer = this.players[pos];
+            rPlayer.login(player.seatid);
+
+            if (MJModel.mj_public_style == 0) {
+                JsUtils.postNotifi("notify_room_check_ip");
+            } else {
+                this.checkIpAndDistance();
+                this.checkGPSWarning();
+            }
+            if (this.pre_scene) this.pre_scene.resetMode();
+            if (this.pre_scene) this.pre_scene.resetSelectMode();
+        }
+
+        if (this.pre_scene) this.pre_scene.handler_server_up_table_bc(data, canDelay);
+    },
+    handler_server_down_table_bc: function (data, canDelay) {
+        var ackDownTableSuccess = parsePacket("proto.login.AckDownTableSuccess", data);
+        var uid = ackDownTableSuccess.uid;
+        var seatid = ackDownTableSuccess.seatid;
+
+        var player = MJModel.players[seatid];
+        player.uid = 0;
+        var pos = MJModel.getPosBySeatid(seatid);
+        var roomPlayer = this.players[pos];
+        roomPlayer.reset();
+        roomPlayer.logout();
+        if (this.pre_scene) this.pre_scene.resetMode();
+        if (this.pre_scene) this.pre_scene.resetSelectMode();
+        if (MJModel.isMyPlayer(seatid)) {
+            MJModel.tempSeatid = MJModel.seatid;
+            MJModel.seatid = -1;
+            ZJHModel.getInstance().mySeatid = MJModel.seatid;
+            if (this.room_Action) {
+                this.room_Action.setReadyVisible(false);
+            }
+            MJModel.mj_table.release();
+            ZJHModel.getInstance().roomToHall();
+            return;
+        }
+
+        if (MJModel.gpsInfo) {
+            MJModel.gpsInfo.updateInfo();
+        }
+
+        if (this.pre_scene) this.pre_scene.handler_server_down_table_bc(data, canDelay);
+    },
+
+    handler_game_time_over_bc: function (data, canDelay) {
+        MJModel.state = MJ_STATUS.MJ_GAME_FREE;
+        this.startTimeEnd();
+        // PlatformHelper.showToast("服务器通知房间结束！");
+    },
+
+    handler_game_time_out_bc: function (data, canDelay) {
+        var ackUpdateUserInfo = parsePacket("proto.game.AckUpdateTimer", data);
+        var seatid = ackUpdateUserInfo.ChairID;
+        var time = ackUpdateUserInfo.lefttime;
+
+        this.room_Info.showTime(time);
+        if (seatid != -1) {
+            this.room_Info.showDirectionTip(MJModel.getPosBySeatid(seatid));
+        }
+
+        if (!MJModel.isMyPlayer(seatid)) this.room_Tip.showTextTip("等待玩家重连");
+    },
+
+    handler_game_heartbeat_uc: function (data, canDelay) {
+        MJModel.lastHeartBeatTime = time(null);
+        MJModel.netDely = time(null) - MJModel.lastSendHeartTime;
+        this.roomPublic.showDelay();
+    },
+    showScoreEffect: function (pos, value, need_save) {
+        cc.log("showScoreEffect:showScoreEffect-------");
+        if (value == 0) {
+            return;
+        }
+
+        if (need_save == undefined) {
+            need_save = false;
+        }
+        var size = cc.director.getWinSize();
+
+        var label = null;
+        if (value > 0) {
+            label = new cc.LabelAtlas(":" + value, getResPath("RoomMJ/dz_balance_num_win.png"), 41, 58, '0');
+        } else {
+            label = new cc.LabelAtlas(":" + Math.abs(value), getResPath("RoomMJ/dz_balance_num_lose.png"), 41, 58, '0');
+        }
+        label.setAnchorPoint(cc.p(0.5, 0.5));
+        var bp;
+        var ep;
+        if (pos == 0) {
+            bp = cc.p(size.width / 2, 30);
+            bp.y += 70;
+        } else if (pos == 1) {
+            label.setAnchorPoint(cc.p(1, 0.5));
+            bp = cc.p(size.width - 130, size.height / 2);
+            bp.x -= 90;
+        } else if (pos == 2) {
+            bp = cc.p(size.width / 2, size.height - 100);
+            bp.y -= 70;
+        } else if (pos == 3) {
+            label.setAnchorPoint(cc.p(0, 0.5));
+            bp = cc.p(130, size.height / 2);
+            bp.x += 90;
+        }
+        //label.setScale(1.5);
+        this.addChild(label, 250);
+        label.setPosition(bp);
+        label.setName("reset_remove");
+        label.setOpacity(0);
+
+        if (need_save) {
+            try {
+                label.runAction(cc.sequence(cc.spawn(cc.fadeIn(0.17), cc.moveBy(0.17, cc.p(0, 50)))));
+            } catch (e) {
+            }
+        } else {
+            try {
+                label.runAction(cc.sequence(cc.delayTime(0.3), cc.spawn(cc.fadeIn(0.2), cc.moveBy(1, cc.p(0, 50))), cc.delayTime(0.5), cc.fadeOut(1), cc.removeSelf()));
+            } catch (e) {
+                label.runAction(cc.sequence(cc.delayTime(0.3), cc.removeSelf()));
+            }
+        }
+    },
+    gameend_showAllHandCard: function (ackGameEnd) {
+        if (MJModel.isOnVideo) {
+            return;
+        }
+        JsUtils.postNotifi("notify_game_check_end");//为了刷新局数 或者  开始倒计时
+        if (MJModel.currentCount >= MJModel.RoomCountSum && !MJModel.isDaQuan)this.startTimeEnd();
+        try {
+            var usercard_size = ackGameEnd.UserCard.length;
+            var IsShowHandCard = true;
+            if (IsShowHandCard) {
+                var cardData = [];
+                for (var i = 0; i < usercard_size; i++) {
+                    //结束玩家手牌数组
+                    var changeable_Size = ackGameEnd.UserCard[i].ChangeableCards.length;
+                    cardData = [];
+
+                    for (var j = 0; j < changeable_Size; j++) {
+                        var cardDataNum = ackGameEnd.UserCard[i].ChangeableCards[j];
+                        cardData.push(cardDataNum);
+                    }
+
+                    try {
+                        cardData.sort(this.room_Card.sortCard);
+                    } catch (e) {
+                        Log(this, e);
+                    }
+
+                    var pos = MJModel.getPosBySeatid(i);
+                    if (ackGameEnd.faninfo.length > i) {
+                        this.room_Card.showEndCard(pos, cardData, ackGameEnd.faninfo[i].hucard, ackGameEnd.faninfo[i].SpecialType == 1);
+                    }
+                    else {
+                        this.room_Card.showEndCard(pos, cardData, 0, false);
+                    }
+
+                    //找到暗杠的牌 需要把暗杠显示出来
+                    if (ackGameEnd.UserCard[i].stFixedCards) {
+                        var groupcard_size = ackGameEnd.UserCard[i].stFixedCards.length;
+                        var allpenggangcards = ackGameEnd.UserCard[i].stFixedCards;
+                        for (var j = 0; j < groupcard_size; j++) {
+                            var cardData = allpenggangcards[j].CardData;
+                            var state = allpenggangcards[j].state;
+                            var chairId = allpenggangcards[j].chairID;
+                            var cardList = allpenggangcards[j].OpCards;
+                            var out_pos = MJModel.getPosBySeatid(chairId);
+
+
+                            if ((state & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+                                this.room_Card.changeAnGang(pos, PengType.Peng_AnKang, cardData, out_pos, cardList);
+                            }
+                        }
+                    }
+                    if (ackGameEnd.md5 && ackGameEnd.md5.length > 0 && ackGameEnd.md5[i])this.room_Card.checkCardSafe(ackGameEnd.md5[i], pos);
+                    Sound.getInstance().playEffect(getResPath("RoomMJ/sound/order_pai2.mp3"));
+                }
+            }
+        } catch (e) {
+
+        }
+    },
+    gameend_showAllScoreEffect: function (ackGameEnd) {
+        this.room_Tip.resetRemove();
+        for (var i = 0; i < ackGameEnd.Score.length; i++) {
+            var pos = MJModel.getPosBySeatid(i);
+            var player = MJModel.players[i];
+            if (player.uid > 0) {
+                this.showScoreEffect(pos, ackGameEnd.Score[i], true);
+                if (pos == 0) {
+                    if (ackGameEnd.Score[i] > 0) {
+                        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/win.mp3"));
+                    } else if (ackGameEnd.Score[i] < 0) {
+                        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/loss.mp3"));
+                    }
+                }
+            }
+        }
+    },
+    gameend_showFinalGameEnd: function (ackGameEnd) {
+        MJModel.state = MJ_STATUS.MJ_GAME_FREE;
+        this.room_Action.setReady2Visible(true);
+        if (ackGameEnd.EndState == 1) {
+            return;
+        }
+
+        this.gameend_showGameEndDetail(ackGameEnd);
+    },
+    gameend_showGameEndDetail: function (ackGameEnd) {
+
+    },
+    gameend_showAllPublicCard: function (ackGameEnd) {
+        var carInfo = ackGameEnd.stShowCardPool;
+        if (carInfo) {
+            var publickNum = 0;
+            for (var i = 0; i < carInfo.length; i++) {
+                var pos = MJModel.getPosBySeatid(carInfo[i].seat_id);
+                if (pos != -1 && pos != 255) {
+                    publickNum += carInfo[i].PoolCard.length;
+                    for (var j = 0; j < carInfo[i].PoolCard.length; j++) {
+                        var card = carInfo[i].PoolCard[j];
+                        var cardsp = this.room_Card.addOutCard(pos, card, false);
+                        cardsp.setStoreColor(cc.color(198, 232, 229));
+                        var dx = 0;
+                        var dy = 0;
+                        if (pos == 0) {
+                            dy = -30;
+                        }
+                        if (pos == 2) {
+                            dy = 30;
+                        }
+                        if (pos == 1) {
+                            dx = 30;
+                        }
+                        if (pos == 3) {
+                            dx = -30;
+                        }
+                        var end_pos = cardsp.getPosition();
+                        var begin_pos = cc.p(end_pos.x + dx, end_pos.y + dy);
+                        cardsp.setPosition(begin_pos);
+                        cardsp.runAction(cc.sequence(cc.delayTime(1), cc.moveTo(0.25, end_pos)));
+                    }
+                }
+            }
+            this.room_Card.removePublicCardByNums(publickNum, 0);
+        }
+    },
+    gameend_updatePlayersInfo: function (ackGameEnd) {
+        try {
+            for (var i = 0; i < ackGameEnd.money.length; i++) {
+                var player = MJModel.players[i];
+                player.money = ackGameEnd.money[i];
+
+                var pos = MJModel.getPosBySeatid(i);
+                var player = MJModel.players[i];
+                if (player.uid > 0) {
+                    var player = this.players[pos];
+                    player.updateInfo();
+                }
+            }
+        } catch (e) {
+        }
+    },
+    handler_server_end_room_req_fail_uc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.AckDisbandChooseFaild", data);
+        var code = jpacket.code;
+        if (code == 101) {
+            PlatformHelper.showToast("每个玩家每局游戏只能申请两次解散房间！");
+        }
+        else if (code == 102) {
+            PlatformHelper.showToast("只有桌子上的玩家可以申请解散房间！");
+        }
+        else if (code == 103) {
+            PlatformHelper.showToast("当前有人正在申请解散房间！");
+        }
+    },
+    handler_server_end_room_bc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.AckDisbandApply", data);
+        if (MJModel.seatid == -1)return;
+
+        if (this.room_EndTouPiao) {
+            this.room_EndTouPiao.removeFromParent(true);
+            this.room_EndTouPiao = null;
+        }
+
+        var json = {};
+
+        var owner_seatid = jpacket.ApplyChairid;
+        var time = jpacket.Waittime;
+        var alltime = jpacket.totaltime;
+        var player = MJModel.players[owner_seatid];
+
+        json["ownerid"] = player.uid;
+        json["ownername"] = player.name;
+        json["time_left"] = time;
+        json["time_all"] = alltime;
+        json["players"] = [];
+        for (var i = 0; i < jpacket.onlinechairid.length; i++) {
+            var seatid = jpacket.onlinechairid[i];
+            var p = MJModel.players[seatid];
+            var d = {}
+            d["uid"] = p.uid;
+            d["name"] = p.name + "";
+            d["avatar"] = p.avatar;
+            d["state"] = 0;
+            json["players"].push(d);
+        }
+
+        MJModel.TouPiaoING = true;
+
+        if (MJModel.mj_public_style == 0) {
+            this.room_EndTouPiao = RoomHEndTouPiao.create();
+        } else {
+            this.room_EndTouPiao = new EndRoomLayer();
+            if (MJModel.gpsInfo) {
+                MJModel.gpsInfo.removeFromParent();
+                MJModel.gpsInfo = null;
+            }
+        }
+
+        this.room_EndTouPiao.initWithJsonStr(JSON.stringify(json));
+        this.setTouPiaoTips();
+
+        if (MJModel.mj_public_style == 0) {
+            this.addChild(this.room_EndTouPiao, 10000000);
+        } else {
+            this.addChild(this.room_EndTouPiao, 300);
+        }
+
+        this.room_EndTouPiao.setCallback(function (str) {
+            if (str == "ok") {
+                sendEndRoomResult(1);
+            }
+            else if (str == "no") {
+                sendEndRoomResult(2);
+            }
+        });
+    },
+    handler_server_end_room_action_bc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.AckDisbandChooseBc", data);
+        var seatid = jpacket.chairid;
+        var action = jpacket.Choosestate;
+        var p = MJModel.players[seatid];
+        if (this.room_EndTouPiao) this.room_EndTouPiao.updateState(p.uid, action);
+    },
+    handler_server_end_room_result_bc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.AckDisbandResult", data);
+        if (this.room_EndTouPiao) this.room_EndTouPiao.removeFromParent(true);
+        this.room_EndTouPiao = null;
+        MJModel.TouPiaoING = false;
+        if (jpacket.uid == null || jpacket.uid == 0){
+            var result = jpacket.Result;
+            if (result == 1) {
+                PlatformHelper.showToast("房间解散成功，3秒后房间自动结束");
+            }
+            else {
+                PlatformHelper.showToast("解散失败，稍后游戏继续！");
+            }
+        } else {
+            var dialog = new BeiJieSanLayer();
+            dialog.setInfo(jpacket);
+            cc.director.getRunningScene().addChild(dialog);
+        }
+    },
+//天门出牌跟有操作的通知合在一个接口里
+    handler_server_operate_notify_bc2: function (data, canDelay) {
+        var ackOpNotify = parsePacket("proto.game.AckOpNotify", data);
+        var seatid = ackOpNotify.ChairID;
+        var operat = ackOpNotify.OpType;
+        var card = ackOpNotify.Card;
+
+        var packet = createPacket("proto.game.AckUserOutCard");
+        packet.ChairID = seatid;
+        packet.Card = card;
+        var sendData = packet.encode64();
+        this.handler_server_out_card_bc(sendData, canDelay);
+
+        if (MJModel.seatid != -1) {
+            ackOpNotify.ChairID = MJModel.seatid;
+            this.handler_server_operate_notify_bc(ackOpNotify.encode64(), canDelay);
+        }
+    },
+    handler_server_player_offline_bc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.AckUserOnlineState", data);
+        var seatid = jpacket.chairid;
+        var state = jpacket.state;
+        var pos = MJModel.getPosBySeatid(seatid);
+        this.players[pos].setOffline(state == 1);
+        if (state == 2) {
+            //离开游戏
+            MJModel.addOutPlayer(this.players[pos]);
+        } else {
+            MJModel.removeOutPlayer(this.players[pos]);
+        }
+
+        this.room_Tip.showTextTip(MJModel.getOutPlayerTips());
+
+    },
+
+    handler_server_player_wait_bc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.OperateWaite", data);
+        var state = jpacket.state;
+        var outPlayerTips = MJModel.getOutPlayerTips();
+        if (outPlayerTips == "") {
+            this.room_Tip.showTextTip(state == 0 ? "" : "其他玩家正在思考");
+        }
+    },
+
+    handler_server_player_timeout_bc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.AckUserOvertimeState", data);
+        var seatid = jpacket.chairid;
+        var state = jpacket.state;
+
+        if (MJModel.outtimecount && MJModel.outtimecount != 0) {
+            if (state != 0) {
+                MJModel.outtimeplayers.push(seatid);
+                this.room_Tip.startAutoEndRoomTip(MJModel.outtimecount, this.room_Card.isDuoPai(0) == false && MJModel.curOperate <= 0, seatid);
+            } else {
+                if (MJModel.outtimeplayers.length > 1 && MJModel.outtimeplayers.indexOf(seatid) != -1) {
+                    MJModel.outtimeplayers.splice(MJModel.outtimeplayers.indexOf(seatid), 1);
+                }
+                this.room_Tip.setAutoEndRoomVis(false, MJModel.getPosBySeatid(seatid));
+            }
+            return;
+        }
+
+        if (state == 1) {
+            var pos = MJModel.getPosBySeatid(seatid);
+            if (this.players[pos]) this.players[pos].setTimeOut(true);
+        }
+        else if (state == 2) {
+            if (MJModel.curOperate == 0)this.room_Tip.showTextTip("等待玩家操作");
+        }
+    },
+
+    handler_server_get_msg: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.AckMessage", data);
+        var msg = jpacket.message;
+        this.room_Tip.showMyTip(msg);
+    },
+
+    handler_server_all_records: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.TotalRoundScore", data);
+        if (!(jpacket.round && jpacket.round.length > 0)) {
+            var scoreDetail = {Score: [0, 0, 0, 0]};
+            jpacket.round = [scoreDetail];
+        }
+        this.removeChildByName("MJRecordDetail");
+        var detail = new MJRecordDetail();
+        detail.setName("MJRecordDetail");
+        detail.updateRecordList(jpacket.round);
+        this.addChild(detail, 100000);
+
+    },
+
+    actionCallBack: function (name, evt) {
+        Log(this, "actionCallBack[" + name + "]");
+        if (name == "uptable") {
+            var hasNULL = false;
+            for (var i = 0; i < 4; i++) {
+                if (MJModel.players[i].uid <= 0) {
+                    hasNULL = true;
+                    break;
+                }
+            }
+
+            if (hasNULL) {
+                sendUpTable();
+            }
+            else {
+                this.room_Tip.showMyTip("桌上人已经满了");
+            }
+        }
+        else if (name == "downtable") {
+            sendDownTable();
+        }
+        else if (name == "weiguan") {
+        }
+        else if (name == "ready") {
+            sendReady();
+        }
+        else if (name == "quxiaoReady") {
+            sendQuxiaoReady();
+        }
+        else if (name == "auto_out_card") {
+            MJModel.isAutoOutCard = !MJModel.isAutoOutCard;
+            if (this.room_Action) this.room_Action.setAutoOutCardVis(true);
+            this.room_Card.setAutoOutCard(MJModel.isAutoOutCard);
+            if (MJModel.isMyPlayer(MJModel.cur_seat)) {
+                if (MJModel.isAutoOutCard) {
+                    this.autoOutCard();
+                }
+                else {
+                    this.myselfOpenOutCard();
+                }
+            }
+        } else if (name == "chat") {
+            try {
+                var chatInfo = new RoomChat();
+                chatInfo.setName("dialog");
+                chatInfo.show();
+                cc.director.getRunningScene().addChild(chatInfo);
+            } catch (e) {
+            }
+        } else if (name == "gps") {
+            Utils.refreshGps();
+        } else if (name == "more") {
+            var menu = new MenuList();
+            MJModel.mj_table.addChild(menu, 100000);
+        } else if (name == "yaoqing") {
+            var data = {};
+            data["roomId"] = MJModel.curRoomID;
+
+            CCHttpAgent.getInstance().sendHttpPost(function (tag) {
+                var data = CCHttpAgent.getInstance().getPacketData(tag);
+                if (data != "") {
+                    var recv = null;
+                    try {
+                        recv = JSON.parse(data);
+                        if (recv && recv.status == 200) {
+                            var data1 = recv["resultMap"];
+                            PlatformHelper.WeChatShare(data1["gameRoom"]["shareTitle"], data1["gameRoom"]["shareContent"], data1["gameRoom"]["shareUrl"], "");
+                        }
+                    }
+                    catch (e) {
+                    }
+                }
+                CCHttpAgent.getInstance().popPackets(tag);
+            }, "duiju/shareView", JSON.stringify(data), "shareVertical");
+        } else if (name == "copyshare") {
+            Utils.copyRoomID();
+        } else if (name == "xlshare") {
+            Utils.yaoqingToXL();
+        } else if (name == "sound") {
+            cc.log("sound evt:" + evt);
+            try {
+                if (evt == cc.EventTouch.EventCode.BEGAN) {
+                    if (cc.director.getRunningScene().getChildByName("ChatRecordEffect") == null) {
+                        var ChatRecordEffects = ChatRecordEffect.create();
+                        ChatRecordEffects.setName("ChatRecordEffect");
+                        cc.director.getRunningScene().addChild(ChatRecordEffects, 1000000);
+                    }
+                    PlatformHelper.startRecord();
+                }
+                else if (evt == cc.EventTouch.EventCode.ENDED || evt == cc.EventTouch.EventCode.CANCELLED) {
+                    PlatformHelper.stopRecord();
+                }
+            } catch (e) {
+                Log(this, e);
+                PlatformHelper.showToast("请更新到最新版本");
+            }
+        }
+    },
+
+    showBigfaceMenu: function (pos) {
+        var menu = new BigFaceMenu();
+        this.addChild(menu, 100000);
+
+        var seatid = MJModel.getSeatidByPos(pos);
+
+        var p = MJConfig.getPlayerPos(pos);
+        if (pos == 1) {
+            p.x -= 100;
+        }
+        if (pos == 3) {
+            p.x += 100;
+        }
+
+        if (pos == 2) {
+            p.y -= 50;
+        }
+        menu.setPosition(p);
+        var rotation = 0;
+        if (pos == 1) rotation = 180;
+        if (pos == 2) rotation = 270;
+        menu.show(rotation, seatid);
+        var self = this;
+        menu.setCallback(function (tag) {
+                var faceid = tag;
+                if (faceid == 0) {
+                    self.roomPublic.showPlayerList();
+                }
+                else if (faceid == 11) {
+                    MJModel.hudong_on_off[seatid] = 0;
+                }
+                else if (faceid == 12) {
+                    MJModel.hudong_on_off[seatid] = 1;
+                }
+                else {
+                    var curTime = time(null);
+                    if (MJModel.bigface_lastSendTime == -1 || curTime - MJModel.bigface_lastSendTime > 2000) {
+                        MJModel.bigface_lastSendTime = curTime;
+                        sendBigface(MJModel.seatid, MJModel.getSeatidByPos(pos), faceid);
+                    } else {
+                    }
+
+                    self.room_Tip.showBigFace(0, pos, faceid, MJModel.players[MJModel.seatid].sex);
+                }
+            }
+        )
+        ;
+    },
+
+    playerClickCallback: function (pos) {
+        var seatid = MJModel.getSeatidByPos(pos);
+        if (seatid == MJModel.seatid) {
+            if (PackName == "mjnew225d") {
+                this.release();
+                ZJHModel.getInstance().roomToHall();
+            }
+        }
+        else {
+            if (MJModel.seatid == -1) {
+                var player = MJModel.players[MJModel.getSeatidByPos(pos)];
+                var userInfo = new MJUserInfo();
+                userInfo.init(player);
+                this.addChild(userInfo, 1000000);
+            }
+            else {
+
+                if (MJModel.hudong == 0) {
+                    return;
+                }
+
+                this.showBigfaceMenu(pos);
+            }
+        }
+    },
+
+    syncPlayerInfo: function () {
+    },
+
+    faPaiOver: function (dt) {
+    },
+    nextUserEnterBet: function () {
+    },
+
+    resetGame: function (allClean) {
+        if (allClean == undefined) {
+            allClean = true;
+        }
+        try {
+            while (this.getChildByName("reset_remove")) {
+                this.removeChildByName("reset_remove");
+            }
+        } catch (e) {
+
+        }
+        MJModel.preGame();
+        MJModel.valueGuiPai = 0;
+        this.room_Tip.hideAllTip();
+        this.room_Tip.resetRemove();
+        this.room_Tip.hideOutCardTip();
+
+        if (this.pre_scene) this.pre_scene.resetSelectMode();
+        if (this.pre_scene) this.pre_scene.resetMode(false, true);
+
+        if (this.room_Action) this.room_Action.setTingPaiVis(false);
+        if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+
+        if (this.room_Action) this.room_Action.setReadyVisible(false);
+        if (this.room_Action) this.room_Action.setQuxiaoReadyVisible(false);
+
+        if (this.room_Action) this.room_Action.setOperator(-1);
+        if (this.room_Action_video) this.room_Action_video.reset();
+
+        this.unschedule(this.autoOutCardTimeOut);
+        this.unschedule(this.autoHuCardTimeOut);
+
+        this.room_Card.reset();
+        this.room_Info.gdmj_showFengQuan(-1);
+        this.room_Info.showDirectionTip(-1);
+        this.room_Info.showCardNums(0);
+        this.room_Info.stopTime();
+        for (var i = 0; i < 4; i++) {
+            var player = this.players[i];
+            player.reset();
+            var model = MJModel.players[i];
+            model.ready = 0;
+        }
+
+        if (allClean) {
+            if (this.room_EndTouPiao) {
+                this.room_EndTouPiao.removeFromParent(true);
+                this.room_EndTouPiao = null;
+            }
+        }
+
+        this.removeChildByName("RoomMJSCEndCheck");
+        this.removeChildByName("RoomMJResultDetail");
+
+        MJModel.mj_mo_cards = [-1, -1, -1, -1];
+    },
+
+    gameHeartBeat: function (dt) {
+        if (MJModel.firstEnterGame)return;
+        sendHeartbeat();
+        this.checkUploadMyGPS();
+    },//心跳
+    notificationCallback: function (msg) {
+    },
+    GameTimeEndNotify: function (ref) {
+        MJModel.isTimeEnd = true;
+        this.startTimeEnd();
+        // PlatformHelper.showToast("平台通知房间结束！");
+    },
+    startTimeEnd: function () {
+        // PlatformHelper.showToast("有人通知房间结束！");
+        this.schedule(this.timeEnd, 1.0);
+    },
+    stopTimeEnd: function () {
+        this.unschedule(this.timeEnd);
+    },
+    timeEnd: function (dt) {
+
+        if (MJModel.isEnd)return;
+
+        if (MJModel.isState(MJ_STATUS.MJ_GAME_FREE)) {
+            // PlatformHelper.showToast("房间正式结束！");
+            this.exitRoom();
+        }
+
+    },
+
+    exitRoom: function (isCloseHall) {
+        this.release();
+        sendLogout();
+        if (isCloseHall) {
+            ZJHModel.getInstance().roomToHall();
+        } else {
+            ZJHModel.getInstance().roomToShareView(MJModel.curRoomID);
+        }
+    },
+
+    getPlayerList: function () {
+    },
+
+    myselfOpenOutCard: function (IsMoCard, showTip) {
+        if (IsMoCard == undefined) IsMoCard = false;
+        if (showTip == undefined) showTip = true;
+        if (MJModel.isOnVideo) {
+            return;
+        }
+
+        if (MJModel.isAutoOutCard && IsMoCard) {
+            this.autoOutCard();
+            return;
+        }
+        this.room_Card.resetAllCardClickState();
+        MJModel.canTouchCard = true;
+        MJModel.canChoiceMore = false;
+        this.room_Card.setTingPaiFlag(true);
+
+        if (this.room_Action) this.room_Action.setTingPaiVis(false);
+        if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+
+        this.room_Card.setSomeCardClickState();
+
+        if (showTip)this.room_Tip.showOutCardTip();
+    },
+    myselfCloseOutCard: function () {
+        MJModel.canTouchCard = false;
+        MJModel.canChoiceMore = false;
+        if (this.room_Action) this.room_Action.checkTingPaiVis();
+        if (this.room_Action) this.room_Action.setOperator(-1);
+        this.room_Card.setTingPaiFlag(false);
+        this.room_Tip.showOutCardEffect(false);
+        this.room_Tip.hideOutCardTip();
+    },
+
+    autoOutCard: function () {
+        this.schedule(this.autoOutCardTimeOut, 3.0);
+    },
+    autoOutCardTimeOut: function (dt) {
+        this.unschedule(this.autoOutCardTimeOut);
+        if (MJModel.isAutoOutCard == false)return;
+        if (MJModel.TouPiaoING == true) return;//投票期间 该功能不起作用
+        sendOutCard(MJModel.curOperateCard);
+    },
+    autoHuCard: function () {
+        this.schedule(this.autoHuCardTimeOut, 2.0);
+    },
+    autoHuCardTimeOut: function (dt) {
+        this.unschedule(this.autoHuCardTimeOut);
+        if (MJModel.isAutoOutCard == false)return;
+        if (MJModel.TouPiaoING == true) return;//投票期间 该功能不起作用
+        var operate = MJModel.curOperate;
+        if (( operate & ActionType.TYPE_LISTEN) == ActionType.TYPE_LISTEN) {
+            operate = operate - ActionType.TYPE_LISTEN;
+        }
+
+        if (operate > 0) {
+            if ((operate & ActionType.TYPE_ZHIGANG) == ActionType.TYPE_ZHIGANG || (operate & ActionType.TYPE_WANGANG) == ActionType.TYPE_WANGANG || (operate & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+                //有杠  取消自动胡牌功能
+                MJModel.isAutoOutCard = false;
+                if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+                this.room_Card.setAutoOutCard(false);
+            }
+            else {
+                var type = ActionType.TYPE_PASS;
+                if ((operate & ActionType.TYPE_HU) == ActionType.TYPE_HU) {
+                    type = ActionType.TYPE_HU;
+                }
+
+                sendOperateCard(type, 0);
+                if (this.room_Action) this.room_Action.setOperator(-1);
+            }
+        }
+    },
+
+    checkIpAndDistance: function () {
+        if (MJModel.mj_gps_type == 1)return;
+        var json = {};
+        var self = this;
+        json.roomId = MJModel.curRoomID;
+        CCHttpAgent.getInstance().sendHttpPost(function (tag) {
+                var data = CCHttpAgent.getInstance().getPacketData(tag);
+                CCHttpAgent.getInstance().popPackets(tag);
+                if (data != "") {
+                    var recv = null;
+                    try {
+                        recv = JSON.parse(data);
+                        if (recv) {
+                            if (recv.status == 200) {
+                                if (recv["resultMap"].hasOwnProperty("lookList") && recv["resultMap"]["lookList"].hasOwnProperty("result")) {
+                                    var data = recv["resultMap"]["lookList"]["result"];
+                                    MJModel.gpsData = data;
+                                    if (MJModel.gpsInfo) {
+                                        MJModel.gpsInfo.updateInfo();
+                                        return;
+                                    }
+
+                                    if (self.room_EndTouPiao) {
+                                        return;
+                                    }
+
+                                    for (var i = 0; i < data.length - 1; i++) {
+                                        for (var j = i + 1; j < data.length; j++) {
+                                            if (data[i].city == null || data[j].city == null || data[i].city == "" || data[j].city == "" || Utils.getDistance(data[i].latitude, data[i].longitude, data[j].latitude, data[j].longitude) < 100) {
+                                                try {
+                                                    MJModel.gpsInfo = new PlayerInfo();
+                                                    MJModel.gpsInfo.updateInfo();
+                                                    MJModel.mj_table.addChild(MJModel.gpsInfo, 100000);
+                                                } catch (e) {
+                                                    MJModel.gpsInfo = null;
+                                                }
+
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+
+                            }
+                        }
+                    }
+                    catch (e) {
+                    }
+                }
+            },
+            "duiju/invite/lookList", JSON.stringify(json), "room_all_player");
+    },
+    handler_player_gps: function (data, canDelay) {
+        //player.userId + " city:" + player.city + " latitude:" + player.latitude + " longitude:" + player.longitude
+        var jpacket = parsePacket("proto.login.AckGPS", data);
+        this.checkUpdateGPS(jpacket);
+        this.checkGPSWarning();
+    },
+
+    checkUploadMyGPS: function () {
+        if (MJModel.mj_gps_type == 0)return;
+        if (MJModel.hasUpLoad == true)return;
+        try {
+            var gpsinfo = PlatformHelper.getGPSInfo();
+            var data = JSON.parse(gpsinfo);//{"latitude":22.554647,"longitude":113.951079,"city":"深圳市"};//
+            if (data.latitude != null && data.longitude != null && data.city != null && (data.latitude != 0 && data.longitude != 0) && data.city != "") {
+                //PlatformHelper.showToast("checkUploadMyGPS");
+                sendSelfGPSInfo(data);
+                MJModel.hasUpLoad = true;
+            } else {
+                if (MJModel.hasUpLoadNull == true) return;
+                sendSelfGPSInfo({"latitude": 0, "longitude": 0, "city": ""});
+                this.checkGPSWarning();
+                MJModel.hasUpLoadNull = true;
+            }
+        } catch (e) {
+
+        }
+    },
+    checkUpdateGPS: function (gpsdata) {
+        if (MJModel.mj_gps_type == 0 || gpsdata == null || gpsdata == undefined)return;
+        var player = {};
+        var isNew = true;
+        for (var i = 0; i < MJModel.gpsData.length; i++) {
+            var p = MJModel.gpsData[i];
+            if (p.userId == gpsdata.uid) {
+                player = p;
+                isNew = false;
+                break;
+            }
+        }
+        player.userId = gpsdata.uid;
+        player.city = gpsdata.city;
+        player.latitude = gpsdata.latitude;
+        player.longitude = gpsdata.longitude;
+        if (isNew)MJModel.gpsData.push(player);
+        Log(this, player.latitude);
+    },
+
+    checkGPSWarning: function (checkself) {
+        if (MJModel.isOnVideo)return;
+        if (MJModel.mj_gps_type == 0)return;
+        if (checkself == undefined)checkself = true;
+        if (MJModel.gpsInfo) {
+            MJModel.gpsInfo.updateInfo();
+            return;
+        }
+
+        if (this.room_EndTouPiao) {
+            return;
+        }
+
+        if (MJModel.hasWarning) {
+            return;
+        }
+
+        if (MJModel.gpsData.length == 0) {
+            try {
+                MJModel.gpsInfo = new PlayerInfo();
+                MJModel.gpsInfo.updateInfo();
+                MJModel.mj_table.addChild(MJModel.gpsInfo, 300000);
+                MJModel.hasWarning = true;
+            } catch (e) {
+                MJModel.gpsInfo = null;
+            }
+
+            return true;
+        }
+
+        var selfhasdata = false;
+        for (var i = 0; i < MJModel.gpsData.length; i++) {
+            if (MJModel.gpsData[i].city == null || MJModel.gpsData[i].city == "" || MJModel.gpsData[i].latitude == null || MJModel.gpsData[i].longitude == null) {
+                try {
+                    MJModel.gpsInfo = new PlayerInfo();
+                    MJModel.gpsInfo.updateInfo();
+                    MJModel.mj_table.addChild(MJModel.gpsInfo, 300000);
+                    MJModel.hasWarning = true;
+                } catch (e) {
+                    MJModel.gpsInfo = null;
+                }
+                return true;
+            } else {
+                if (MJModel.gpsData[i].userId == ZJHModel.getInstance().uid)selfhasdata = true;
+            }
+        }
+
+        for (var i = 0; i < MJModel.gpsData.length - 1; i++) {
+            for (var j = i + 1; j < MJModel.gpsData.length; j++) {
+                if (MJModel.gpsData[i].city == null || MJModel.gpsData[j].city == null || MJModel.gpsData[i].city == "" || MJModel.gpsData[j].city == "" || Utils.getDistance(MJModel.gpsData[i].latitude, MJModel.gpsData[i].longitude, MJModel.gpsData[j].latitude, MJModel.gpsData[j].longitude) < 100) {
+                    try {
+                        MJModel.gpsInfo = new PlayerInfo();
+                        MJModel.gpsInfo.updateInfo();
+                        MJModel.mj_table.addChild(MJModel.gpsInfo, 300000);
+                        MJModel.hasWarning = true;
+                    } catch (e) {
+                        MJModel.gpsInfo = null;
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        if (!selfhasdata && checkself) {
+            try {
+                MJModel.gpsInfo = new PlayerInfo();
+                MJModel.gpsInfo.updateInfo();
+                MJModel.mj_table.addChild(MJModel.gpsInfo, 300000);
+                MJModel.hasWarning = true;
+            } catch (e) {
+                MJModel.gpsInfo = null;
+            }
+        }
+    },
+
+    check_tip_operate_card: function (operat, value) {
+        try {
+            if ((operat & ActionType.TYPE_PENG) == ActionType.TYPE_PENG || (operat & ActionType.TYPE_ZHIGANG) == ActionType.TYPE_ZHIGANG) {
+                for (var i = 0; i < this.room_Card.hand_card[0].length; i++) {
+                    var card = this.room_Card.hand_card[0][i];
+                    if (card.getValue() == value) {
+                        card.setChoiceTipShow(true);
+                    }
+                }
+                return;
+            }
+
+            if ((operat & ActionType.TYPE_WANGANG) == ActionType.TYPE_WANGANG || (operat & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+                for (var j = 0; j < MJModel.gang_info.length; j++) {
+                    for (var i = 0; i < this.room_Card.hand_card[0].length; i++) {
+                        var card = this.room_Card.hand_card[0][i];
+                        if (card.getValue() == MJModel.gang_info[j].curCard) {
+                            card.setChoiceTipShow(true);
+                        }
+                    }
+                }
+                return;
+            }
+
+            for (var i = 0; i < this.room_Card.hand_card[0].length; i++) {
+                var card = this.room_Card.hand_card[0][i];
+                card.setChoiceTipShow(false);
+            }
+        } catch (e) {
+            Log(this, e);
+        }
+    },
+
+});

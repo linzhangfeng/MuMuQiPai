@@ -1,0 +1,424 @@
+var MJVideo = cc.Layer.extend({
+    tag: "MJVideo",
+    room_Table: null,
+    cmd_list: [],
+    curIndex: -1,
+    maxIndex: 0,
+    isPlay: false,
+    wantToIndex: -1,
+    musicSlider: null,
+    minCount: 60,
+    curTime: null,
+    maxTime: null,
+    playLayer: null,
+
+    videoData: null,
+    curRound: -1,
+    allRoundNums: -1,
+    allRoundList: [],
+    room_id: -1,
+    room_code: -1,
+    videoDataLoading: false,
+    saveVideoData: [],
+    ctor: function () {
+        this._super();
+        var size = cc.director.getWinSize();
+        this.ignoreAnchorPointForPosition(false);
+        this.setAnchorPoint(cc.p(0.0, 0.0));
+        this.setContentSize(size);
+
+        var roomData = JSON.parse(ZJHModel.getInstance().getRoomData());
+        this.videoData = roomData["videoData"];
+        this.saveVideoData = [];
+        cc.log(JSON.stringify(this.videoData));
+        if (this.videoData) {
+            this.curRound = this.videoData["curCount"];
+            this.allRoundNums = this.videoData["count"];
+            this.allRoundList = this.videoData["videoNumList"];
+            this.room_id = this.videoData["roomID"];
+            this.room_code = this.videoData["code"];
+            if (this.allRoundList.length > this.allRoundNums) {
+                this.allRoundNums = this.allRoundList.length;
+            }
+        } else {
+            this.videoData = null;
+        }
+
+        var self = this;
+        var layout = new ccui.Layout();
+        layout.setContentSize(size);
+        layout.setAnchorPoint(cc.p(0, 0));
+        layout.setPosition(cc.p(0, 0));
+        layout.setTouchEnabled(true);
+        layout.setSwallowTouches(true);
+
+        playLayer = new cc.Layer();
+        playLayer.setContentSize(size);
+        playLayer.setAnchorPoint(cc.p(0, 0));
+        playLayer.setPosition(cc.p(0, 0));
+
+        layout.addClickEventListener(function (btn) {
+            playLayer.setVisible(!playLayer.isVisible());
+        });
+        this.addChild(layout);
+
+        {
+            var btn = new ccui.Button("RoomVideo/back01.png", "RoomVideo/back02.png");
+            btn.setName("return");
+            btn.addClickEventListener(function (btn) {
+                self.btnCallback(btn);
+            });
+            btn.setPosition(cc.p(64, size.height - 51));
+            this.addChild(btn);
+
+            if (this.videoData != null) {
+                btn.setPosition(cc.p(size.width - 64, size.height - 51));
+            }
+        }
+
+        {
+            var btn = new ccui.Button("RoomVideo/pre01.png", "RoomVideo/pre02.png");
+            btn.setName("pre");
+            btn.addClickEventListener(function (btn) {
+                self.btnCallback(btn);
+            });
+            btn.setPosition(cc.p(size.width / 2 - 108, 114));
+            playLayer.addChild(btn);
+        }
+
+        {
+            var btn = new ccui.Button("RoomVideo/pause01.png", "RoomVideo/pause02.png");
+            btn.setName("pause");
+            btn.addClickEventListener(function (btn) {
+                self.btnCallback(btn);
+            });
+            btn.setPosition(cc.p(size.width / 2 - 0, 114));
+            playLayer.addChild(btn);
+        }
+
+        {
+            var btn = new ccui.Button("RoomVideo/play01.png", "RoomVideo/play02.png");
+            btn.setName("play");
+            btn.setVisible(false);
+            btn.addClickEventListener(function (btn) {
+                self.btnCallback(btn);
+            });
+            btn.setPosition(cc.p(size.width / 2 - 0, 114));
+            playLayer.addChild(btn);
+        }
+
+        {
+            var btn = new ccui.Button("RoomVideo/next01.png", "RoomVideo/next02.png");
+            btn.setName("next");
+            btn.addClickEventListener(function (btn) {
+                self.btnCallback(btn);
+            });
+            btn.setPosition(cc.p(size.width / 2 + 108, 114));
+            playLayer.addChild(btn);
+        }
+
+        this.musicSlider = new ccui.Slider();
+        this.musicSlider.loadProgressBarTexture("RoomVideo/process_fg.png");
+        this.musicSlider.loadBarTexture("RoomVideo/process_bg.png");
+        this.musicSlider.loadSlidBallTextures("RoomVideo/process_point.png", "RoomVideo/process_point.png", "");
+        this.musicSlider.setPercent(0);
+        this.musicSlider.setPosition(cc.p(size.width / 2, 21));
+        this.musicSlider.addEventListener(function (slider, event) {
+            var wantToIndex = parseInt(slider.getPercent() / 60);
+            self.gotoIndex(wantToIndex);
+        });
+
+        playLayer.addChild(this.musicSlider);
+
+        {
+            this.curTime = new cc.LabelTTF("00:00", "Thonburi", 20);
+            this.curTime.setAnchorPoint(cc.p(1, 0.5));
+            this.curTime.setPosition(cc.p(size.width / 2 - 488, 22));
+            this.curTime.setColor(cc.color(119, 255, 0));
+            this.addChild(this.curTime);
+
+            this.maxTime = new cc.LabelTTF(__String.createWithFormat("%1:%2", Utils.to2d(parseInt(this.maxIndex / 60)), Utils.to2d(parseInt(this.maxIndex % 60))), "Thonburi", 20);
+            this.maxTime.setAnchorPoint(cc.p(0, 0.5));
+            this.maxTime.setPosition(cc.p(size.width / 2 + 488, 22));
+            this.maxTime.setColor(cc.color(119, 255, 0));
+            playLayer.addChild(this.maxTime);
+        }
+
+        this.addChild(playLayer);
+
+        if (this.videoData != null) {
+            // var inviteCodeLabel = new cc.LabelTTF(__String.createWithFormat("房间号 : %1", this.room_code), "Arial", 22);
+            // inviteCodeLabel.setName("invite_code");
+            // inviteCodeLabel.setAnchorPoint(cc.p(0, 1));
+            // inviteCodeLabel.setColor(cc.color(0xdc, 0xff, 0x92));
+            // inviteCodeLabel.setPosition(cc.p(18, size.height - 20));
+            // this.addChild(inviteCodeLabel);
+            //
+            // var timeLabel = new cc.LabelTTF(__String.createWithFormat("局数 : %1/%2", this.curRound, this.allRoundNums), "Arial", 22);
+            // timeLabel.setAnchorPoint(cc.p(0, 1));
+            // timeLabel.setPosition(cc.p(18, inviteCodeLabel.getPositionY() - inviteCodeLabel.getContentSize().height - 2));
+            // timeLabel.setName("time_label");
+            // this.addChild(timeLabel);
+
+            MJModel.currentCount = this.curRound;
+            MJModel.RoomCountSum = this.allRoundNums;
+            MJModel.roomCode = this.room_code;
+            MJModel.mj_table.roomPublic.showJuShuTip();
+            MJModel.mj_table.roomPublic.showRoomCode(this.room_code)
+        }
+        // playLayer.runAction(cc.sequence(cc.delayTime(3), cc.hide()));
+
+        for (var i = 1; i < 4; i ++){
+            var layout = new ccui.Layout();
+            layout.setContentSize(cc.size(83,111));
+            layout.setAnchorPoint(cc.p(0.5, 0.5));
+            layout.setPosition(MJConfig.getPlayerPos(i));
+            layout.setTag(i);
+            layout.setTouchEnabled(true);
+            layout.setSwallowTouches(true);
+            layout.addClickEventListener(function (btn) {
+                self.changeViewPlayerCallback(btn.getTag());
+            });
+            this.addChild(layout);
+        }
+    },
+    changeViewPlayerCallback:function(pos){
+        Log(this, "pos:" + pos);
+        if (MJModel.seatid == -1)return;
+        if (MJModel.mj_roomType == 1 && pos == 2)return;
+        if (MJModel.mj_roomType == 2 && pos != 2)return;
+        MJModel.vidoeSeatID = MJModel.getSeatidByPos(pos);
+        this.wantToIndex = this.curIndex;
+        this.curIndex = 0;
+        MJModel.seatid = -1;
+        this.gotoIndexNow(0);
+    },
+    setTable: function (rtable) {
+        this.room_Table = rtable;
+    },
+    nextRound: function () {
+        if (this.curRound == this.allRoundNums) {
+            return;
+        }
+
+        this.room_Table.resetGame();
+        this.reset();
+        this.curRound++;
+        if (this.allRoundList.indexOf(this.curRound) != -1) {
+            this.getVideoData();
+        } else {
+            PlatformHelper.showToast("本局没有录像数据!");
+        }
+        this.updateRound();
+    },
+    preRound: function () {
+        if (this.curRound == 1) {
+            return;
+        }
+        this.room_Table.resetGame();
+        this.reset();
+        this.curRound--;
+        if (this.allRoundList.indexOf(this.curRound) != -1) {
+            this.getVideoData();
+        } else {
+            PlatformHelper.showToast("本局没有录像数据!");
+        }
+        this.updateRound();
+    },
+    updateRound: function () {
+        var timeLabel = this.getChildByName("time_label");
+        if (timeLabel != null) {
+            timeLabel.setString(__String.createWithFormat("局数 : %1/%2", this.curRound, this.allRoundNums));
+        }
+
+        MJModel.currentCount = this.curRound;
+        MJModel.RoomCountSum = this.allRoundNums;
+        MJModel.mj_table.roomPublic.showJuShuTip();
+    },
+    getVideoData: function () {
+        if (this.saveVideoData[this.curRound]){
+            this.runScript(this.saveVideoData[this.curRound]);
+            return;
+        }
+        this.videoDataLoading = true;
+        var json = {};
+        var self = this;
+        json.roomId = this.room_id;
+        json.num = this.curRound;
+        CCHttpAgent.getInstance().sendHttpPost(function (tag) {
+                var data = CCHttpAgent.getInstance().getPacketData(tag);
+                CCHttpAgent.getInstance().popPackets(tag);
+                self.videoDataLoading = false;
+                if (data != "") {
+                    var recv = null;
+                    try {
+                        recv = JSON.parse(data);
+                        if (recv) {
+                            if (recv.status == 200) {
+                                if (recv["resultMap"].hasOwnProperty("data")) {
+                                    var data = recv["resultMap"]["data"][0]["content"];
+                                    self.runScript(data);
+                                }
+                            }
+                            else {
+
+                            }
+                        }
+                    }
+                    catch (e) {
+                    }
+                }
+            },
+            "room/dz/video", JSON.stringify(json), "videoPost");
+    },
+    reset: function () {
+        this.cmd_list = [];
+        this.curIndex = -1;
+        this.maxIndex = 0;
+        this.isPlay = false;
+        this.wantToIndex = -1;
+        this.minCount = 60;
+        this.unschedule(this.getData);
+        MJModel.mj_table.removeChildByName("CommonTotalResult");
+    },
+    runScript: function (videodata) {
+        if (this.videoData != null){
+            this.saveVideoData[this.curRound] = videodata;
+        }
+        var data = base64decode(videodata);
+        Log(this, data);
+        this.reset();
+        var cmdList = data.split(":E:");
+        Log(this, "cmd lens:" + cmdList.length);
+        for (var i = 0; i < cmdList.length; i++) {
+            var cmd_data = cmdList[i].split(":S:");
+            if (cmd_data.length < 2) continue;
+            var jp = {};
+            jp["cmd"] = Number(cmd_data[0]);
+            jp["data"] = base64encode(cmd_data[1]);
+            Log(this, "cmd:" + jp["cmd"]);
+            this.cmd_list.push(jp);
+        }
+        this.maxIndex = this.cmd_list.length;
+        this.isPlay = true;
+        this.musicSlider.setMaxPercent(this.maxIndex * 60);
+        this.maxTime.setString(__String.createWithFormat("%1:%2", Utils.to2d(parseInt(this.maxIndex / 60)), Utils.to2d(parseInt(this.maxIndex % 60))));
+        this.schedule(this.getData, 0.0);
+    },
+    getData: function (dt) {
+        if (MJModel.isEnterWait) {
+            cc.log("MJModel.isEnterWait");
+            return;
+        }
+        if (this.curIndex >= this.maxIndex || this.isPlay == false || this.wantToIndex != -1)return;
+        this.minCount++;
+        this.musicSlider.setPercent(parseInt(this.curIndex * 60 + this.minCount * 2));
+        if (this.minCount < 30) {
+            return;
+        }
+
+        this.minCount = 0;
+        this.curIndex++;
+        if (this.curIndex >= this.maxIndex) {
+            this.curIndex = this.maxIndex;
+            return;
+        }
+
+        this.curTime.setString(__String.createWithFormat("%1:%2", Utils.to2d(parseInt((this.curIndex + 1) / 60)), Utils.to2d(parseInt((this.curIndex + 1) % 60))));
+
+        var jp = this.cmd_list[this.curIndex];
+        this.handle_cmd(jp.cmd, jp.data, true);
+    },
+    handle_cmd: function (cmd, data, canDelay) {
+        Log(this, "handle_cmd:" + cmd);
+        this.room_Table.handler_cmd(cmd, data, canDelay);
+    },
+    btnCallback: function (btn) {
+        var name = btn.getName();
+        if (name == "pre") {
+            if (this.videoData != null) {
+                this.preRound();
+                return;
+            }
+            if (this.curIndex <= 0) {
+                return;
+            }
+            var cur = this.curIndex;
+            if (this.wantToIndex != -1) cur = this.wantToIndex;
+            var wt = cur - 1;
+            this.gotoIndex(wt);
+        }
+
+        if (name == "play") {
+            this.isPlay = true;
+            playLayer.getChildByName("pause").setVisible(true);
+            btn.setVisible(false);
+        }
+
+        if (name == "pause") {
+            this.isPlay = false;
+            playLayer.getChildByName("play").setVisible(true);
+            btn.setVisible(false);
+        }
+
+        if (name == "next") {
+            if (this.videoData != null) {
+                this.nextRound();
+                return;
+            }
+            if (this.curIndex >= this.maxIndex) {
+                return;
+            }
+            var cur = this.curIndex;
+            if (this.wantToIndex != -1) cur = this.wantToIndex;
+            var wt = cur + 1;
+            this.gotoIndex(wt);
+        }
+
+        if (name == "return") {
+            ZJHModel.getInstance().toGameHall(2);
+        }
+    },
+    gotoIndex: function (index) {
+        MJModel.mj_table.removeChildByName("CommonTotalResult");
+        this.unschedule(this.gotoIndexNow);
+        this.schedule(this.gotoIndexNow, 1.0);
+        if (index < 0) index = 0;
+        if (index >= this.maxIndex) index = this.maxIndex;
+        this.wantToIndex = index;
+        this.musicSlider.setPercent(index * 60);
+        this.curTime.setString(__String.createWithFormat("%1:%2", Utils.to2d(parseInt(this.wantToIndex / 60)), Utils.to2d(parseInt(this.wantToIndex % 60))));
+    },
+
+    gotoIndexNow: function (dt) {
+        this.unschedule(this.gotoIndexNow);
+
+        if (this.wantToIndex < this.curIndex) {
+            for (var i = 0; i <= this.wantToIndex; i++) {
+                if (i == this.maxIndex) {
+                    break;
+                }
+                var jp = this.cmd_list[i];
+                this.handle_cmd(jp.cmd, jp.data, false);
+            }
+            this.curIndex = this.wantToIndex;
+        }
+        else if (this.wantToIndex > this.curIndex) {
+            if (this.curIndex < 0) this.curIndex = 0;
+            for (var i = this.curIndex + 1; i <= this.wantToIndex; i++) {
+                if (i == this.maxIndex) {
+                    break;
+                }
+                var jp = this.cmd_list[i];
+                this.handle_cmd(jp.cmd, jp.data, false);
+            }
+            this.curIndex = this.wantToIndex;
+        }
+
+        this.wantToIndex = -1;
+        MJModel.isEnterWait = false;
+    },
+});
+
+
+

@@ -1,0 +1,81 @@
+<Solution>
+  <PropertyGroup Name="GameHallUI" Version="3.10.0.0" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="StudioUI">
+          <Folder Name="GameHallUI">
+            <Folder Name="background">
+              <Image Name="bg1.png" />
+              <Image Name="bg2.png" />
+              <Image Name="btn_create_room.png" />
+              <Image Name="btn_enter_room.png" />
+              <Image Name="btn_return_room.png" />
+              <Image Name="btn_weixin_login.png" />
+              <Image Name="LOGO.png" />
+              <Image Name="LOGO_mini.png" />
+              <Image Name="notice.png" />
+              <Image Name="nv.png" />
+              <Image Name="top_bar.png" />
+            </Folder>
+            <Folder Name="GameHall">
+              <Image Name="bangzhu.png" />
+              <Image Name="card.png" />
+              <Image Name="chuangjianfang.png" />
+              <Image Name="chuangjianfangjianxiaochangjing.png" />
+              <Image Name="dingbuuibantoumingdi.png" />
+              <Image Name="fangkaxiaobeijing.png" />
+              <Image Name="feedback.png" />
+              <Image Name="ffanghuifangj.png" />
+              <Image Name="goumaixiaojiahao.png" />
+              <Image Name="huodong.png" />
+              <Image Name="jiaruyouxi.png" />
+              <Image Name="jiaruyouxixiaochangjing.png" />
+              <Image Name="paomadengbeijing.png" />
+              <Image Name="share.png" />
+              <Image Name="shezhi.png" />
+              <Image Name="touxing001.png" />
+              <Image Name="touxingbg001.png" />
+              <Image Name="wuhanmajiangtitle.png" />
+              <Image Name="xiaolaba.png" />
+              <Image Name="xiaoxi.png" />
+              <Image Name="xixia001.png" />
+              <Image Name="zhanji.png" />
+              <Image Name="zhuziyou.png" />
+            </Folder>
+            <Project Name="GameHallLayer.csd" Type="Layer" />
+          </Folder>
+          <Folder Name="LoadingUI">
+            <Folder Name="loading">
+              <Image Name="loading_ttitle.png" />
+              <Image Name="LoadingBg.png" />
+            </Folder>
+            <Project Name="LoadingLayer.csd" Type="Layer" />
+          </Folder>
+          <Folder Name="LoginUI">
+            <Project Name="LoginLayer.csd" Type="Layer" />
+            <Folder Name="login">
+              <Image Name="bg.jpg" />
+              <Image Name="btn_ traveler.png" />
+              <Image Name="btn_checkbox.png" />
+              <Image Name="btn_weixin.png" />
+              <Image Name="check_mark.png" />
+              <Image Name="LoginBg.png" />
+              <Image Name="yonghuxieyi.png" />
+            </Folder>
+          </Folder>
+          <Folder Name="FlashUI">
+            <Folder Name="flash">
+              <Image Name="splash.jpg" />
+            </Folder>
+            <Project Name="FlashLayer.csd" Type="Layer" />
+          </Folder>
+          <Folder Name="MJGameUI">
+            <Project Name="MJTableLayer.csd" Type="Layer" />
+            <Folder Name="Table" />
+          </Folder>
+        </Folder>
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>

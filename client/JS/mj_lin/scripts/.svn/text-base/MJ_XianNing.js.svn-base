@@ -1,0 +1,2945 @@
+loadProtoFile("proto/xianningmj.proto");
+var HuBeiGameType = {
+    GAME_TYPE_FAN: 1237001,			//半干瞪眼
+    GAME_TYPE_FEN: 1237002,			//平胡多赖
+};
+var LaiZiGangType = {
+    TYPE_HONGZHONG_GANG: 0x20000,
+    TYPE_FACAI_GANG: 0x40000,
+    TYPE_LAIZI_GANG: 0x10000
+};
+var SHUANGLIAO_PLAY = {
+    SiRen: 5380001,//四人
+    LiangRen: 5380002,//二人
+
+    ZZSiRen: 5385001,//四人
+    ZZSanRen: 5385002,//3人
+    ZZLiangRen: 5385003,//二人
+
+    DiFenYi: 5381001,//底分1
+    DiFenEr: 5381002,//底分2
+    DiFenWu: 5381003,//底分5
+    DiFenShi: 5381004,//底分10
+
+    HongZhongLaiZiKeDa: 5382001,//红中赖子可打
+    KeQiangAnGang: 5382002,//可抢暗杠
+
+    ZZKeDianPao: 5386001,//可点炮
+    ZZBuKeDianPao: 5386002,//不可点炮
+
+    ZZHongZhongLai: 5387001,//红中癞子
+    ZZKeHuQiDui: 5387002,//可胡七对
+    ZZZhuangXian: 5387003,//庄闲
+
+    ZZBuZhuaNiao: 5388001,//不抓鸟
+    ZZZhuaErNiao: 5388002,//抓2鸟
+    ZZZhuaSiNiao: 5388003,//抓4鸟
+    ZZZhuaLiuNiao: 5388004,//抓6鸟
+    sanjubaopei: 1549001,//三句包赔
+    HongZhongLaiZiFaCaiGang: 1655003,//红中癞子发财杠
+};
+
+var selfCMD = {
+    CLIENT_MJ_CHOOSE_HONGZHONGLAIZIGONG: 1113,//咸宁红中赖子杠
+    SERVER_LAIZI_UC: 44002,		//潮州麻将广播赖子
+    SERVER_ROOM_MAJINAG_QINGYISE_WANING: 44003,//咸宁清一色告警
+    SERVER_TONGSHAN_ROBGANGFAILSCORE: 5076,	//抢杠胡失败时，杠分信息
+    SERVER_OPERATE_RESULT_ANGANG: 10006,//广播操作结果
+    SER_CMD_XIANNING_GANG_INFO_AFTER_GANG: 10021,//咸宁红中赖子杠。
+    SERVER_CONFIRM_RES: 4088,//确认返回
+    CLIENT_CONFIRM_REQ: 1091, //请求确认
+}
+
+var ActionTSType =
+{
+    TYPE_HZLAIZI: 0x160000,//补花
+    TYPE_QIANGGANGHU: 0x8000,//抢杠胡
+};
+
+var XNMJ_GAME_TYPE = {
+    XIANGNINGMJ: 1,//通山红中赖子杠
+    XIANGNINGZHUANGZHUANGMJ: 2,//咸宁转转麻将
+    XIANGNINGHongZhongLaiZiFaCaiGang: 3,//咸宁红中癞子杠
+}
+var NINGXIANG_MJ_TYPE = {
+    14: "清一色",
+    16: "碰碰胡",
+    17: "平胡",
+    22: "抢杠胡",
+    23: "海底捞",
+    24: "杠上花",
+    28: "全求人",
+    36: "七对",
+    65: "将一色",
+    66: "黑胡",
+    67: "红中杠",
+    68: "赖子杠",
+    564: "将一色",
+    565: "黑胡",
+    569: "四赖加倍",
+    570: "四红中"
+};
+var MJTable_XianNing = MJTable.extend({
+    tag: "MJTable_XianNing",
+    count: 1,
+    _curLaizi: -1,
+    _curLaizipi: -1,
+    _curLaizipi2: -1,
+    _curLaizi_bg: null,
+    isRecordShow: false,
+    _oldBanker: -1,
+    _play_gamestart: false,
+    _gameType: 0,
+    _gameType_sp: null,
+    _allBeiShu: [null, null, null, null],
+    _allBeiShu_Nums: [0, 0, 0, 0],
+    _mj_style: 0,
+
+    _has_show_pi_flag: false,
+    _gang_nums: [0, 0, 0, 0],
+    RoomConfigID: [],
+    GameEndDeley: 0,
+    ctor: function () {
+        this._super();
+        var self = this;
+        var _listenerChat2 = cc.EventListener.create({
+            event: cc.EventListener.CUSTOM,
+            eventName: "notify_room_check_ip",
+            callback: function (evt) {
+                cc.log("lin=MJModel.gpsInfo=" + MJModel.gpsInfo);
+                if (MJModel.gpsInfo) {
+                    Utils.refreshGps();
+                }
+            }
+        });
+        cc.eventManager.addListener(_listenerChat2, this);
+        this.setFastChat();
+    },
+    getGameTypeName: function () {
+        var name = "咸宁麻将";
+        return name;
+    },
+    isVideoShowConfigFor3d: function () {
+        return true;
+    },
+    fastChat3: ["不好意思，我有事先走了", "不好意思我接个电话", "出牌咯站长", "今天真高兴", "你好牛X啊", "你真会打啊", "手气真好啊", "这个吃得好"],
+    setFastChat: function () {
+        var chatList = [];
+        chatList = this.fastChat3;
+        MJModel.mj_fastChat = this.fastChat3;
+        var self = this;
+        Utils.getFastChatSound = function (chat, sex) {
+            for (var i = 0; i < chatList.length; i++) {
+                if (chatList[i] == chat) {
+                    var sounstr = __String.createWithFormat("xianningmj/sound/fast/%1_liaotian%2.mp3", sex == SEX_ID.SEX_MAN ? "male" : "female", i + 1);
+
+                    return getResPath(sounstr);
+                }
+            }
+            return "";
+        };
+    },
+    //初始化界面
+    initRoom: function () {
+        var roomData = JSON.parse(ZJHModel.getInstance().getRoomData());
+        this._pkg_id = roomData["gameRoom"]["pkgId"];
+        MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGMJ;
+        if (this._pkg_id == 2461 || this._pkg_id == 2353) {  //咸宁麻将
+            MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGMJ;
+            MJModel.mj_roomType = 0;
+        } else if (this._pkg_id == 2462 || this._pkg_id == 2354) {//咸宁麻将两人
+            MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGMJ;
+            MJModel.mj_roomType = 2;
+        } else if (this._pkg_id == 2463 || this._pkg_id == 2355) {//咸宁转转
+            MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ;
+            MJModel.mj_roomType = 0;
+        } else if (this._pkg_id == 2464 || this._pkg_id == 2356) {//咸宁转转三人
+            MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ;
+            MJModel.mj_roomType = 1;
+        } else if (this._pkg_id == 2465 || this._pkg_id == 2357) {//咸宁转转2人
+            MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ;
+            MJModel.mj_roomType = 2;
+        } else if (this._pkg_id == 2558 || this._pkg_id == 2431) {//咸宁红中癞子发财杠
+            MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGHongZhongLaiZiFaCaiGang;
+            MJModel.mj_roomType = 0;
+        }
+        MJModel.chi_layout = 3;
+        MJModel.mj_public_style = 0;
+        this._init_extend();
+        this._super();
+        this.updateButtonPostion();
+        //this.schedule(this.test, 1.0);
+
+    },
+    reflashSetting: function (isInit) {
+        this._super(isInit);
+
+        this.updateButtonPostion();
+        if (this.room_Tip) {
+            this.room_Tip.updateJingBao();
+        }
+        //if (this.mChangeBar && this.mChangeBar.getChildByName("sureChoice") != undefined) {
+        //    this.mChangeBar.getChildByName("sureChoice").setEnabled(false);
+        //}
+        //
+        //var pos = 0
+        //if (this.room_Card && this.room_Card.isDuoPai(pos)) {
+        //    var card = this.room_Card.hand_card[pos][13];
+        //    if (card) {
+        //        card.setMyPosition(MJConfig.getMoCardPos(pos));
+        //        this.room_Card.hand_card[pos].splice(13, 1);
+        //        this.room_Card.reflashHandCard(pos);
+        //        this.room_Card.hand_card[pos].push(card);
+        //    }
+        //
+        //    this.room_Card.openHuaZhuClickOnly();
+        //}
+        //
+        //
+        //if (this.room_Card) {
+        //    //更新hu的坐标
+        //    for (var i = 0; i < 4; i++) {
+        //        var card = this.room_Card.other_card[i][0];
+        //        if (card) {
+        //            card.reflashUI();
+        //            card.setPosition(MJConfig.getMoCardPos(i));
+        //        }
+        //    }
+        //}
+        //
+        //
+        ////更新坐标
+        //for (var i = 0; i < MJModel.players.length; i++) {
+        //    var player = MJModel.players[i];
+        //    var hu_tip = this._all_huType_tip[i];
+        //    Log(this, "lin=player=" + player);
+        //    if (hu_tip && player) {
+        //        if (i != 2) {
+        //            hu_tip.setPosition(MJConfig.getPlayerPos(i).x, MJConfig.getPlayerPos(i).y + 70);
+        //        }
+        //    }
+        //}
+
+        //this._all_huType_tip[pos];
+
+    },
+    updateButtonPostion: function () {
+        var size = cc.director.getWinSize();
+        var x1 = 50;
+        var y1 = size.height - 55;
+
+        var x2 = size.width - 140;
+        var y2 = size.height - 85;
+
+        var cardNumViewPos = cc.p(0, size.height - 63);
+
+        var scale = 1.2;
+        var justScale = 0.92
+
+        var oriscale = 0.55;
+        //2d场景
+        if (MJModel.mj_bg_use == 0) {
+            cardNumViewPos.x = 100;
+            if (this.room_Action && this.room_Action.btns["gps"]) {
+                this.room_Action.btns["gps"].setPosition(x2, y2);
+            }
+
+            if (this._curLaizi_bg) {
+                this._curLaizi_bg.setScale(scale * justScale, scale);
+                this._curLaizi_bg.setOpacity(0);
+                this._curLaizi_bg.setPosition(cc.p(x1 - 15, y1 + 18));
+
+                var laiziBgsize = this._curLaizi_bg.getContentSize();
+                var label = this._curLaizi_bg.getChildByName("laiziLabel");
+                var card = this._curLaizi_bg.getChildByName("laizi");
+                label.setVisible(true);
+
+                label.setAnchorPoint(cc.p(0.5, 1));
+                card.setAnchorPoint(cc.p(0.5, 1));
+                label.setColor(cc.color(255, 255, 255));
+                label.setString("赖");
+                label.setOpacity(0);
+
+                label.setPosition(laiziBgsize.width / 2, laiziBgsize.height);
+                card.setPosition(cc.p(laiziBgsize.width / 2, laiziBgsize.height - label.getContentSize().height));
+                label.setScaleX(1 / justScale);
+                card.setScaleX(card.oriScale / justScale);
+            }
+        } else {
+            cardNumViewPos.x = 175;
+            if (this.room_Action && this.room_Action.btns["gps"]) {
+                this.room_Action.btns["gps"].setPosition(cc.p(225, y1));
+            }
+
+            if (this._curLaizi_bg) {
+                this._curLaizi_bg.setScale(scale * justScale, scale);
+                this._curLaizi_bg.setOpacity(255);
+                this._curLaizi_bg.setPosition(x1 + 25, y2 + 17);
+
+                var laiziBgsize = this._curLaizi_bg.getContentSize();
+                var label = this._curLaizi_bg.getChildByName("laiziLabel");
+                var card = this._curLaizi_bg.getChildByName("laizi");
+                label.setVisible(true);
+
+                label.setAnchorPoint(cc.p(1, 0.5));
+                card.setAnchorPoint(cc.p(0, 0.5));
+
+                label.setString("赖子");
+                label.setOpacity(255);
+                label.setColor(cc.color(29, 202, 107));
+                label.setPosition(laiziBgsize.width / 2, laiziBgsize.height * 0.5);
+                card.setPosition(cc.p(laiziBgsize.width / 2, laiziBgsize.height * 0.5));
+
+                label.setScaleX(1 / justScale);
+                card.setScaleX(card.oriScale / justScale);
+            }
+        }
+
+        if (this.roomPublic && this.roomPublic.cardNumView) {
+            var pos = this.roomPublic.cardNumView.getPosition();
+            this.roomPublic.cardNumView.setPosition(this.roomPublic.cardNumView.getParent().convertToNodeSpace(cardNumViewPos));
+            if (MJModel.mj_bg_use == 0) {
+                this.roomPublic.cardNumView.setScale(1.5);
+            } else {
+                this.roomPublic.cardNumView.setScale(1.5);
+            }
+        }
+    },
+    _init_extend: function () {
+        this.initMJAction();
+        this.initMJTips();
+        this.initMJCard();
+        this.initMJConfig();
+        this.initMJInfo();
+        this.initMJPlayer();
+        this.initMJPublic();
+        this.initMJDialogs();
+        this.initPreTable();
+    },
+    initPreTable: function () {
+        if (this.isXianNingMJ() || this.isHongZhongLaiZiFaCaiGang()) {
+
+            var superCtor = MJPreTable.prototype.ctor;
+            MJPreTable.prototype.ctor = function () {
+                superCtor.call(this);
+                var ready = this.btns["ready"];
+                var self = this;
+                var confirm = new ccui.Button();
+                confirm.loadTextures(getResPath("xianningmj/xianning/action/confirm_n.png"), getResPath("xianningmj/xianning/action/confirm_s.png"));
+                confirm.setPosition(ready.getPosition());
+                confirm.setName("confirm");
+                confirm.setVisible(false);
+                confirm.addClickEventListener(function (sender, evt) {
+                    self.actionCallBack(sender);
+                });
+                ready.getParent().addChild(confirm);
+                this.btns["confirm"] = confirm;
+            };
+
+            MJPreTable.prototype.handler_server_ready_succ_bc = function (data, canDelay) {
+                var ackUserReady = parsePacket("proto.game.AckUserReady", data);
+                var ready_size = ackUserReady.ready.length;
+                for (var i = 0; i < ready_size; i++) {
+                    var ready = ackUserReady.ready[i];
+                    var pos = MJModel.getPosBySeatid(i);
+                    var player = MJModel.players[i];
+                    if (player.uid != -1) {
+                        var mp = this.players[pos];
+                        //if (mp.getReadyState() == ready) {
+                        //    //和之前的状态相同
+                        //    continue;
+                        //}
+                        if (ready != 0) {
+                            mp.setConfirm(false);
+                            mp.setReadyFlag(true);
+                        } else {
+                            mp.setReadyFlag(false);
+                        }
+                    }
+                    if (player.uid == ZJHModel.getInstance().uid) {
+                        if (ready != 0) {
+                            //this.setReadyVisible(false);
+                            this.btns["confirm"].setVisible(false);
+                        }
+                    }
+                }
+            };
+        }
+    },
+    initMJDialogs: function () {
+        Setting.prototype.doSupportFangYan = function () {
+            this.checkboxs_setting["fangyan_putonghua"].setVisible(true);
+            this.checkboxs_setting["fangyan_fangyan1"].setVisible(true);
+            this.checkboxs_setting["fangyan_fangyan2"].setVisible(false);
+
+            this.checkboxs_setting["fangyan_fangyan1"].getChildByName("text").setString("方言");
+            this.checkboxs_setting["fangyan_fangyan1"].getChildByName("text").ignoreContentAdaptWithSize(true);
+
+            this.checkboxs_setting["fangyan_fangyan2"].getChildByName("text").setString("方言2");
+            this.checkboxs_setting["fangyan_fangyan2"].getChildByName("text").ignoreContentAdaptWithSize(true);
+        };
+
+        BigFaceMenu.prototype.getIconsIndexArray = function (seatid) {
+            var icons = [14, 15, 16, 17, 18, 19];//需要显示的动画表情
+            return icons;
+        };
+    },
+    initMJPublic: function () {
+
+
+    },
+    initMJPlayer: function () {
+        var selfTable = this;
+
+        var super_mjplayer_setid = MJPlayer.prototype.setId;
+        MJPlayer.prototype.setId = function (id) {
+            super_mjplayer_setid.call(this, id);
+
+
+            if (id == 0 || id == 2 || id == 3) {
+                this.ready_flag.setPosition(cc.p(this.m_size.width + 20 + this.ready_flag.getContentSize().width / 2, this.m_size.height / 2));
+            } else {
+                this.ready_flag.setPosition(cc.p(-20 - this.ready_flag.getContentSize().width / 2, this.m_size.height / 2));
+            }
+
+            if (selfTable.isXianNingMJ() || selfTable.isHongZhongLaiZiFaCaiGang()) {
+                this.ready_flag.setTexture(getResPath("xianningmj/xianning/action/confirm_icon.png"));
+                this.confirm_flag = new cc.Sprite(getResPath("RoomMJ/ok.png"));
+                this.confirm_flag.setVisible(false);
+                if (id == 0 || id == 2 || id == 3) {
+                    this.confirm_flag.setPosition(cc.p(this.m_size.width + 20 + this.confirm_flag.getContentSize().width / 2, this.m_size.height / 2));
+                } else {
+                    this.confirm_flag.setPosition(cc.p(-20 - this.ready_flag.getContentSize().width / 2, this.m_size.height / 2));
+                }
+
+                this.addChild(this.confirm_flag, 100);
+            }
+
+        };
+
+        MJPlayer.prototype.setConfirm = function (v) {
+            if (this.confirm_flag) {
+                this.confirm_flag.setVisible(v);
+                if (!this.confirm && v) {
+                    this.confirm = 1;
+                }
+            }
+            //if(selfTable.pre_scene){
+            //    if (this.confirm_flag) this.confirm_flag.setVisible(v);
+            //}else{
+            //    if (this.ready_flag) this.ready_flag.setVisible(v);
+            //}
+        };
+    },
+    initMJInfo: function () {
+    },
+    initMJConfig: function () {
+        MJModel.IsCancelGang = false;
+        MJModel.JingValue = [];
+        MJModel.IsHaoBaoJing = false;//HongZhongLaiZiKeDa
+        MJModel.IsHongZhongLaiZiKeDa = false;
+        MJModel.MycurOperate = -1;
+        MJModel.needSpecialAnim = false;
+        MJModel.MyOutCardEffect = false;
+        MJModel.QiangGangInfo = [];
+
+        MJConfig.getJingBaoPos = function (pos) {
+            if (MJModel.mj_bg_use == 0) {
+                var startpos = MJConfig.getPlayerPos(pos);
+                if (pos == 0) {
+                    return cc.p(startpos.x, startpos.y + 80);
+                }
+                else if (pos == 2) {
+                    return cc.p(startpos.x + 80, startpos.y + 20);
+                }
+                else if (pos == 3) {
+                    return cc.p(startpos.x, startpos.y + 80);
+                }
+                else {
+                    return cc.p(startpos.x, startpos.y + 80);
+                }
+            }
+            else {
+                var startpos = MJConfig.getPlayerPos(pos);
+                if (MJModel.mj_paiban != "horizontal") {
+                    if (pos == 0) {
+                        return cc.p(startpos.x + 25, startpos.y + 40);
+                    }
+                    else if (pos == 2) {
+                        return cc.p(startpos.x + 25, startpos.y + 40);
+                    }
+                    else if (pos == 3) {
+                        return cc.p(startpos.x + 25, startpos.y + 40);
+                    }
+                    else {
+                        return cc.p(startpos.x - 25, startpos.y + 40);
+                    }
+                } else {
+                    if (pos == 0) {
+                        return cc.p(startpos.x, startpos.y + 80);
+                    }
+                    else if (pos == 2) {
+                        return cc.p(startpos.x + 75, startpos.y - 50);
+                    }
+                    else if (pos == 3) {
+                        return cc.p(startpos.x, startpos.y + 80);
+                    }
+                    else {
+                        return cc.p(startpos.x, startpos.y + 85);
+                    }
+                }
+
+            }
+        };
+
+
+        MJConfig.getJingCardPos = function (index) {
+            var size = cc.director.getWinSize();
+            if (MJModel.mj_bg_use == 0) {
+                var _vec = cc.p(0, 0);
+                var begin = cc.p(5, size.height - 40);
+                var dx = 41;
+                if (index == -1) {
+                    _vec = cc.p(begin.x + dx * 1, begin.y);
+                }
+                else if (index == 0) {
+                    _vec = cc.p(begin.x + dx * 0 + 40, begin.y - 10);
+                }
+                else if (index == 1) {
+                    _vec = cc.p(begin.x + dx * 1 + 20, begin.y + 12);
+                }
+                else if (index == 2) {
+                    _vec = cc.p(begin.x + dx, begin.y + 12);
+                }
+                return _vec;
+            }
+            else {
+                var _vec = cc.p(0, 0);
+                var begin = cc.p(250, size.height - 78);
+                var dx = 41;
+                if (index == -1) {
+                    _vec = cc.p(begin.x + dx * 1, begin.y);
+                }
+                else if (index == 0) {
+                    _vec = cc.p(begin.x + dx * 0 + 60, begin.y);
+                }
+                else if (index == 1) {
+                    _vec = cc.p(begin.x + dx * 1 + 20, begin.y + 12);
+                }
+                else if (index == 2) {
+                    _vec = cc.p(begin.x + dx, begin.y + 12);
+                }
+                return _vec;
+            }
+
+        };
+    },
+    initMJCard: function () {
+        var selfTable = this;
+        var superaoutHandCardCallback = MJCards.prototype.outHandCardCallback;
+        MJCards.prototype.outHandCardCallback = function (n) {
+            var card = n;
+            if (selfTable.getIsHongZhongLaiZi(card.value) && MJModel.IsHongZhongLaiZiKeDa) {
+                selfTable.showLaiZiGangLayer(n);
+            }
+            else {
+                superaoutHandCardCallback.call(this, n);
+            }
+        };
+
+        MJCards.prototype.outHandCardCallback1 = function (n, isWait) {
+            if (isWait == undefined) isWait = false;
+
+            if (this.outCardBtn) this.outCardBtn.setVisible(false);
+            var card = n;
+            this.showTouchCards(card.getValue(), false);
+            if (MJModel.canTouchCard == true && MJModel.isMyPlayer(MJModel.cur_seat)) {
+                try {
+                    this.curOutCard = card;
+
+                    if (isWait) {
+                        sendGangOutCard(card.getValue(), isWait);
+                    } else {
+                        sendOutCard(card.getValue());
+                    }
+
+                    MJModel.isOutCard = true;
+                    MJModel.canTouchCard = false;
+                    //如果有第三方的继承函数 需要调继承的优先
+                    if (this.hasOwnProperty("outMyCard_extend") && typeof this.outMyCard_extend === "function") {
+                        this.outMyCard_extend(card);
+                    } else {
+                        this.outMyCard(card);
+                    }
+                } catch (e) {
+                    Log(this, e);
+                    MJModel.canTouchCard = true;
+                }
+            }
+            else {
+                card.goBack();
+            }
+        };
+
+        var super_addOutCard = MJCards.prototype.addOutCard;
+        MJCards.prototype.addOutCard = function (pos, value, showPoint, isReflash) {
+            if (isReflash == undefined)isReflash = false;
+            if (selfTable.getIsHongZhong(value) || selfTable.getIsJingPoker(value)) {
+                return this.addHuCard(pos, value);
+            }
+            var card = super_addOutCard.call(this, pos, value, showPoint);
+            return card;
+        };
+
+        MJCards.prototype.sortCard = function (a, b) {
+            var self = this;
+            try {
+                var av = a;
+                var bv = b;
+                if (typeof a === "object")av = a.value;
+                if (typeof b === "object")bv = b.value;
+
+                var value = selfTable._curLaizi;
+                if (av == value && bv != value)return 1;//癞子放最前边
+                if (av != value && bv == value)return -1;
+                if (selfTable.isXianNingMJ() || selfTable.isHongZhongLaiZiFaCaiGang()) {
+                    if (selfTable._curLaizipi != -1) {
+                        var value = selfTable._curLaizipi;
+                        if (av == value && bv != value)return 1;//红中放最前边
+                        if (av != value && bv == value)return -1;
+                    }
+
+                    if (selfTable._curLaizipi2 != -1) {
+                        var value = selfTable._curLaizipi2;
+                        if (av == value && bv != value)return 1;//红中放最前边
+                        if (av != value && bv == value)return -1;
+                    }
+                }
+                return bv - av;
+            } catch (e) {
+                return 0;
+            }
+        };
+
+        MJCard.prototype.setTingPai = function (v) {
+            if (this.tingpai_flag) this.tingpai_flag.setVisible(false);
+        };
+
+        MJCard.prototype.check_addFlag = function () {
+            selfTable._checkAddCardFlag(this);
+        };
+
+    },
+    initMJAction: function () {
+        var selfTable = this;
+        var self_table = this;
+
+        var superCtor = MJAction.prototype.ctor;
+        MJAction.prototype.ctor = function () {
+            superCtor.call(this);
+            var size = cc.director.getWinSize();
+            var self = this;
+            var btn = new ccui.Button();
+            btn.loadTextures(getResPath("xianningmj/xianning/qianggang1.png"), getResPath("xianningmj/xianning/qianggang2.png"), "");
+            this.actions["qiangganghu"] = btn;
+            btn.setName("qiangganghu");
+            btn.addClickEventListener(function (sender, evt) {
+                self.btnCallback(sender);
+            });
+            btn.setVisible(false);
+            this.addChild(btn);
+            this.opBtns.push(btn);
+
+            var jingbao_btn = new ccui.Button();
+            jingbao_btn.loadTextures(getResPath("xianningmj/xianning/baojing_btn.png"), getResPath("xianningmj/xianning/baojing_btn_h.png"));
+            jingbao_btn.setPosition(MJConfig.getJingBaoPos(0));
+            jingbao_btn.setName("BaoJingBtn");
+            jingbao_btn.setVisible(false);
+            jingbao_btn.addClickEventListener(function (sender, evt) {
+                self.btnCallback(sender);
+            });
+            this.addChild(jingbao_btn);
+
+            if (self_table.isXianNingMJ() || self_table.isHongZhongLaiZiFaCaiGang()) {
+                this.ready.setName("confirm");
+                this.ready.loadTextures(getResPath("xianningmj/xianning/action/confirm_n.png"), getResPath("xianningmj/xianning/action/confirm_s.png"));
+            }
+        };
+        var superBtnCallback = MJAction.prototype.btnCallback;
+        MJAction.prototype.btnCallback = function (ref) {
+            var n = ref;
+            var name = n.getName();
+            var self = this;
+            if (name == "qiangganghu") {
+                if (MJModel.QiangGangInfo.length > 1) {
+                    var size = cc.director.getWinSize();
+                    var selectLayer = new ChooseAnGang();
+                    selectLayer.setChoiceInfos(MJModel.QiangGangInfo);
+                    selectLayer.setName("ChooseGang_selectLayer");
+                    selectLayer.setTitle("请点击选择要杠的牌");
+                    selectLayer.setPosition(cc.p(size.width / 2, n.getPosition().y + 50));
+                    selectLayer.setCallback(function (index) {
+                        var type = ActionType.TYPE_HU;
+                        sendOperateCard(type, MJModel.QiangGangInfo[index]);
+
+                        self.setOperator(-1);
+                        self.removeChildByName("ChooseGang_selectLayer");
+                    });
+                    this.addChild(selectLayer, 10000);
+                    return;
+                } else if (name == "BaoJingBtn") {
+                    sendBaoJingInfo();
+                    self.SetJingBaoVisible(false);
+                }
+                else if (MJModel.QiangGangInfo.length == 1 && MJModel.QiangGangInfo[0] != 255) {
+                    var type = ActionType.TYPE_HU;
+                    sendOperateCard(type, MJModel.QiangGangInfo[0]);
+                    self.setOperator(-1);
+                    return;
+                }
+                var type = ActionType.TYPE_HU;
+                var card = MJModel.curOperateCard;
+                sendOperateCard(type, card);
+                this.setOperator(-1);
+            }
+            else if (name == "tingpai") {
+                try {
+                    var selectLayer = MJModel.mj_table.getChildByName("tingpai_layer");
+
+                    if (selectLayer) {
+                        MJModel.mj_listenLayer_autoshow = true;
+                        MJModel.mj_listenLayer_need_autoshow = false;
+                        selectLayer.removeFromParent(true);
+                        return;
+                    }
+
+                    var can_show_listen_info = true;
+                    for (var j = 0; j < MJModel.final_listen_info.length; j++) {
+                        if (MJModel.final_listen_info[j].Card == 255) {
+                            can_show_listen_info = false;
+                            break;
+                        }
+                    }
+
+                    if (can_show_listen_info) {
+                        if (MJModel.final_listen_info.length > 0) {
+                            MJModel.mj_listenLayer_autoshow = false;
+                            MJModel.mj_listenLayer_need_autoshow = true;
+                            var size = cc.director.getWinSize();
+                            selectLayer = new TingPaiLayer();
+                            selectLayer.setAnchorPoint(cc.p(0.5, 0));
+                            selectLayer.show2(MJModel.final_listen_info);
+                            selectLayer.setName("tingpai_layer");
+                            selectLayer.setPosition(cc.p(size.width / 2, 145));
+                            MJModel.mj_table.addChild(selectLayer, 100);//一定要在MJAction下边
+                        }
+                    } else {
+                        PlatformHelper.showToast("见字胡不显示听牌张");
+                    }
+                } catch (e) {
+                    Log(this, e);
+                }
+
+                return;
+            }
+            else {
+                superBtnCallback.call(this, ref);
+            }
+
+        };
+
+        var superSetOperator = MJAction.prototype.setOperator;
+        MJAction.prototype.setOperator = function (operat) {
+            var isShowOp = superSetOperator.call(this, operat);
+            if (isShowOp) {
+                if ((operat & ActionTSType.TYPE_QIANGGANGHU) == ActionTSType.TYPE_QIANGGANGHU) {
+                    if (this.actions["qiangganghu"]) {
+                        this.actions["qiangganghu"].setVisible(true);
+                    }
+                }
+                this.reflashOpBtns();
+            } else {
+                MJModel.isGangOutOp = false;
+                MJModel.gangMoPai = false;
+            }
+            if (operat == -1 || operat == 0 || operat == null || operat == undefined) {
+                MJModel.MycurOperate = -1;
+                return isShowOp;
+            }
+            MJModel.MycurOperate = operat;
+            if (selfTable.room_Card.isDuoPai(0)) {
+                MJModel.mj_table.myselfOpenOutCard();
+            }
+
+            return isShowOp;
+        };
+
+        TingPaiLayer.prototype.getCardNums = function (vv, sver_num) {
+            var allcards = {};
+            for (var j = 0; j < self_table.room_Card.hand_card[0].length; j++) {
+                try {
+                    var card = self_table.room_Card.hand_card[0][j];
+                    Utils.checkCard(allcards, card.getValue());
+                } catch (e) {
+                }
+            }
+
+            for (var i = 0; i < self_table.room_Card.out_card.length; i++) {
+                for (var j = 0; j < self_table.room_Card.out_card[i].length; j++) {
+                    try {
+                        var card = self_table.room_Card.out_card[i][j];
+                        Utils.checkCard(allcards, card.getValue());
+                    } catch (e) {
+
+                    }
+                }
+            }
+
+            for (var i = 0; i < self_table.room_Card.hu_card.length; i++) {
+                for (var j = 0; j < self_table.room_Card.hu_card[i].length; j++) {
+                    try {
+                        var card = self_table.room_Card.hu_card[i][j];
+                        Utils.checkCard(allcards, card.getValue());
+                    } catch (e) {
+                    }
+                }
+            }
+
+            for (var i = 0; i < self_table.room_Card.peng_card.length; i++) {
+                for (var j = 0; j < self_table.room_Card.peng_card[i].length; j++) {
+                    try {
+                        var peng = self_table.room_Card.peng_card[i][j];
+                        for (var k = 0; k < peng.cardList.length; k++) {
+                            var card = peng.cardList[k];
+                            if (card.isVisible() == false)continue;
+                            var v = card.getValue();
+                            if (v == 0) {
+                                v = peng.getValue();
+                            }
+                            if (v == 0)continue;
+                            Utils.checkCard(allcards, card.getValue());
+                        }
+                    } catch (e) {
+
+                    }
+                }
+            }
+            var curN = allcards[vv];
+            if (allcards[vv] == undefined)curN = 0;
+            var n = 4 - curN;
+            if (n < 0) n = 0;
+            return n;
+        };
+
+
+    },
+    initMJTips: function () {
+        MJTips.prototype.zhongNiao_tips = [];
+
+        MJTips.prototype.setJingBaoVisible = function (pos, visible) {
+            var mjtipsself = this;
+            var tagName = "JingBaoarmature" + pos;
+            var armature = this.getChildByName(tagName);
+            if (!armature) {
+                armature = new ccs.Armature("effects_jinbaozz1");
+                var animation = armature.getAnimation();
+                if (animation) {
+                    if (typeof animation.playWithIndex === "function") {
+                        animation.playWithIndex(0);
+                        armature.setName(tagName);
+                        armature.setPosition(MJConfig.getJingBaoPos(pos));
+                        mjtipsself.addChild(armature, 10000);
+                    }
+                }
+            }
+            armature.setVisible(visible);
+            if (visible) {
+
+                armature.getAnimation().resume();
+            }
+            else {
+                armature.getAnimation().pause();
+            }
+        };
+
+        MJTips.prototype.updateJingBao = function () {
+            for (var i = 0; i < 4; i++) {
+                var tagName = "JingBaoarmature" + i;
+                var armature = this.getChildByName(tagName);
+                if (armature) {
+                    armature.setPosition(MJConfig.getJingBaoPos(i));
+                }
+            }
+        };
+        MJTips.prototype.HideJingBao = function () {
+            for (var i = 0; i < 4; i++) {
+                this.setJingBaoVisible(i, false);
+            }
+        };
+        MJTips.prototype.PaiNumsTip = function (nums) {
+            if (nums == 20) {
+                var size = cc.director.getWinSize();
+                var PaiNumsTipbg = this.getChildByName("PaiNumsTipbg");
+                if (PaiNumsTipbg) {
+                    PaiNumsTipbg.stopAllActions();
+                    this.removeChildByName("PaiNumsTipbg");
+                }
+                PaiNumsTipbg = new cc.Sprite(getResPath("xianningmj/xianning/pai_tip_bg.png"));
+                PaiNumsTipbg.setName("PaiNumsTipbg");
+                PaiNumsTipbg.setPosition(cc.p(size.width / 2, size.height / 2));
+                this.addChild(PaiNumsTipbg);
+                var painums = new cc.LabelTTF("即将开始海底捞月,还剩6张牌!", "Arial", 35);
+                painums.setColor(cc.color(248, 181, 30));
+                painums.setAnchorPoint(cc.p(0.5, 0.5));
+                painums.setPosition(cc.p(PaiNumsTipbg.getContentSize().width / 2, PaiNumsTipbg.getContentSize().height / 2));
+                PaiNumsTipbg.addChild(painums);
+                PaiNumsTipbg.runAction(cc.sequence(cc.delayTime(2), cc.removeSelf()));
+            }
+        };
+
+        var superCtor = MJTips.prototype.ctor;
+        MJTips.prototype.ctor = function () {
+            superCtor.call(this);
+            ccs.armatureDataManager.addArmatureFileInfo(getResPath("xianningmj/xianning/effect/jingbao/effects_jinbaozz1.ExportJson"));
+            ccs.armatureDataManager.addArmatureFileInfo(getResPath("xianningmj/xianning/effect/fenzhang/effects_mjhaidilao.ExportJson"));
+        };
+
+        MJTips.prototype.fenzhang = function () {
+            var size = cc.director.getWinSize();
+            var begin = cc.p(size.width / 2, size.height / 2);
+            var armature = new ccs.Armature("effects_mjhaidilao");
+            if (armature != null) {
+                var animation = armature.getAnimation();
+                if (animation) {
+                    if (typeof animation.playWithIndex === "function") {
+                        //animation.play(name);
+                        animation.playWithIndex(0);
+                        armature.setPosition(begin);
+                        this.addChild(armature, 10000);
+                    }
+                }
+                armature.runAction(cc.sequence(cc.delayTime(1), cc.removeSelf()));
+                armature.setName("hu_effect");
+                return armature;
+            }
+        };
+    },
+    actionCallBack: function (name, evt) {
+        Log(this, "actionCallBack1[" + name + "]");
+        if (this.isXianNingMJ() || this.isHongZhongLaiZiFaCaiGang()) {
+            if (name == "ready") {
+                var packet = createPacket("proto.game.xianningmj.AckConfirm");
+                cc.log("lin=MJModel.seatid=" + MJModel.seatid);
+                packet.chairid = MJModel.seatid;
+                sendPacket(packet, selfCMD.CLIENT_CONFIRM_REQ);
+            } else if (name == "confirm") {
+                sendReady();
+            } else {
+                this._super(name, evt);
+            }
+        } else {
+            this._super(name, evt);
+        }
+
+
+    },
+    isAllConfirm: function () {
+        if (this.pre_scene) {
+            for (var i = 0; i < MJModel.Play_num; i++) {
+
+                var player = this.pre_scene.players[i];
+                cc.log("lin=actionCallBack1=" + i + "  " + player.confirm);
+                if (player && (player.confirm != 1)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return true;
+        }
+    },
+    _showHandcardFlag: function (isEndShow) {
+        if (MJModel.isOnVideo) {
+            for (var j = 0; j < 4; j++) {
+                var allcards = this.room_Card.hand_card[j];
+                if (allcards) {
+                    for (var i = 0; i < allcards.length; i++) {
+                        var card = allcards[i];
+                        this._checkAddCardFlag(card);
+                    }
+                }
+            }
+            return;
+        }
+        var allcards = this.room_Card.hand_card[0];
+        if (allcards) {
+            for (var i = 0; i < allcards.length; i++) {
+                var card = allcards[i];
+                this._checkAddCardFlag(card);
+            }
+        }
+
+        this.room_Card.reflashHandCard(0, true);
+    },
+
+
+    _checkAddCardFlag: function (card) {
+        try {
+
+            if (card.getValue() == this._curLaizi) {
+                card.setStoreColor(cc.color(255, 249, 137));
+                var p = card.getChildByName("sprite");
+                p.removeChildByName("laizi_flag");
+                var flag = null;
+
+                flag = new cc.Sprite(getResPath("xianningmj/flag/lai_flag2.png"));
+
+                var m_size = p.getContentSize();
+                if (flag) {
+                    flag.setPosition(cc.p(0, m_size.height));
+                    flag.setAnchorPoint(cc.p(0, 1));
+                    flag.setName("laizi_flag");
+                    p.addChild(flag);
+                    this._flagDirection(card.pos, flag, m_size);
+                    if (card.type == CardType.Card_End) {
+                        if (card.pos == 1 || card.pos == 3 || card.pos == 2) {
+                            flag.setScale(0.5);
+                        } else {
+                            flag.setScale(0.8);
+                        }
+                    }
+
+                    if (card.type == CardType.Card_Out || card.type == CardType.Card_Hu) {
+                        flag.setScale(0.47);
+                    }
+                }
+
+                return;
+            }
+        } catch (e) {
+            Log(this, e);
+        }
+    },
+    //每个方向角标对应
+    _flagDirection: function (pos, flag, m_size) {
+        if (MJModel.mj_table_view == "2d") {
+            if (MJModel.mj_paiban == "vertical" || pos == 2) {
+                return;
+            }
+        }
+        if (MJModel.mj_bg_use == 1) {
+            if (pos == 1) {
+                flag.setPosition(cc.p(0, 17));
+                flag.setRotation(-90);
+            } else if (pos == 2) {
+                flag.setPosition(cc.p(m_size.width, 17));
+                flag.setRotation(180);
+            } else if (pos == 3) {
+                flag.setPosition(cc.p(m_size.width, m_size.height));
+                flag.setRotation(90);
+            }
+        } else {
+            if (pos == 1) {
+                flag.setPosition(cc.p(4, 14));
+                flag.setRotation(-90);
+            } else if (pos == 2) {
+                flag.setPosition(cc.p(m_size.width, 14));
+                flag.setRotation(180);
+            } else if (pos == 3) {
+                flag.setPosition(cc.p(m_size.width - 3, m_size.height));
+                flag.setRotation(90);
+            }
+        }
+
+    },
+
+    lockHongZhongLaiZi: function () {
+        for (var i = 0; i < this.room_Card.hand_card[0].length; i++) {
+            var card = this.room_Card.hand_card[0][i];
+            if (this.getIsHongZhong(card.getValue()) || this.getIsJingPoker(card.getValue())) {
+                card.setCardTouchEnable(false);
+            }
+        }
+
+    },
+
+    _setLaizi: function (laizi, laizipi, laizipi2, gamestart) {
+        if (laizi == null || laizi == undefined || laizi == -1 || laizi == 255) {
+            if (this._curLaizi_bg) this._curLaizi_bg.setVisible(false);
+            return;
+        }
+        if (gamestart == undefined) gamestart = false;
+        var size = cc.director.getWinSize();
+
+        if (this._curLaizi_bg == null) {
+            this._curLaizi_bg = new cc.Sprite(getResPath("xianningmj/flag/laizi_bg2.png"));
+
+            this._curLaizi_bg.setPosition(cc.p(size.width - 220, size.height - 70));
+            this.addChild(this._curLaizi_bg, 200);
+        }
+        this._curLaizi_bg.removeAllChildren();
+        this._curLaizi_bg.setVisible(true);
+        this._curLaizi = laizi;
+
+        if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGMJ) {
+            this._curLaizipi = 0x41;
+        }
+        if (this.isHongZhongLaiZiFaCaiGang()) {
+            this._curLaizipi = 0x41;
+            this._curLaizipi2 = 0x42;
+        }
+
+        this._showHandcardFlag(false);
+
+        if (this._curLaizi > 0) {
+
+            var laiziBgsize = this._curLaizi_bg.getContentSize();
+            var label = new cc.LabelTTF("赖子", "Thonburi", 25);
+            label.setName("laiziLabel");
+            label.setAnchorPoint(cc.p(0.5, 1));
+            label.setVisible(false);
+            label.setPosition(laiziBgsize.width / 2, laiziBgsize.height);
+            this._curLaizi_bg.addChild(label);
+
+            var scale = 0.55;
+            var card = new MJCard();
+            card.setValue(laizi, 0, CardType.Card_Hand, 0);
+            card.setName("laizi");
+            card.setAnchorPoint(cc.p(0.5, 1));
+            card.setScale(scale);
+            card.oriScale = scale;
+            card.setStoreColor(cc.color(255, 249, 137));
+            var localPos = this._curLaizi_bg.convertToNodeSpace(cc.p(size.width * 0.5, size.height * 0.5));
+            card.setPosition(localPos);
+
+            this._curLaizi_bg.addChild(card);
+
+            if (gamestart) {
+                var dl = 1;
+                card.setVisible(false);
+                var ppos = card.getPosition();
+                var self = this;
+                var callFunc = cc.CallFunc(function () {
+                    self._showLaizi_effect("赖子");
+                });
+                var updateBtn = cc.CallFunc(function () {
+                    self.updateButtonPostion();
+                });
+                card.setPosition(cc.p(size.width / 2 - this._curLaizi_bg.getPositionX() + this._curLaizi_bg.getContentSize().width / 2, size.height / 2 - this._curLaizi_bg.getPositionY() + this._curLaizi_bg.getContentSize().height / 2));
+                card.runAction(cc.sequence(cc.delayTime(0 + dl), cc.show(), callFunc, cc.scaleTo(0.1, 2.0), cc.delayTime(0.5), cc.spawn(cc.moveTo(0.17, ppos), cc.scaleTo(0.17, scale)), updateBtn));
+            } else {
+                card.setVisible(true);
+                this.updateButtonPostion();
+            }
+        }
+    },
+    _showLaizi_effect: function (name) {
+        ccs.armatureDataManager.addArmatureFileInfo(getResPath("xianningmj/xianning/effect/laizi/effects_mjhunancx.ExportJson"));
+        var size = cc.director.getWinSize();
+        var armature = new ccs.Armature("effects_mjhunancx");
+        var animation = armature.getAnimation();
+        if (animation) {
+            if (typeof animation.playWithIndex === "function") {
+                if (name == "赖子") {
+                    animation.playWithIndex(1, -1, 0);
+                }
+                if (name == "赖根") {
+                    animation.playWithIndex(2, -1, 0);
+                }
+                if (name == "朝天") {
+                    animation.playWithIndex(3, -1, 0);
+                }
+                armature.setPosition(cc.p(size.width / 2, size.height / 2 + 150));
+                this.addChild(armature, 100);
+                armature.runAction(cc.sequence(cc.delayTime(0.5), cc.removeSelf()));
+            }
+        }
+        Sound.getInstance().playEffect(__String.createWithFormat(getResPath("xianningmj/sound/laizi.mp3")));
+        return armature;
+    },
+    handlerAutoUpTableReady: function (nums, selfIsReady) {
+
+        cc.log("----handlerAutoUpTableReady", selfIsReady);
+        if ((MJModel.banker_seatid < 0 || MJModel.banker_seatid > 4) && !selfIsReady) {
+            if (this.room_Action) this.room_Action.setReadyVisible(true);
+        }
+        if (MJModel.seatid == -1 && nums < 4) {
+        }
+        else if (selfIsReady == false) {
+            if (MJModel.canQuxiaoZhun()) {
+                if (MJModel.roomState != 0) this.actionCallBack("ready");
+            } else {
+
+                if (MJModel.banker_seatid >= 0 && MJModel.banker_seatid < 4) {
+                    this.actionCallBack("ready");
+                }
+            }
+        }
+    },
+
+    handler_cmd: function (cmd, jpacket, canDelay, svrid) {
+        cc.log("lin=handler_cmd=" + cmd);
+        if (cmd == CMD.SERVER_GAME_RECORD) {
+            cc.log("lin=SERVER_GAME_RECORD");
+            this._handler_game_record(jpacket, canDelay);
+            return;
+        }
+
+        if (cmd == CMD.SERVER_GAME_END) {
+            var ackGameEnd = parsePacket("proto.game.xianningmj.GameEndXianNing", jpacket);
+            //cc.log("-----handler_server_game_end_bc",jpacket);
+            this.handler_server_game_end_bc(ackGameEnd, canDelay);
+            return;
+        }
+        if (cmd == CMD.SERVER_GAME_SCENE) {
+            this.handlerTableInfo(this.tableData);
+            var tagGameScene = parsePacket("proto.game.xianningmj.tagGameScene", jpacket);
+            this.handler_server_scene_info_uc(tagGameScene, canDelay);
+            if (MJModel.mj_public_style == 0 && this._has_check_ip == false) {
+                Utils.refreshGps();
+            }
+            this._has_check_ip = true;
+            return;
+        }
+        else if (cmd == selfCMD.SERVER_LAIZI_UC) {
+            this.handler_server_showLaizi_uc(jpacket, canDelay);
+            return;
+        }
+        else if (cmd == selfCMD.SERVER_TONGSHAN_ROBGANGFAILSCORE) {
+            this.handler_server_tongshan_gangfen_uc(jpacket, canDelay);
+            return;
+        }
+        else if (cmd == selfCMD.SERVER_ROOM_MAJINAG_QINGYISE_WANING) {
+            this.handler_server_baojing_success_bc(jpacket, canDelay);
+            return;
+        }
+        else if (cmd == selfCMD.SERVER_OPERATE_RESULT_ANGANG) {
+            this.handler_gang_scores_xianning(jpacket, canDelay);
+            return;
+        }
+        else if (cmd == selfCMD.SERVER_CONFIRM_RES) {
+            this.handler_server_ready(jpacket, canDelay);
+            return;
+        }
+        else if (cmd == CMD.SERVER_USER_READY) {
+            this.handler_server_confirm(jpacket, canDelay);
+            return;
+        }
+        this._super(cmd, jpacket, canDelay, svrid);
+
+
+    },
+    handler_server_ready: function (jpacket, canDelay) {
+        var data = parsePacket("proto.game.xianningmj.AckConfirm", jpacket);
+        var seadid = data.chairid;
+        if (MJModel.isMyPlayer(seadid) && this.pre_scene) {
+            //隐藏准备，显示确定
+            this.pre_scene.btns["confirm"].setVisible(false);
+            this.pre_scene.btns["ready"].setVisible(false);
+        }
+
+
+        //显示flag
+        var pos = MJModel.getPosBySeatid(seadid);
+        var player = MJModel.players[seadid];
+        if ((player.uid != -1) && this.pre_scene) {
+            var mp = this.pre_scene.players[pos];
+            mp.setConfirm(true);
+        }
+
+
+        if (this.isAllConfirm()) {
+            this.pre_scene.btns["confirm"].setVisible(true);
+        }
+    },
+
+    handler_server_confirm: function (jpacket, canDelay) {
+        this.handler_server_ready_succ_bc(jpacket, canDelay);
+        ////隐藏准备，显示确定
+        //this.pre_scene.btns["confirm"].setVisible(false);
+        //this.pre_scene.btns["ready"].setVisible(false);
+    },
+    handler_server_baojing_success_bc: function (data, canDelay) {
+        //报警提醒
+        var self = this;
+        var jpacket = parsePacket("proto.game.xianningmj.RspGamePlayerAlertingInfo", data);
+        var seatid = jpacket.seatid;
+        var flag = jpacket.flag;
+        var pos = MJModel.getPosBySeatid(seatid);
+
+        this.room_Tip.setJingBaoVisible(pos, flag);
+
+    },
+    timeEnd: function (dt) {
+        if (MJModel.isEnd)return;
+        if (MJModel.isState(MJ_STATUS.MJ_GAME_FREE)) {
+            sendGameEndRecordReq();
+        }
+    },
+    _handler_game_record: function (data, canDelay) {
+        //-----新总结算界面
+        cc.log("------big End");
+        if (this.isRecordShow) {
+            return;
+        }
+        this.isRecordShow = true;
+        var self = this;
+        this.resetGame(false);
+        var pkgId = this._pkg_id;
+        var name = "";
+        if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ) {
+            name = "咸宁转转";
+        } else if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGHongZhongLaiZiFaCaiGang) {
+            name = "红中癞子发财杠";
+        } else {
+            name = "咸宁麻将";
+        }
+        var gameType = name + " · " + (4 - MJModel.mj_roomType) + "人";
+
+        var gameRecord = parsePacket("proto.game.GameEndRecord", data);
+        var bigResult = new CommonTotalResult();
+        cc.director.getRunningScene().addChild(bigResult, 100000);
+
+        var time = Utils.getTime(gameRecord.DataTime * 1000);
+        var startTime = Utils.getTime(MJModel.roomData["gameRoom"]["createTime"]);
+
+        var roomId = "房间号:" + MJModel.roomData["gameRoom"]["code"];
+        gameType += " · " + MJModel.base_money + "分底";
+
+        bigResult.initUI(gameType, roomId, time, startTime, MJModel.RoomCountSum, MJModel.currentCount);
+        bigResult.back_btn.addClickEventListener(function (node) {
+            self.exitRoom(true);
+        });
+        //var _winSeatid = [0, 0, 0, 0];
+        var _PaoSeatid = [0, 0, 0, 0];
+        for (var i = 0; i < gameRecord.MostDianPaoUser.length; i++) {
+            var seatId = gameRecord.MostDianPaoUser[i];
+            if (seatId != 255) {
+                _PaoSeatid[seatId] = 1;
+            }
+        }
+        var addX = 0;
+        var PlayerNumber = 0;
+        var has_result = false;
+        var houseOwner = false;
+
+        var max_score = 0;
+        for (var i = 0; i < gameRecord.UserRecoreInfo.length; i++) {
+            var recoreInfo = gameRecord.UserRecoreInfo[i];
+            if (recoreInfo.totalscore > max_score) {
+                max_score = recoreInfo.totalscore;
+            }
+        }
+
+        for (var i = 0; i < gameRecord.UserRecoreInfo.length; i++) {
+            var recoreInfo = gameRecord.UserRecoreInfo[i];
+            //var playerRecord = totalRecord.player_records[i];
+            var player = MJModel.players[i];
+            var arrStr = ["坐庄次数", "胡牌次数", "点炮次数", "超时次数"];
+            //次数
+            var arrcount = [recoreInfo.banker_num, recoreInfo.hu_num, recoreInfo.Ex1, recoreInfo.outtime_num];
+
+            if (player && player.uid != -1 && player.uid != 0) {
+                addX = 39 + (i * 302);
+                if (MJModel.roomData["gameRoom"]["userId"] == player.uid) {
+                    houseOwner = true;
+                } else {
+                    houseOwner = false;
+                }
+                var isWin = false;
+                if (max_score > 0 && recoreInfo.totalscore == max_score) {
+                    isWin = true;
+                }
+                var Item = bigResult.addItem(player.avatar, player.name, player.uid, isWin, _PaoSeatid[i], arrStr, arrcount, recoreInfo.totalscore, houseOwner);
+                Item.setAnchorPoint(cc.p(0.5, 0.5));
+                bigResult.player_records[i] = Item;
+                PlayerNumber++;
+            }
+
+            if (recoreInfo.totalscore != 0) {
+                has_result = true;
+            }
+
+        }
+        bigResult.refresh(PlayerNumber);
+        this.release();
+    },
+
+    handler_server_scene_info_uc: function (data, canDelay) {
+        var self = this
+        var ackGameFree = data;
+        //癞子牌
+        var tongshangamescene = ackGameFree;
+        MJModel.RoomConfigID = data.GameSence.RoomConfigID;
+        if (tongshangamescene) {
+            if (tongshangamescene.laizi_info) {
+                var laiziShow = tongshangamescene.laizi_info.laiziShow[0];
+                var laiziSign = tongshangamescene.laizi_info.laiziSign[0];
+                var flag = tongshangamescene.laizi_info.flag;// true:游戏开始首次发送标记；
+
+                this._curLaizi = laiziSign;
+
+                this._setLaizi(laiziSign, -1, -1, flag);
+            }
+        }
+
+        if (tongshangamescene) {
+            var PlayerAlertingInfo = tongshangamescene.PlayerAlertingInfo;
+            for (var i = 0; i < PlayerAlertingInfo.length; i++) {
+                var baojingseatid = PlayerAlertingInfo[i].seatid;
+                if (baojingseatid != null) {
+                    var flag = PlayerAlertingInfo[i].flag;
+                    var baojingpos = MJModel.getPosBySeatid(baojingseatid);
+                    this.room_Tip.setJingBaoVisible(baojingpos, flag);
+                }
+
+            }
+            MJModel.QiangGangInfo = [];
+            var gang_size = tongshangamescene.bAnGangTing.length;
+            for (var i = 0; i < gang_size; i++) {
+                MJModel.QiangGangInfo.push(tongshangamescene.bAnGangTing[i]);
+            }
+        }
+
+        this._super(data.GameSence, canDelay);
+        this._setGameType();
+
+        if (tongshangamescene && this.pre_scene) {
+            var userconfirm = tongshangamescene.userconfirm;
+
+            for (var i = 0; i < userconfirm.length; i++) {
+                var confirm = userconfirm[i];
+                var pos = MJModel.getPosBySeatid(i);
+                var player = MJModel.players[i];
+                if (player.uid != -1) {
+                    var mp = this.pre_scene.players[pos];
+                    if (player.ready) {
+                        mp.setReadyFlag(true);
+                        if (!mp.confirm) {
+                            mp.confirm = 1;
+                        }
+                    } else if (confirm) {
+                        mp.setConfirm(true);
+                        if (MJModel.isMyPlayer(i)) {
+                            //隐藏准备，显示确定
+                            this.pre_scene.btns["confirm"].setVisible(false);
+                            this.pre_scene.btns["ready"].setVisible(false);
+                        }
+                    } else {
+                        if (MJModel.isMyPlayer(i)) {
+                            //隐藏准备，显示确定
+                            this.pre_scene.btns["confirm"].setVisible(false);
+                            this.pre_scene.btns["ready"].setVisible(true);
+                        }
+                    }
+                }
+            }
+
+            for (var i = 0; i < userconfirm.length; i++) {
+                var confirm = userconfirm[i];
+                var pos = MJModel.getPosBySeatid(i);
+                var player = MJModel.players[i];
+                if (player.uid != -1) {
+                    var mp = this.pre_scene.players[pos];
+                    if (player.ready) {
+
+                    } else if (confirm && this.isAllConfirm()) {
+                        if (MJModel.isMyPlayer(i)) {
+                            //隐藏准备，显示确定
+                            this.pre_scene.btns["confirm"].setVisible(true);
+                            this.pre_scene.btns["ready"].setVisible(false);
+                        }
+                    } else {
+
+                    }
+                }
+            }
+        }
+
+        if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ) {
+            this.lockHongZhongLaiZi();
+        }
+
+        this.updateButtonPostion();
+
+    },
+    handler_server_game_start_bc: function (data, canDelay) {
+        MJModel.mj_listenLayer_need_autoshow = true;
+        this.GameEndDeley = 0;
+        MJModel.IsCancelGang = false;
+        MJModel.JingValue = [];
+        MJModel.IsHaoBaoJing = false;
+        this.room_Tip.HideJingBao();
+        this._super(data, canDelay);
+    },
+    handler_server_game_start_bc2: function (data, canDelay) {
+        this._super(data, canDelay);
+    },
+    handler_gang_scores: function (scores, OpType, OpType2, canDelay) {
+
+    },
+    handler_gang_scores_xianning: function (data, canDelay) {
+        var self = this;
+        var jpacket = parsePacket("proto.game.xianningmj.AckBcOpResultAnGangScore", data);
+        for (var j = 0; j < jpacket.Score.length; j++) {
+            var seadid = j;
+            var pos = MJModel.getPosBySeatid(j);
+            var s = jpacket.Score[seadid];
+            var myPlayer = MJModel.players[seadid];
+            if (myPlayer) {
+                myPlayer.money += s;
+                this.players[pos].updateInfo();
+                if (canDelay) this.showScoreEffect(pos, s);
+            }
+        }
+    },
+    handler_server_operate_notify_bc: function (data, canDelay) {
+        this.room_Info.showTime(MJModel.oprateTime);
+        this.room_Info.showDirectionTip(-1);
+
+        var ackOpNotify = parsePacket("proto.game.AckOpNotify", data);
+        var seatid = ackOpNotify.ChairID;
+        var optype = ackOpNotify.OpType;
+        var card = ackOpNotify.Card;
+
+        MJModel.cur_seat = -1;
+        if (MJModel.isMyPlayer(seatid)) {
+
+            MJModel.curOperateCard = card;
+            MJModel.curOperate = optype;
+            if (( optype & ActionType.TYPE_LISTEN) == ActionType.TYPE_LISTEN) {
+                optype = optype - ActionType.TYPE_LISTEN;
+            }
+
+            this.autoHuCard();
+
+            MJModel.cur_seat = seatid;
+            if (optype > 0) {
+                MJModel.canTouchCard = false;
+            }
+            MJModel.QiangGangInfo = [];
+            if (ackOpNotify.Gang != null && ackOpNotify.Gang.length > 0) {
+
+                MJModel.gang_info = [];
+                var gang_size = ackOpNotify.Gang.length;
+                for (var i = 0; i < gang_size; i++) {
+                    var tgInfo = Utils.clone(tagGangInfo);
+                    tgInfo.curCard = ackOpNotify.Gang[i].Card;
+                    tgInfo.state = ackOpNotify.Gang[i].state;
+                    MJModel.gang_info.push(tgInfo);
+                }
+            }
+            if (ackOpNotify.bAnHuGang != null && ackOpNotify.bAnHuGang.length > 0) {
+
+                var gang_size = ackOpNotify.bAnHuGang.length;
+                for (var i = 0; i < gang_size; i++) {
+                    MJModel.QiangGangInfo.push(ackOpNotify.bAnHuGang[i]);
+                }
+            }
+            this.check_tip_operate_card(optype, card);
+
+            if (this.room_Action) this.room_Action.setOperator(optype);
+        }
+    },
+
+    handler_server_showLaizi_uc: function (data, canDelay) {
+        var self = this;
+        var jpacket = parsePacket("proto.game.xianningmj.GameLaiziInfo", data);
+        var shai_one = jpacket.diceList.length > 0 ? jpacket.diceList[0] : 0;
+        var shai_two = jpacket.diceList.length > 1 ? jpacket.diceList[1] : 0;
+        var laiziShow = jpacket.laiziShow[0];
+        var laiziSign = jpacket.laiziSign[0];
+        var flag = jpacket.flag;// true:游戏开始首次发送标记；
+        this._curLaizi = laiziSign;
+
+        if (MJModel.isOnVideo) {
+            this._setLaizi(laiziSign, -1, -1, canDelay)
+        } else {
+            this._setLaizi(laiziSign, -1, -1, flag)
+        }
+
+    },
+
+    handler_server_tongshan_gangfen_uc: function (data, canDelay) {
+        var jpacket = parsePacket("proto.game.tongshanmj.robGangFailScore", data);
+        var score = jpacket.score;
+        for (var i = 0; i < score.length; i++) {
+            var chairid = i;
+            var scorenums = score[i];
+            var player = MJModel.players[chairid];
+            var pos = MJModel.getPosBySeatid(chairid);
+
+            if (player && player.uid > 0) {
+                this.showScoreEffect(pos, scorenums, false);
+                if (MJModel.isMyPos(pos)) {
+                    if (scorenums >= 0) {
+                        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/win.mp3"));
+                    } else {
+                        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/loss.mp3"));
+                    }
+                }
+            }
+        }
+    },
+    handler_server_mo_card_bc: function (data, canDelay) {
+        var userGetCard = parsePacket("proto.game.AckUserGetCard", data);
+        var leftCardNum = userGetCard.LeftCardNum;
+        var seatId = userGetCard.ChairID;
+        var operate = userGetCard.OpType;
+        this._super(data, canDelay);
+        if (this.isXianNingMJ() || this.isHongZhongLaiZiFaCaiGang()) {
+            if (leftCardNum == 13) {
+                this.room_Tip.fenzhang();
+
+            }
+            if (leftCardNum <= 13) {
+
+                if (MJModel.isMyPlayer(seatId)) {
+                    MJModel.canTouchCard = false;
+                }
+            }
+            if (leftCardNum == 20) {
+                this.room_Tip.PaiNumsTip(leftCardNum);
+
+            }
+
+        }
+        if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ) {
+            this.lockHongZhongLaiZi();
+        }
+    },
+    handler_server_peng_kang_bc: function (data, canDelay) {
+        cc.log("lin=handler_server_peng_kang_bc=xianing");
+        this.room_Tip.showTextTip("");
+        this.check_tip_operate_card(0, 0);
+        var ackBcOpResult = parsePacket("proto.game.AckBcOpResult", data);
+        this.unschedule(this.autoOutCardTimeOut);
+        this.unschedule(this.autoHuCardTimeOut);
+
+        var seatid = ackBcOpResult.ChairID;
+        var out_seatid = ackBcOpResult.OutCardChairID;
+        var OpType = ackBcOpResult.OpType;
+        var OpType2 = ackBcOpResult.OpType2;
+        var card = ackBcOpResult.Card;
+        var specialCard = ackBcOpResult.SpecialCard;
+
+        var scores = ackBcOpResult.Score;
+        this.handler_gang_scores(scores, OpType, OpType2, canDelay);
+
+        if (MJModel.isMyPlayer(seatid)) {
+            if (this.room_Action) this.room_Action.setOperator(-1);
+        }
+
+        if (this.room_Action_video) this.room_Action_video.reset();
+
+        var pos = MJModel.getPosBySeatid(seatid);
+        var out_pos = MJModel.getPosBySeatid(out_seatid);
+
+        this.players[pos].setTimeOut(false);
+        this.players[pos].setOffline(false);
+
+        if ((OpType & ActionType.TYPE_PASS) == ActionType.TYPE_PASS) {
+
+            if (MJModel.isMyPlayer(seatid) && seatid == out_seatid && this.room_Card.isDuoPai(0))//如果是我自己摸的牌  自己过 则放开选牌功能
+            {
+                this.room_Info.showTime(MJModel.outCardTime);
+                MJModel.cur_seat = seatid;
+                this.myselfOpenOutCard(true);
+            }
+
+            return;
+        }
+        cc.log("OpType2 && OpType2=2");
+        var needRemoveOutCard = false;
+        var needOpenOutCard = false;
+        if ((OpType & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+            var ok = this.room_Card.addPengCard(pos, PengType.Peng_AnKang, card, out_pos, OpType, specialCard);
+            cc.log("OpType2 && OpType2=8");
+
+            if (!ok)return;
+            this.room_Card.removeHandCard(pos, card, 4);
+        }
+        else if ((OpType & ActionType.TYPE_PENG) == ActionType.TYPE_PENG) {
+            this.room_Card.addPengCard(pos, PengType.Peng_Peng, card, out_pos, OpType, specialCard);
+            this.room_Card.removeHandCard(pos, card, 2);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_ZHIGANG) == ActionType.TYPE_ZHIGANG) {
+            var ok = this.room_Card.addPengCard(pos, PengType.Peng_Kang, card, out_pos, OpType, specialCard);
+            if (!ok)return;
+            this.room_Card.removeHandCard(pos, card, 3);
+            needRemoveOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_WANGANG) == ActionType.TYPE_WANGANG) {
+            var ok = this.room_Card.changPengCard(pos, PengType.Peng_Kang, card, out_pos, OpType);
+            if (!ok)return;
+            this.room_Card.removeHandCard(pos, card, 1);
+        }
+        else if ((OpType & ActionType.TYPE_LEFT_CHI) == ActionType.TYPE_LEFT_CHI) {
+            this.room_Card.addPengCard(pos, PengType.Chi_L, card, out_pos, OpType, specialCard);
+            this.room_Card.removeHandCard(pos, card + 1, 1);
+            this.room_Card.removeHandCard(pos, card + 2, 1);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_CENTER_CHI) == ActionType.TYPE_CENTER_CHI) {
+            this.room_Card.addPengCard(pos, PengType.Chi_M, card, out_pos, OpType, specialCard);
+            this.room_Card.removeHandCard(pos, card - 1, 1);
+            this.room_Card.removeHandCard(pos, card + 1, 1);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_RIGHT_CHI) == ActionType.TYPE_RIGHT_CHI) {
+            this.room_Card.addPengCard(pos, PengType.Chi_R, card, out_pos, OpType, specialCard);
+            this.room_Card.removeHandCard(pos, card - 1, 1);
+            this.room_Card.removeHandCard(pos, card - 2, 1);
+            needRemoveOutCard = true;
+            needOpenOutCard = true;
+        }
+        else if ((OpType & ActionType.TYPE_HU) == ActionType.TYPE_HU) {
+            this.room_Info.showDirectionTip(-1);
+            this.room_Info.stopTime();
+            MJModel.canTouchCard = false;
+
+            //暗扛
+            if ((OpType2 && OpType2 == 16)) {
+                this.changeAnGang(out_pos, PengType.Peng_Peng, card)
+                if (this.room_Card.isDuoPai(out_pos)) this.room_Card.removeHandCard(out_pos, card, 1);
+            }
+
+            //抢弯杠
+            if ((OpType2 && OpType2 == 5)) {
+                this.room_Card.changeWanGang(out_pos, PengType.Peng_Peng, card);
+                if (this.room_Card.isDuoPai(out_pos)) this.room_Card.removeHandCard(out_pos, card, 1);
+            }
+
+            //抢直杠
+            if ((OpType2 && OpType2 == 11)) {
+                var ok = this.room_Card.changeZhiGang(out_pos, PengType.Peng_Peng, card);
+                if (ok) {
+                    this.room_Card.initMoCard(out_pos, (out_pos == 0 || MJModel.isOnVideo ) ? card : 0);
+                    this.room_Card.initMoCard(out_pos, (out_pos == 0 || MJModel.isOnVideo ) ? card : 0);
+                    this.room_Card.initMoCard(out_pos, (out_pos == 0 || MJModel.isOnVideo ) ? card : 0);
+                    this.room_Card.reflashHandCard(out_pos, true, false);
+                }
+            }
+
+            if ((OpType2 && OpType2 == 5) || (OpType2 && OpType2 == 11)) {
+                //避免双抢杠的时候 会出两次牌
+                if (this.room_Card.out_card[out_pos].length == 0 || this.room_Card.out_card[out_pos][this.room_Card.out_card[out_pos].length - 1].getValue() != card) {
+                    this.room_Card.addOutCard(out_pos, card);
+                }
+            }
+        }
+
+        if (MJModel.isMyPlayer(seatid)) {
+            if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+            MJModel.isAutoOutCard = false;
+            this.room_Card.setAutoOutCard(false);
+        }
+        if (needRemoveOutCard) {
+            MJModel.cur_seat = seatid;
+            var isok = this.room_Card.removeOutCard(out_pos, card, canDelay);
+            this.room_Card.setCurCardTip(false);
+            if (isok == false) {
+                try {
+                    ERROR(this, "removeOutCard error card:" + card + "lastoutcard:" + this.room_Card.out_card[out_pos][this.room_Card.out_card[out_pos].length - 1].getValue());
+                } catch (e) {
+                    ERROR(this, "needRemoveOutCard" + e);
+                }
+                this.reConnect("", false);
+            }
+        }
+        if (needOpenOutCard) {
+            this.room_Info.showDirectionTip(pos);
+            if (MJModel.isMyPlayer(seatid)) {
+                this.myselfOpenOutCard();
+            }
+        }
+        var player = MJModel.players[seatid];
+        if (player && canDelay) {
+
+            var effect = "gang";
+            if ((OpType & ActionType.TYPE_HU) == ActionType.TYPE_HU) {
+                var zimo = this.room_Card.isDuoPai(pos);
+                effect = "hu";
+                if (zimo) {
+                    effect = "zimo";
+                }
+
+                if (OpType2 == 5 || OpType2 == 11 || OpType2 == 16) {
+                    effect = "qiangganghu";
+                }
+            }
+            else if ((OpType & ActionType.TYPE_PENG) == ActionType.TYPE_PENG) {
+                effect = "peng";
+            }
+            else if ((OpType & ActionType.TYPE_LEFT_CHI) == ActionType.TYPE_LEFT_CHI || (OpType & ActionType.TYPE_CENTER_CHI) == ActionType.TYPE_CENTER_CHI || (OpType & ActionType.TYPE_RIGHT_CHI) == ActionType.TYPE_RIGHT_CHI) {
+                effect = "chi";
+            }
+
+            this.handler_op_sound(pos, player.sex, OpType, OpType2, effect);
+            this.handler_op_effect(pos, out_pos, player.sex, OpType, OpType2, effect);
+        }
+        cc.eventManager.dispatchCustomEvent("tingpai_info_notice_reflash");
+    },
+    changeAnGang: function (pos, type, value, out_pos) {
+        for (var i = this.room_Card.peng_card[pos].length - 1; i >= 0; i--) {
+            if (this.room_Card.peng_card[pos][i].pengType == PengType.Peng_AnKang) {
+                this.room_Card.peng_card[pos][i].removeFromParent();
+                break;
+            }
+        }
+    },
+    getIsHongZhongLaiZi: function (value) {
+        var self = this;
+        if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGMJ) {
+            if (value == self._curLaizi || value == self._curLaizipi) {
+                return true;
+            }
+        }
+
+        if (this.isHongZhongLaiZiFaCaiGang()) {
+            if (value == self._curLaizi || value == self._curLaizipi || value == self._curLaizipi2) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+    getIsHongZhong: function (value) {
+        var self = this;
+        if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGMJ) {
+            if (value == 0x41) {
+                return true;
+            }
+        }
+
+        if (this.isHongZhongLaiZiFaCaiGang()) {
+            if (value == 0x42 || value == 0x41) {
+                return true;
+            }
+        }
+        return false;
+    },
+    getIsJingPoker: function (value) {
+
+        var iswang = false;
+        if (value == this._curLaizi) {
+            iswang = true;
+        }
+        return iswang;
+    },
+    getLaiRes: function (pos, cardtype) {
+        if (cardtype == CardType.Card_Hand) {
+            return getResPath("xianningmj/xianning/jing_flag.png");
+        }
+        else if (cardtype == CardType.Card_Peng || CardType.Card_End || cardtype == CardType.Card_Out) {
+
+            var fomatstr = "xianningmj/xianning/jing_out_flag_" + pos + ".png";
+
+            return getResPath(fomatstr);
+        }
+        return null;
+    },
+
+    getConfigPathById: function (configId) {
+        var path = "";
+        cc.log("-----getConfigPathById:", configId);
+        if (configId == SHUANGLIAO_PLAY.SiRen
+            || configId == SHUANGLIAO_PLAY.ZZSiRen) {
+
+            path = "4人";
+            if (configId == SHUANGLIAO_PLAY.ZZSiRen) {
+                MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ;
+            }
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZSanRen) {
+            MJModel.mj_roomType = 1;
+            path = "3人";
+            MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ;
+        }
+        else if (configId == SHUANGLIAO_PLAY.LiangRen
+            || configId == SHUANGLIAO_PLAY.ZZLiangRen) {
+            MJModel.mj_roomType = 2;
+            path = "2人";
+            if (configId == SHUANGLIAO_PLAY.ZZLiangRen) {
+                MJModel.GameType = XNMJ_GAME_TYPE.XIANGNINGZHUANGZHUANGMJ;
+            }
+        }
+        else if (configId == SHUANGLIAO_PLAY.DiFenYi) {
+            path = "底分1";
+        }
+        else if (configId == SHUANGLIAO_PLAY.DiFenEr) {
+            path = "底分2";
+        }
+        else if (configId == SHUANGLIAO_PLAY.DiFenWu) {
+            path = "底分5";
+        }
+        else if (configId == SHUANGLIAO_PLAY.DiFenShi) {
+            path = "底分10";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZKeDianPao) {
+            path = "可点炮";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZBuKeDianPao) {
+            path = "不可点炮";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZHongZhongLai) {
+            this.GameNameXianningTiaotiao = true;
+            path = "红中癞子";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZKeHuQiDui) {
+            path = "可胡七对";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZZhuangXian) {
+            path = "庄闲";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZBuZhuaNiao) {
+            path = "不抓鸟";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZZhuaErNiao) {
+            path = "抓2鸟";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZZhuaSiNiao) {
+            path = "抓4鸟";
+        }
+        else if (configId == SHUANGLIAO_PLAY.ZZZhuaLiuNiao) {
+            path = "抓6鸟";
+        }
+        else if (configId == SHUANGLIAO_PLAY.HongZhongLaiZiKeDa) {
+            path = "红中赖子可打";
+            MJModel.IsHongZhongLaiZiKeDa = true;
+            if (this.isHongZhongLaiZiFaCaiGang()) {
+                path = "红中癞子发财可打";
+            }
+        }
+        else if (configId == SHUANGLIAO_PLAY.KeQiangAnGang) {
+            path = "可抢暗杠";
+        }
+        else if (configId == SHUANGLIAO_PLAY.sanjubaopei) {
+            path = "三句包赔";
+        }
+
+        return path;
+    },
+    getMjTypePath: function () {
+
+    },
+    test: function (dt) {
+        MJModel.testCount++;
+        var tempCount = MJModel.testCount;
+        if (tempCount == 5 && true) {
+            //this.room_Card.addOutCard(0, 0x19);
+            //this.room_Card.addOutCard(1, 0x19);
+            //this.room_Card.addOutCard(2, 0x19);
+            //this.room_Card.addOutCard(3, 0x19);
+            //this.room_Tip.ShowGameState(0);
+            this.room_Tip.setJingBaoVisible(1, true);
+            this.room_Tip.setJingBaoVisible(2, true);
+            this.room_Tip.setJingBaoVisible(3, true);
+            this.room_Tip.setJingBaoVisible(0, true);
+            //this.showLaiZiGangLayer();
+            //this.showAnGangLayer();
+            //this.handler_op_effect(0, 1, player.sex, OpType, OpType2, effect);
+        }
+
+        if (tempCount == 5 && false) {
+            var packge = {
+                "gameend": {
+                    "UserCard": [{
+                        "ChangeableCardsLen": 7,
+                        "ChangeableCards": [20, 22, 22, 24, 34, 34, 34],
+                        "FixedCardsLen": 4,
+                        "stFixedCards": [{"CardData": 21, "state": 8, "chairID": 0, "LaiziNum": null}, {
+                            "CardData": 21,
+                            "state": 8,
+                            "chairID": 0,
+                            "LaiziNum": null
+                        }, {"CardData": 23, "state": 8, "chairID": 0, "LaiziNum": null}, {
+                            "CardData": 23,
+                            "state": 8,
+                            "chairID": 0,
+                            "LaiziNum": null
+                        }]
+                    }, {
+                        "ChangeableCardsLen": 8,
+                        "ChangeableCards": [18, 18, 21, 21, 24, 24, 24, 34],
+                        "FixedCardsLen": 2,
+                        "stFixedCards": [{"CardData": 2, "state": 8, "chairID": 1, "LaiziNum": null}, {
+                            "CardData": 34,
+                            "state": 1,
+                            "chairID": 2,
+                            "LaiziNum": null
+                        }]
+                    }, {
+                        "ChangeableCardsLen": 13,
+                        "ChangeableCards": [3, 4, 5, 5, 6, 7, 9, 18, 18, 19, 25, 34, 34],
+                        "FixedCardsLen": 0,
+                        "stFixedCards": []
+                    }, {
+                        "ChangeableCardsLen": 13,
+                        "ChangeableCards": [2, 3, 4, 5, 6, 8, 21, 21, 21, 22, 23, 24, 25],
+                        "FixedCardsLen": 0,
+                        "stFixedCards": []
+                    }],
+                    "Score": [-60, 180, -60, -60],
+                    "EndState": 0,
+                    "EndGangInfo": [{
+                        "Gang": [{"GangType": 8, "GangCard": 21}, {
+                            "GangType": 8,
+                            "GangCard": 21
+                        }, {"GangType": 8, "GangCard": 23}, {"GangType": 8, "GangCard": 23}], "TotalGangScore": 5
+                    }, {"Gang": [{"GangType": 8, "GangCard": 2}], "TotalGangScore": 1}, {
+                        "Gang": [],
+                        "TotalGangScore": -3
+                    }, {"Gang": [], "TotalGangScore": -3}],
+                    "faninfo": [{
+                        "chairid": 0,
+                        "SpecialType": 4,
+                        "FanNum": 0,
+                        "addfan": [],
+                        "hucard": null,
+                        "DianPao": []
+                    }, {
+                        "chairid": 1,
+                        "SpecialType": 1,
+                        "FanNum": 5,
+                        "addfan": [{"AddType": 565, "AddNum": 1, "AddType2": null}, {
+                            "AddType": 564,
+                            "AddNum": 1,
+                            "AddType2": null
+                        }],
+                        "hucard": 34,
+                        "DianPao": []
+                    }, {
+                        "chairid": 2,
+                        "SpecialType": 4,
+                        "FanNum": 0,
+                        "addfan": [],
+                        "hucard": null,
+                        "DianPao": []
+                    }, {"chairid": 3, "SpecialType": 4, "FanNum": 0, "addfan": [], "hucard": null, "DianPao": []}],
+                    "money": [100040, 100080, 99940, 99940]
+                },
+                "hongzhonglaizigang": [{"hongzhonggang": 0, "laizegang": 0}, {
+                    "hongzhonggang": 0,
+                    "laizegang": 0
+                }, {"hongzhonggang": 0, "laizegang": 0}, {"hongzhonggang": 0, "laizegang": 0}],
+                "playerScoreInfoList": [],
+                "gameMapaiInfo": null,
+                "laiziSign": 36,
+                "remainderCards": [34, 34, 34, 34, 34, 4, 4, 4, 4, 4, 4, 34, 34, 2, 34, 34, 34, 34]
+            };
+            this.handler_server_game_end_bc(packge, true);
+        }
+        if (tempCount == 5 && false) {
+            var outCards = [0x01, 0x22, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
+                0x11, 0x12, 0x13, 0x14, 0x15, 0x26, 0x27, 0x28, 0x29, 0x21,
+                0x22, 0x28, 0x29, 0x21,
+                0x22];
+            var cards = [0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x01, 0x23, 0x24, 0x12, 0x24, 0x12];
+            MJModel.JingValue = [];
+            MJModel.JingValue.push(0x22);
+            this.room_Info.showCardNums(28);
+            for (var i = 0; i < 4; i++) {
+                var player = this.players[i];
+                player.setId(i);
+                player.seatid = i;
+                player.login(i);
+                player.HuaNums(1, 2);
+                player.setBankerFlag(true);
+                if (i == 0) {
+                    this.room_Card.initHandCard(0, cards);
+                    this.room_Card.reflashHandCard(0, true);
+
+                    this.room_Card.initMoCard(i, 0x05, true);
+                } else {
+                    var cardList = [];
+                    for (var m = 0; m < 10; m++) {
+                        cardList.push(0);
+                    }
+                    this.room_Card.initHandCard(i, cardList);
+                    this.room_Card.reflashHandCard(i, true);
+
+                    this.room_Card.initMoCard(i, 0, true);
+                }
+                for (var j = 0; j < 8; j++) {
+                }
+                this.room_Tip.setJingBaoVisible(i, true);
+                this.room_Card.initOutCard(i, outCards);
+            }
+            this.room_Info.showCardNums(28);
+        }
+
+    },
+
+    handler_server_out_card_bc: function (data, canDelay) {
+        this._super(data, canDelay);
+
+        var userOutCard = parsePacket("proto.game.AckUserOutCard", data);
+        var seatId = userOutCard.ChairID;
+        var card = userOutCard.Card;
+        var player = MJModel.getPlayerBySeatID(seatId);
+
+        var can_show_listen_info = true;
+        for (var j = 0; j < MJModel.final_listen_info.length; j++) {
+            if (MJModel.final_listen_info[j].Card == 255) {
+                can_show_listen_info = false;
+                break;
+            }
+        }
+        if (MJModel.mj_table.getChildByName("tingpai_layer") == null && MJModel.final_listen_info.length > 0 && can_show_listen_info && MJModel.isMyPlayer(seatId) && MJModel.mj_listenLayer_need_autoshow) {
+            MJModel.mj_listenLayer_autoshow = true;
+            var selectLayer = new TingPaiLayer();
+            selectLayer.show2(MJModel.final_listen_info);
+            selectLayer.setName("tingpai_layer");
+            MJModel.mj_table.addChild(selectLayer, 100);//一定要在MJAction下边
+        } else {
+            if (MJModel.mj_table.getChildByName("tingpai_layer")) {
+                MJModel.mj_table.getChildByName("tingpai_layer").reflash();
+            }
+        }
+
+        if (this.isXianNingMJ() || this.isHongZhongLaiZiFaCaiGang()) {
+            if (this.getIsHongZhongLaiZi(card) && canDelay) {
+                this.handler_op_effect(MJModel.getPosBySeatid(seatId), -1, player.sex, -1, -1, "gang");
+                return;
+            }
+        }
+    },
+
+    handler_out_card_sound: function (sex, card) {
+        this._gang_nums = [0, 0, 0, 0];
+        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/operator/luopai.mp3"));
+        if (this.isXianNingMJ() || this.isHongZhongLaiZiFaCaiGang()) {
+            if (this.getIsHongZhongLaiZi(card)) {
+                this.handler_op_sound(0, sex, -1, -1, "gang");
+                return;
+            }
+        }
+        if (MJModel.fangyan == "fangyan1") {
+            Sound.getInstance().playEffect(__String.createWithFormat(getResPath("xianningmj/sound/chupai/%1_%2.mp3"), sex == SEX_ID.SEX_FEMALE ? "female" : "male", Utils.toHex2(card)));
+        } else {
+            this._super(sex, card);
+        }
+    },
+    handler_op_sound: function (pos, sex, OpType, OpType2, effect) {
+        if (MJModel.fangyan == "fangyan1") {
+            if ((OpType & ActionType.TYPE_ANGANG) == ActionType.TYPE_ANGANG) {
+                effect = "gang";
+            }
+            else if ((OpType & ActionType.TYPE_ZHIGANG) == ActionType.TYPE_ZHIGANG) {
+                effect = "gang";
+            }
+            else if ((OpType & ActionType.TYPE_WANGANG) == ActionType.TYPE_WANGANG) {
+                effect = "gang";
+            }
+            else if ((OpType & ActionType.TYPE_HU) == ActionType.TYPE_HU && effect == "") {
+                var zimo = this.room_Card.isDuoPai(pos);
+                effect = "hu";
+                if (zimo) {
+                    effect = "zimo";
+                }
+            } else if ((OpType & ActionType.TYPE_PENG) == ActionType.TYPE_PENG) {
+                effect = "peng";
+            } else if ((OpType & ActionType.TYPE_LEFT_CHI) == ActionType.TYPE_LEFT_CHI || (OpType & ActionType.TYPE_CENTER_CHI) == ActionType.TYPE_CENTER_CHI || (OpType & ActionType.TYPE_RIGHT_CHI) == ActionType.TYPE_RIGHT_CHI) {
+                effect = "chi";
+            }
+            if (effect == "gang" && this._gang_nums[pos] > 1) {
+                effect = "gang2";
+            }
+            Sound.getInstance().playEffect(__String.createWithFormat(getResPath("xianningmj/sound/operator/%1_%2.mp3"), sex == SEX_ID.SEX_MAN ? "male" : "female", effect));
+        } else {
+            this._super(pos, sex, OpType, OpType2, effect);
+        }
+    },
+    handler_server_game_end_bc: function (data, canDelay) {
+        var ackGameEnd = data;
+
+        var self = this;
+        this.room_Card.setAutoOutCard(false);
+        if (this.room_Action) this.room_Action.setTingPaiVis(false);
+        if (this.room_Action) this.room_Action.setAutoOutCardVis(false);
+        if (this.room_Action) this.room_Action.setOperator(-1);
+        this.room_Info.stopTime();
+        if (MJModel.RoomCountSum == MJModel.currentCount) {
+            JsUtils.postNotifi("notify_against_room_end");
+        }
+        if (MJModel.isOnVideo) {
+            this.showFinalMJResult(data);
+            return;
+        }
+
+
+        //var leftCardNum = ackGameEnd.hunanGameEndInfo.LeftCardNum;
+        //if (leftCardNum != null) {
+        //    this.room_Info.showCardNums(leftCardNum);
+        //}
+
+        this._showHandCards(ackGameEnd);
+
+        this._showUserScore(ackGameEnd);
+
+        this.gameend_updatePlayersInfo(ackGameEnd.gameend);
+
+        this._showGameEnd(ackGameEnd.gameend.EndState, data);
+
+        //var jiangma = ackGameEnd.hunanGameEndInfo.Niao;
+        //if (jiangma && jiangma.Num > 0) {
+        //    this._showZhuaNiao(jiangma);
+        //    var callback = cc.callFunc(function () {
+        //        self._showUserScore(ackGameEnd);
+        //        self._showGameEnd(ackGameEnd.EndState, data);
+        //    });
+        //    this.runAction(cc.sequence(cc.delayTime(3), callback));
+        //} else {
+        //    this._showUserScore(ackGameEnd);
+        //    this._showGameEnd(ackGameEnd.EndState, data);
+        //}
+    },
+    _showGameEnd: function (state, ackGameEnd) {
+        var self = this;
+        cc.log("lin=_showGameEnd=" + state);
+        if (state == 1) {
+            //流局
+            this.room_Tip.ShowGameState(3);
+        }
+        else {
+            this.room_Tip.ShowGameState(2);
+        }
+        var callback = cc.callFunc(function () {
+            self.showFinalMJResult(ackGameEnd);
+        });
+        this.runAction(cc.sequence(cc.delayTime(1.8), callback));
+    },
+    _showUserScore: function (ackGameEnd) {
+        var ackGameEnd = ackGameEnd.gameend
+        var scoresLen = ackGameEnd.Score.length;
+        for (var i = 0; i < scoresLen; i++) {
+            var pos = MJModel.getPosBySeatid(i);
+            var player = MJModel.players[i];
+            if (player.uid > 0) {
+                var player = this.players[pos];
+                player.showBalanceNumber(ackGameEnd.Score[i]);
+                if (MJModel.isMyPos(pos)) {
+                    if (ackGameEnd.Score[i] >= 0) {
+                        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/win.mp3"));
+                    } else {
+                        Sound.getInstance().playEffect(getResPath("RoomMJ/sound/loss.mp3"));
+                    }
+                }
+            }
+        }
+    },
+    _showHandCards: function (ackGameEnd) {
+        var ackGameEnd = ackGameEnd.gameend
+        var usercard_size = ackGameEnd.UserCard.length;
+        var cardData = [];
+        for (var i = 0; i < usercard_size; i++) {
+            //结束玩家手牌数组
+            var changeable_Size = ackGameEnd.UserCard[i].ChangeableCards.length;
+            cardData = [];
+
+            for (var j = 0; j < changeable_Size; j++) {
+                var cardDataNum = ackGameEnd.UserCard[i].ChangeableCards[j];
+                cardData.push(cardDataNum);
+            }
+            try {
+                cardData.sort(this.room_Card.sortCard);
+            } catch (e) {
+                Log(this, e);
+            }
+            var pos = MJModel.getPosBySeatid(i);
+            var stFenZhangCard = ackGameEnd.UserCard[i].stFenZhangCard;
+            if (stFenZhangCard) {
+                this.room_Card.showEndCard(pos, cardData, stFenZhangCard, true);
+            }
+            else {
+                this.room_Card.showEndCard(pos, cardData, 0, false);
+            }
+
+        }
+    },
+    showFinalMJResult: function (data) {
+        var result = new MJResult_Tongshan();
+        result.setName("RoomMJResultDetail");
+        this.addChild(result, 100000);
+        result.updateContentView(data);
+    },
+
+    resetGame: function (allClean) {
+        this._curLaizi = -1;
+        this._curLaizipi = -1;
+        this._curLaizipi2 = -1;
+        this._super(allClean);
+        while (this.getChildByName("hubeimj_score_effect")) {
+            this.removeChildByName("hubeimj_score_effect");
+        }
+        this._has_show_pi_flag = false;
+        this.room_Tip.HideJingBao();
+        if (this._curLaizi_bg) {
+            this._curLaizi_bg.setVisible(false);
+        }
+    },
+    _setGameScore: function () {
+        this.removeChildByName("numberScore");
+        this.removeChildByName("qizhuangScore");
+
+        var size = cc.director.getWinSize();
+
+        var p = this._gameType_sp.getPosition();
+
+        var buf = "" + Math.abs(MJModel.base_money);
+        var numberScore = new cc.LabelAtlas(buf, getResPath("RoomMJ/difen/number.png"), 16, 21, '0');
+        //var numberScore = new cc.LabelAtlas(buf, getResPath("RoomMJ2/info2/time_num_2.png"), 20 , 30, '0');
+        numberScore.setName("numberScore");
+        numberScore.setAnchorPoint(cc.p(0.0, 0.0));
+        this.addChild(numberScore);
+
+        var qizhuangScore = new cc.Sprite(getResPath("RoomMJ/difen/icon.png"));
+        qizhuangScore.setAnchorPoint(cc.p(0.0, 0.0));
+        qizhuangScore.setName("qizhuangScore");
+        this.addChild(qizhuangScore);
+
+        //pos at icon right
+        p.x += this._gameType_sp.getContentSize().width / 2;
+        numberScore.setPosition(cc.p(p.x, p.y + 2));
+        qizhuangScore.setPosition(cc.p(numberScore.getPositionX() + numberScore.getContentSize().width, p.y - 2));
+    },
+    isHongZhongLaiZiFaCaiGang: function () {
+        if (XNMJ_GAME_TYPE.XIANGNINGHongZhongLaiZiFaCaiGang == MJModel.GameType) {
+            return true
+        }
+        return false;
+    },
+    isXianNingMJ: function () {
+        if (XNMJ_GAME_TYPE.XIANGNINGMJ == MJModel.GameType) {
+            return true
+        }
+        return false;
+    },
+    _setGameType: function () {
+        if (this._gameType_sp == null) {
+
+            cc.log("lin=_setGameType=" + JSON.stringify(MJModel.RoomConfigID));
+            MJModel.play_id_str = [];
+            //添加人数
+            var roomType = (4 - MJModel.mj_roomType) + "人";
+            MJModel.play_id_str.push(roomType);
+            for (var i = 0; i < MJModel.RoomConfigID.length; i++) {
+                var pkgName = this.getConfigPathById(MJModel.RoomConfigID[i]);
+                MJModel.play_id_str.push(pkgName);
+            }
+
+            cc.log("lin=room2=" + MJModel.GameType + " " + MJModel.mj_roomType);
+            var title = "";
+            if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGMJ) {
+                title = "xianningmj/xianning/xianning_mj_icon.png";
+            } else if (MJModel.GameType == XNMJ_GAME_TYPE.XIANGNINGHongZhongLaiZiFaCaiGang) {
+                title = "xianningmj/xianning/xianning_hzfc.png";
+            } else {
+                title = "xianningmj/xianning/xianningzz_mj_icon.png";
+            }
+
+            var size = cc.director.getWinSize();
+            this._gameType_sp = new cc.Sprite(__String.createWithFormat(getResPath(title)));
+            this._gameType_sp.setAnchorPoint(cc.p(0.5, 1));
+            this._gameType_sp.setPosition(cc.p(size.width / 2, size.height / 2 + (MJModel.play_id_str.length > 0 ? 215 - 0 : 240)));
+            this.addChild(this._gameType_sp);
+
+
+            var gameDes = "";
+            for (var i = 0; i < MJModel.play_id_str.length; i++) {
+                gameDes += MJModel.play_id_str[i];
+                if (i != MJModel.play_id_str.length - 1) {
+                    gameDes += " ";
+                }
+            }
+
+            cc.eventManager.dispatchCustomEvent("notify_mjpublic_roomConfig", gameDes);
+        }
+    },
+    showLaiZiGangLayer: function (n) {
+        var checkLayer = new LaiZiGangLayer(n);
+        checkLayer.setName("LaiZiGangLayer");
+        this.addChild(checkLayer, 10000);
+    },
+    showAnGangLayer: function (qiangGangInfo) {
+        MJModel.QiangGangInfo = [41, 42, 43];
+        var size = cc.director.getWinSize();
+        var selectLayer = new ChooseAnGang();
+        selectLayer.setChoiceInfos(MJModel.QiangGangInfo);
+        selectLayer.setName("ChooseGang_selectLayer");
+        selectLayer.setTitle("请点击选择要杠的牌");
+        selectLayer.setPosition(cc.p(size.width / 2, n.getPosition().y + 50));
+        selectLayer.setCallback(function (index) {
+            var type = ActionType.TYPE_HU;
+            sendOperateCard(type, MJModel.QiangGangInfo[index]);
+
+            self.setOperator(-1);
+            self.removeChildByName("ChooseGang_selectLayer");
+        });
+        this.addChild(selectLayer, 10000);
+    }
+});
+
+var sendGangOutCard = function (card, HongZhongLaiZiFlag) {
+    if (HongZhongLaiZiFlag == undefined) HongZhongLaiZiFlag = false;
+    var packet = createPacket("proto.game.ReqOutCard");
+    packet.Card = card;
+    packet.HongZhongLaiZiFlag = HongZhongLaiZiFlag;
+    sendPacket(packet, CMD.CLIENT_MJ_OUT_CARD);
+}
+
+var sendBaoJingInfo = function () {
+    var packet = createPacket("proto.game.tongshanmj.tagAlarmButtonReminder");
+    packet.allow = true;
+    sendPacket(packet, CMD_TSCMD.CLIENT_TONGSHAN_ALARMBUTTON);
+}
+
+var MJResult_Tongshan = MJCommonResult.extend({
+    _xianningAckGameEnd: null,
+    updateContentView: function (data) {
+        var self = this;
+        this._xianningAckGameEnd = data;
+        if (!this._xianningAckGameEnd) return;
+
+        this._super(data.gameend);
+        var bgsize = this.bgSpr.getContentSize();
+        var moregpai = new ccui.Button();
+        moregpai.loadTextures(getResPath("xianningmj/xianning/shengyupai01.png"), getResPath("xianningmj/xianning/shengyupai02.png"), "");
+        moregpai.setPosition(cc.p(bgsize.width - 440, 45));
+        moregpai.setName("moregpai");
+        moregpai.addClickEventListener(function (sender, evt) {
+            self.ShengYuPaiClick(sender);
+        });
+        this.bgSpr.addChild(moregpai);
+
+
+        if (MJModel.mj_table._curLaizi != -1) {
+            var label = new cc.LabelTTF("赖牌:", "Arial", 25);
+            label.setAnchorPoint(cc.p(0.0, 0.5));
+            label.setColor(this.leftColor);
+            label.setPosition(cc.p(85, 40));
+            this.bgSpr.addChild(label);
+            var card = new MJCard();
+            card.setValue(MJModel.mj_table._curLaizi, 0, CardType.Card_End, 0);
+            card.setAnchorPoint(cc.p(0.0, 0.5));
+            card.setScale(0.60);
+            card.setPosition(cc.p(20 + label.getPositionX() + (card.getBoundingBox().width), 50));
+            this.bgSpr.addChild(card);
+        }
+        var gameMapaiInfo = this._xianningAckGameEnd.gameMapaiInfo;
+        if (gameMapaiInfo) {
+            var publicMapaiList = gameMapaiInfo.publicMapaiList;
+            if (publicMapaiList && publicMapaiList.length > 0) {
+                var label = new cc.LabelTTF("鸟牌:", "Arial", 25);
+                label.setAnchorPoint(cc.p(0.0, 0.5));
+                label.setColor(this.leftColor);
+                label.setPosition(cc.p(220, 40));
+                this.bgSpr.addChild(label);
+                publicMapaiList.sort(this.sortCard);
+                for (var i = 0; i < publicMapaiList.length; i++) {
+                    var tagname = "mapai_" + i;
+                    var card = new MJCard();
+                    card.setValue(publicMapaiList[i], 0, CardType.Card_End, 0);
+                    card.setAnchorPoint(cc.p(0.0, 0.5));
+                    card.setScale(0.60);
+                    card.setName(tagname);
+                    card.setPosition(cc.p(60 + label.getPositionX() + (card.getBoundingBox().width) * i, 50));
+                    this.bgSpr.addChild(card);
+                }
+            }
+        }
+    },
+    createMaLayer: function (seatid) {
+        cc.log("lin=createMaLayer=1");
+        var layer = null;
+        var tongshanGameEnd = this._xianningAckGameEnd;
+        var hongzhonglaizigang = tongshanGameEnd.hongzhonglaizigang;
+        layer = new cc.Layer();
+        if (MJModel.mj_table.isXianNingMJ() || MJModel.mj_table.isHongZhongLaiZiFaCaiGang()) {
+            if (hongzhonglaizigang) {
+                if (hongzhonglaizigang.length > seatid) {
+
+                    var x = 0;
+                    var hongzhonggang = hongzhonglaizigang[seatid].hongzhonggang;
+                    var laizegang = hongzhonglaizigang[seatid].laizegang;
+                    var facaigang = hongzhonglaizigang[seatid].facaigang;
+
+                    var Numstr = new cc.LabelTTF("杠番:", "Arial", 20);
+                    Numstr.setColor(this.leftColor);
+                    Numstr.setAnchorPoint(cc.p(0.0, 0));
+                    Numstr.setPosition(cc.p(0, -40));
+                    layer.addChild(Numstr);
+                    x += 50;
+                    {
+                        var formatstr = "红中:X" + hongzhonggang;
+                        var Numstr = new cc.LabelTTF(formatstr, "Arial", 20);
+                        Numstr.setColor(this.leftColor);
+                        Numstr.setAnchorPoint(cc.p(0.0, 0));
+                        Numstr.setPosition(cc.p(x, -40));
+                        layer.addChild(Numstr);
+                        x += 90;
+                        var hongzhongLabel = Numstr;
+                    }
+                    {
+                        if (MJModel.mj_table._curLaizi > 0) {
+                            var formatstr = "赖子:X" + laizegang * 2;
+                            var Numstr = new cc.LabelTTF(formatstr, "Arial", 20);
+                            Numstr.setColor(this.leftColor);
+                            Numstr.setAnchorPoint(cc.p(0.0, 0));
+                            Numstr.setPosition(cc.p(x, -40));
+                            layer.addChild(Numstr);
+                            var laiziLabel = Numstr;
+                        }
+
+                    }
+                    if (MJModel.mj_table.isHongZhongLaiZiFaCaiGang()) {
+                        var formatstr = "发财:X" + facaigang;
+                        var Numstr = new cc.LabelTTF(formatstr, "Arial", 20);
+                        Numstr.setColor(this.leftColor);
+                        Numstr.setAnchorPoint(cc.p(0.0, 0));
+                        Numstr.setPosition(cc.p(x, -40));
+                        layer.addChild(Numstr);
+                        var facaiLabel = Numstr;
+
+                        var x = 60;
+                        hongzhongLabel.setPosition(cc.p(x, -10));
+                        laiziLabel.setPosition(cc.p(x, -40));
+                        facaiLabel.setPosition(cc.p(x, -70));
+                    }
+                }
+
+            }
+        }
+
+
+        var gameMapaiInfo = tongshanGameEnd.gameMapaiInfo;
+        if (gameMapaiInfo) {
+            var playerMapaiInfoList = gameMapaiInfo.playerMapaiInfoList;
+            if (playerMapaiInfoList) {
+                cc.log("lin=createMaLayer=3");
+                var startx = 10;
+                if (playerMapaiInfoList[seatid] && playerMapaiInfoList[seatid].mapaiList.length > 0) {
+                    cc.log("lin=createMaLayer=4");
+                    var maPic = new cc.LabelTTF("中鸟: ", "Arial", 22);
+                    maPic.setName("zhongmaTip");
+                    maPic.setColor(this.leftColor);
+                    maPic.setAnchorPoint(cc.p(0.0, 0));
+                    maPic.setPosition(cc.p(startx, -40));
+                    layer.addChild(maPic);
+                    for (var i = 0; i < playerMapaiInfoList.length; i++) {
+                        var chairid = playerMapaiInfoList[i].chairId;
+                        if (chairid == seatid) {
+                            var cardlist = [];
+                            var mapaiList = playerMapaiInfoList[i].mapaiList;
+                            for (var j = 0; j < mapaiList.length; j++) {
+                                cardlist.push(mapaiList[j]);
+                            }
+                            for (var i = 0; i < cardlist.length; i++) {
+                                var card = new MJCard();
+                                card.setValue(cardlist[i], 0, CardType.Card_End, 0);
+                                card.setAnchorPoint(cc.p(0.0, 0));
+                                card.setScale(0.3);
+                                card.setPosition(cc.p(startx + maPic.getContentSize().width + parseInt((i )) * 25, -45));
+                                layer.addChild(card, 50 - i);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        cc.log("lin=createMaLayer=2");
+        return layer;
+
+    },
+    createSpecialHuTip: function (startX, startY, seatid) {
+
+        if (this.ackGameEnd.faninfo.length > seatid) {
+            //胡牌类型
+            var fanInfo = this.ackGameEnd.faninfo[seatid];
+            var path = "";
+            cc.log("lin=createSpecialHuTip=" + fanInfo.SpecialType);
+            //1表示自摸，2表示点炮胡，3表示放炮,4 被自摸
+            switch (fanInfo.SpecialType) {
+                case 1:
+                    path = "xianningmj/xianning/result/result-detail/result_detail_zimo.png";
+                    break;
+                case 2:
+                    path = "xianningmj/xianning/result/result-detail/result_detail_paohu.png";
+                    break;
+                case 3:
+                    path = "xianningmj/xianning/result/result-detail/result_detail_dianpao.png";
+                    break;
+                case 4:
+                    path = "xianningmj/xianning/result/result-detail/result_detail_beizimo.png";
+                    break;
+                case 8:
+                    path = "xianningmj/xianning/result/result-detail/result_detail_hangkaihua.png";
+                    break;
+                default:
+                    break;
+            }
+            if (path != "") {
+                var typeSprite = new cc.Sprite(getResPath(path));
+                typeSprite.setPosition(cc.p(startX, startY));
+                this.bgSpr.addChild(typeSprite);
+            }
+        }
+    },
+
+    //游戏结束后通用的提示信息
+    createEndInfoTip: function (x, y, layer, seatid) {
+        if (this.ackGameEnd.EndGangInfo.length > seatid) {
+            var gameEndInfo = this.ackGameEnd.EndGangInfo[seatid];
+            //添加hutip
+            var str = this.getFanAllStr(seatid);
+            var typeLabel = new cc.LabelTTF(str, "Arial", 20);
+            typeLabel.setColor(this.leftColor);
+            typeLabel.setAnchorPoint(cc.p(0, 0));
+            typeLabel.setPosition(cc.p(x, y + 10));
+            layer.addChild(typeLabel);
+
+            var x = x + typeLabel.getContentSize().width;
+
+            var map = {};
+            for (var i = 0; i < gameEndInfo.Gang.length; i++) {
+                var gang = gameEndInfo.Gang[i];
+                if (map[gang.GangType] == undefined) {
+                    map[gang.GangType] = [];
+                }
+                map[gang.GangType].push(gang.GangCard);
+            }
+            for (var key in map) {
+                if (!map.hasOwnProperty(key))continue;
+                var a = key;
+                var str = this.getStringByType(a);
+                var typeLabel = new cc.LabelTTF(str, "Arial", 20);
+                typeLabel.setColor(this.leftColor);
+                typeLabel.setAnchorPoint(cc.p(0, 0));
+                typeLabel.setPosition(cc.p(x, y + 10));
+                layer.addChild(typeLabel);
+
+                x += typeLabel.getContentSize().width;
+
+                var temp = map[key];
+                for (var j = 0; j < temp.length; j++) {
+
+                    var smallCard = new MJCard();
+                    smallCard.setValue(temp[j], 0, CardType.Card_End, 0);
+                    smallCard.setScale(0.3);
+                    smallCard.setAnchorPoint(cc.p(0.0, 0.0));
+                    smallCard.setPosition(cc.p(x, y));
+                    layer.addChild(smallCard);
+                    x += 26;
+                    if (j == temp.length - 1) {
+                        x += 20;
+                    }
+                }
+            }
+        }
+
+        return {x: x, y: y};
+    },
+    getFanAllStr: function (seatid) {
+        var fanStrs = "";
+        var hunanGameEndInfo = this.ackGameEnd;
+        if (hunanGameEndInfo.faninfo.length > seatid)
+
+            var fanInfo = hunanGameEndInfo.faninfo[seatid];
+        {
+            if (fanInfo.addfan.length > 0) {
+                IsHasScore = true;
+                fanStrs += "【";
+                for (var i = 0; i < fanInfo.addfan.length; i++) {
+                    var addFan = fanInfo.addfan[i];
+                    fanStrs += this.getAddFanStrNoNum(addFan.AddType);
+
+                    if (i < fanInfo.addfan.length - 1) {
+                        fanStrs += " ";
+                    }
+                }
+                fanStrs += "】";
+
+            }
+        }
+        return fanStrs;
+    },
+
+    ShengYuPaiClick: function (ref) {
+        var gpsInfo = new MoreCard();
+        gpsInfo.setName("MoreCard");
+        gpsInfo.init(this._xianningAckGameEnd.remainderCards);
+        this.addChild(gpsInfo, 100);
+    },
+    getAddFanStr: function (addType, addNum) {
+        return NINGXIANG_MJ_TYPE[addType] + "+" + addNum;
+    },
+    getAddFanStrNoNum: function (addType) {
+        return NINGXIANG_MJ_TYPE[addType];
+    },
+});
+
+var MoreCard = cc.Layer.extend({
+
+    btns: {},
+    _bg_size: null,
+    _bg: null,
+    ctor: function () {
+        this._super();
+        var self = this;
+        var size = cc.director.getWinSize();
+        this.ignoreAnchorPointForPosition(false);
+        this.setAnchorPoint(cc.p(0.0, 0.0));
+        this.setContentSize(cc.size(size.width, size.height));
+
+        var layout = new ccui.Layout();
+        layout.setContentSize(size);
+        layout.setAnchorPoint(cc.p(0, 0));
+        layout.setPosition(cc.p(0, 0));
+        layout.setTouchEnabled(true);
+        layout.setSwallowTouches(true);
+        layout.addClickEventListener(function (btn) {
+            self.disappear();
+        });
+        this.addChild(layout, -2);
+
+
+    },
+    init: function (cardlist) {
+        var cardlength = cardlist.length;
+        var size = cc.director.getWinSize();
+        var cardIndex = parseInt(cardlength / 27);
+        if (parseInt(cardlength % 27) != 0) {
+            cardIndex = parseInt(cardlength / 27) + 1;
+        }
+        this._bg = new ccui.ImageView(getResPath("RoomMJ/bg.9.png"));
+        this._bg.setPosition(size.width / 2, 120);
+        this._bg.setScale9Enabled(true);
+        this._bg.setAnchorPoint(cc.p(0.5, 0));
+        this._bg.setContentSize(cc.size(1180, 60 * cardIndex + 40));
+        this.addChild(this._bg);
+        this._bg_size = this._bg.getContentSize();
+
+
+        var x = 20;
+        var dx = 45;
+        var y = this._bg_size.height - 20;
+        var dy = 62;
+        for (var i = 0; i < cardlist.length; i++) {
+            var huCard = new MJCard();
+            huCard.setValue(cardlist[i], 0, CardType.Card_Hand, 0);
+            huCard.setScale(0.5);
+            huCard.setAnchorPoint(cc.p(0.0, 1));
+            huCard.setPosition(cc.p(x + parseInt(i % 25) * dx, y - parseInt(i / 25) * dy));
+            this._bg.addChild(huCard, 1000 - i);
+        }
+        var layout = new ccui.Layout();
+        layout.setContentSize(this._bg_size);
+        layout.setAnchorPoint(cc.p(0.5, 0.5));
+        layout.setPosition(size.width / 2, size.height / 2);
+        layout.setTouchEnabled(true);
+        layout.setSwallowTouches(true);
+        layout.addClickEventListener(function (btn) {
+        });
+        this.addChild(layout, -1);
+    },
+
+    actionCallBack: function (btn) {
+        var name = btn.getName();
+        if (name == "close") {
+            this.disappear();
+        } else if (name == "sure") {
+            this.disappear();
+
+        } else {
+            var index = name.split("_")[1];
+            MJModel.SpeedTime = MJModel.SpeedTimeList[index - 1];
+            this.gamesetting_update();
+            cc.sys.localStorage.setItem("mj_sppedTime", MJModel.SpeedTime);
+        }
+    },
+    disappear: function () {
+        this.removeFromParent(true);
+    },
+});
+
+var LaiZiGangLayer = cc.Layer.extend({
+    _card: -1,
+    _callback: null,
+    ctor: function (card) {
+        this._super();
+        this._card = card;
+        var self = this;
+        var size = cc.director.getWinSize();
+        var layout = new ccui.Layout();
+        layout.setContentSize(size);
+        layout.setAnchorPoint(cc.p(0, 0));
+        layout.setPosition(cc.p(0, 0));
+        layout.setTouchEnabled(true);
+        layout.setSwallowTouches(true);
+        layout.addClickEventListener(function (btn) {
+            //self.hide();
+        });
+        this.addChild(layout);
+        var self = this;
+        var x = size.width * 0.4;
+        var dx = 270;
+        var y = 240;
+        var taglist = ["chupai", "bugang"];
+        for (var i = 1; i < 3; i++) {
+            var name1 = "xianningmj/xianning/gang_pai" + i + "_1.png";
+            var name2 = "xianningmj/xianning/gang_pai" + i + "_2.png";
+            var btn = new ccui.Button(getResPath(name1), getResPath(name2));
+            btn.setPosition(cc.p(x + dx * (i - 1), y));
+            btn.setName(taglist[i - 1]);
+            this.addChild(btn);
+            btn.addClickEventListener(function (sender, evt) {
+                var isWait = false;
+                var name = sender.getName();
+                if (name == "chupai") {
+                    MJModel.mj_table.room_Card.outHandCardCallback1(self._card);
+                }
+                else if (name == "bugang") {
+                    MJModel.mj_table.room_Card.outHandCardCallback1(self._card, true);
+                }
+                self.removeFromParent();
+            });
+        }
+    },
+    setCallback: function (callback) {
+        this._callback = callback;
+    },
+
+    show: function () {
+        var self = this;
+        var size = cc.director.getWinSize();
+        self.setPosition(size.width - 425, 0);
+    },
+
+    hide: function () {
+        this.removeFromParent();
+    },
+
+
+    btnCallback: function (ref) {
+
+    },
+
+
+    onExit: function () {
+        this._super();
+
+    },
+
+    onEnter: function () {
+        this._super();
+        var self = this;
+
+    },
+});
+
+var ChooseAnGang = cc.Layer.extend({
+    _callback: null,
+    title_label: null,
+    ctor: function () {
+        this._super();
+        this.ignoreAnchorPointForPosition(false);
+        this.setAnchorPoint(cc.p(0.5, 0.5));
+    },
+    setTitle: function (title) {
+        this.title_label.setString(title);
+    },
+    setChoiceInfos: function (choiceInfos) {
+        var self = this;
+        var size = choiceInfos.length;
+        var ddx = 20;
+        var card_size = cc.size(83, 125);
+        var allW = size * card_size.width + ddx * (size + 1);
+        var sp = new ccui.ImageView(getResPath("RoomMJ/bg.9.2.png"));
+        sp.setScale9Enabled(true);
+        sp.setAnchorPoint(cc.p(0.5, 0.0));
+        sp.setContentSize(cc.size(allW, 190));
+        sp.setPosition(cc.p(sp.getContentSize().width / 2, sp.getContentSize().height / 2));
+        this.addChild(sp);
+
+        var bg_size = sp.getContentSize();
+        this.setContentSize(bg_size);
+
+        this.title_label = new cc.LabelTTF("请点击选择要操作的牌", "Thonburi", 28);
+        this.title_label.setAnchorPoint(cc.p(0.5, 0.5));
+        this.title_label.setPosition(cc.p(bg_size.width / 2, bg_size.height - 28));
+        this.title_label.setColor(cc.color(255, 255, 255));
+        sp.addChild(this.title_label);
+
+        var bx = ddx;
+        for (var j = 0; j < size; j++) {
+            var gif = choiceInfos[j];
+            var layout = new ccui.Layout();
+            layout.setTag(j);
+            layout.setAnchorPoint(cc.p(0.5, 0.5));
+            layout.setContentSize(card_size);
+            sp.addChild(layout);
+
+            var tingCard = new MJCard();
+            tingCard.setValue(gif, 0, CardType.Card_Hand, 0);
+            tingCard.setPosition(cc.p(bx + card_size.width / 2, 73));
+            tingCard.setAnchorPoint(cc.p(0.5, 0.5));
+            tingCard.setScale(card_size.width / tingCard.getContentSize().width * MJConfig.getTipCardScale());
+            sp.addChild(tingCard);
+
+            layout.setPosition(tingCard.getPosition());
+            layout.setTouchEnabled(true);
+            layout.addClickEventListener(function (sender, eve) {
+                if (self._callback) self._callback(sender.getTag());
+            });
+
+            bx += card_size.width + ddx;
+        }
+    },
+
+    setCallback: function (callback) {
+        this._callback = callback;
+    },
+
+    onEnter: function () {
+        this._super();
+        // 部分事件监听
+        var self = this;
+        var listener = cc.EventListener.create({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches: true,
+            onTouchBegan: function (touch, event) {
+                return self.onTouchBegan(touch, event);
+            },
+            onTouchEnded: function (touch, event) {
+                self.onTouchEnded(touch, event);
+            }
+        });
+        if (listener)cc.eventManager.addListener(listener, this);
+    },
+    _isTouchInside: function (touch) {
+        var touchPoint = touch.getLocation();
+        var localPos = this.convertToNodeSpace(touchPoint);
+
+        var s = this.getContentSize();
+        var rc = cc.rect(0, 0, s.width, s.height)
+        var isTouched = cc.rectContainsPoint(rc, localPos);
+        return isTouched;
+    },
+
+    onTouchBegan: function (touch, event) {
+        return true;
+    },
+
+    onTouchEnded: function (touch, event) {
+        if (this._isTouchInside(touch)) {
+            return;
+        }
+        this.removeFromParent(true);
+    }
+});

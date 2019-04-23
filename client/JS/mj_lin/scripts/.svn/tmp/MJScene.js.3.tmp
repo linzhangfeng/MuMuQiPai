@@ -1,0 +1,171 @@
+var MJScene = cc.Scene.extend({
+    onEnter: function () {
+        this._super();
+        var stable = createTable();
+        this.addChild(stable);
+
+        if (ZJHModel.getInstance().isOnVideo) {
+            var video = new MJVideo();
+            video.setTable(stable);
+            video.runScript(ZJHModel.getInstance().roomVideoData);
+            this.addChild(video, 100000);
+        }
+    }
+});
+
+var createTable = function () {
+    var curGameType = ZJHModel.getInstance().curGameType;
+    var roomData = JSON.parse(ZJHModel.getInstance().getRoomData());
+    var _pkg_id = roomData["gameRoom"]["pkgId"];
+    var layer = null;
+    if (curGameType == 2282) {
+        require(getSrcPath("MJ_shanxian.js"));
+        layer = new MJTable_shanxian();
+    } else if (curGameType == 1033) {
+        require(getSrcPath("MJ_YangZhou.js"));
+        layer = new MJTable_YangZhou();
+    } else if (curGameType == 1091) {
+        require(getSrcPath("MJ_LianHuaGM.js"));
+        layer = new MJTable_LianHuaGM();
+    } else if (curGameType == 1015) {
+        require(getSrcPath("MJ_Yichang.js"));
+        layer = new MJTable_Yichang();
+    } else if (curGameType == 2264) {
+        require(getSrcPath("MJ_ChengDu.js"));
+        layer = new MJTable_ChengDu();
+    } else if (curGameType == 1048) {
+        require(getSrcPath("MJ_ZhuMaDian.js"));
+        layer = new MJTable_ZhuMaDian();
+    } else if (curGameType == 1104) {//咸宁麻将老5380
+        require(getSrcPath("MJ_XianNing.js"));
+        layer = new MJTable_XianNing();
+    }
+    else if (curGameType == 1111) {
+        require(getSrcPath("MJ_GaoGang.js"));
+        layer = new MJTable_GaoGang();
+    }
+    else if (curGameType == 1132) {
+        require(getSrcPath("MJ_HeGang.js"));
+        layer = new MJTable_HeGang();
+    }
+    else if (curGameType == 1113) {
+        require(getSrcPath("MJ_HuaiYuan.js"));
+        layer = new MJTable_HuaiYuan();
+    }
+    else if (curGameType == 1123) {
+        require(getSrcPath("MJ_GuangShan.js"));
+        layer = new MJTable_GuangShan();
+    }
+    else if (curGameType == 4117) {
+        require(getSrcPath("MJ_FenYangQueMen.js"));
+        layer = new MJTable_FenYangQueMen();
+    }
+    else if (curGameType == 1137) {
+        require(getSrcPath("MJ_LinShui.js"));
+        layer = new MJTable_LinShui();
+    }
+    else if (curGameType == 4114) {
+        //qichun
+        require(getSrcPath("MJ_QiChunHuangHuang.js"));
+        layer = new MJTable_QiChunHuangHuang();
+    }
+    else if (curGameType == 1099) {
+        require(getSrcPath("MJ_Pucheng.js"));
+        layer = new MJTable_Pucheng();
+    }
+    else if (curGameType == 1107) {
+        require(getSrcPath("MJ_Yancheng.js"));
+        layer = new MJTable_yancheng();
+    }
+    else if (curGameType == 1110) {
+        require(getSrcPath("MJ_NanJing.js"));
+        layer = new MJTable_NanJing();
+    }
+    else if (curGameType == 1109) {
+        if (_pkg_id == 2582 || _pkg_id == 2608 || _pkg_id == 2609 || _pkg_id == 2520 || _pkg_id == 2521 || _pkg_id == 2522) {
+            require(getSrcPath("MJ_ShaoWu13.js"));
+            layer = new MJTable_ShaoWu13();
+        } else {
+            require(getSrcPath("MJ_ShaoWu17.js"));
+            layer = new MJTable_ShaoWu17();
+        }
+    }
+    else if (curGameType == 1114) {
+        require(getSrcPath("MJ_GaoYou.js"));
+        layer = new MJTable_GaoYou();
+    }
+    else if (curGameType == 2280) {
+        require(getSrcPath("MJ_Luzhou.js"));
+        layer = new MJTable_Luzhou();
+    }
+    else if(curGameType == 1118){
+        require(getSrcPath("MJ_MiShan.js"));
+        layer = new MJTable_MiShan();
+    }
+    else if (curGameType == 2284) {
+        require(getSrcPath("MJ_Nanchong.js"));
+        layer = new MJTable_Nanchong();
+    }
+    else if (curGameType == 4105) {
+        if (_pkg_id == 2771 || _pkg_id == 2773 || _pkg_id == 2774 || _pkg_id == 2776 || _pkg_id == 2694 || _pkg_id == 2695 || _pkg_id == 2696 || _pkg_id == 2697) {
+            require(getSrcPath("MJ_FuLi.js"));
+            layer = new MJTable_FuLi();
+        } else {
+            require(getSrcPath("MJ_ShuangYaShan.js"));
+            layer = new MJTable_ShuangYaShan();
+        }
+    }
+    else if (curGameType == 2278) {
+        require(getSrcPath("MJ_Enshi.js"));
+        layer = new MJTable_Enshi();
+    }
+    else if (curGameType == 4106) {
+        require(getSrcPath("MJ_luoshan.js"));
+        layer = new MJTable_LuoShan();
+    }
+    else if (curGameType == 1121) {
+        require(getSrcPath("MJ_GuZhen.js"));
+        layer = new MJTable_GuZhen();
+    }
+    else if (curGameType == 1096) {
+        require(getSrcPath("MJ_jianlimj.js"));
+        layer = new MJTable_jianli();
+    }
+    else if (curGameType == 1090) {
+        require(getSrcPath("MJ_nankangBH.js"));
+        layer = new MJTable_nankangBH();
+    }
+    else if (curGameType == 4113) {
+        require(getSrcPath("MJ_ShanXiKouDian.js"));
+        layer = new MJTable_shanxikoudian();
+    }
+    else if (curGameType == 4120) {
+        require(getSrcPath("MJ_Xishui.js"));
+        layer = new MJTable_XiShui();
+    }
+    else if (curGameType == 1128) {
+        require(getSrcPath("MJ_BaoQing.js"));
+        layer = new MJTable_BaoQing();
+    }
+    else if (curGameType == 1130) {
+        require(getSrcPath("MJ_YiChun.js"));
+        layer = new MJTable_YiChun();
+    }
+    else if (curGameType == 1052) {
+        require(getSrcPath("MJ_Gushi.js"));
+        layer = new MJTable_Gushi();
+    }
+    else if (curGameType == 2297) {
+        require(getSrcPath("MJ_GuangAn.js"));
+        layer = new MJTable_GuangAn();
+    }
+    else if(curGameType == 1135) {
+        require(getSrcPath("MJ_XinGuangAn.js"));
+        layer = new MJTable_XinGuangAn();
+    }
+    else if(curGameType == 1138) {
+        require(getSrcPath("MJ_AnYang.js"));
+        layer = new MJTable_AnYang();
+    }
+    return layer;
+};

@@ -1,0 +1,209 @@
+{
+  "ID": "589bc56d-b25b-44e3-a537-464f04c90adb",
+  "Version": "2.3.4",
+  "Name": "MJTable",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 3,
+        "Children": [
+          {
+            "ClipAble": false,
+            "BackColorAlpha": 102,
+            "ComboBoxIndex": 1,
+            "SingleColor": {
+              "R": 150,
+              "G": 200
+            },
+            "FirstColor": {
+              "R": 150,
+              "G": 200
+            },
+            "EndColor": {},
+            "ColorVector": {
+              "ScaleY": 1.0
+            },
+            "Scale9Width": 1,
+            "Scale9Height": 1,
+            "TouchEnable": true,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 640.0,
+              "Y": 360.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.5,
+              "Y": 0.5
+            },
+            "PreSize": {
+              "X": 1.0,
+              "Y": 1.0
+            },
+            "Tag": 7,
+            "Children": [
+              {
+                "FileData": {
+                  "Type": "Default",
+                  "Path": "Default/Sprite.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 770,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 640.0,
+                  "Y": 360.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.0359,
+                  "Y": 0.0639
+                },
+                "HorizontalEdge": "BothEdge",
+                "VerticalEdge": "BothEdge",
+                "LeftMargin": 617.0,
+                "RightMargin": 617.0,
+                "TopMargin": 337.0,
+                "BottomMargin": 337.0,
+                "Tag": 4,
+                "ActionTag": 2141767873,
+                "Size": {
+                  "X": 46.0,
+                  "Y": 46.0
+                },
+                "Name": "bg",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "FontSize": 30,
+                "ButtonText": "返回大厅",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Disable.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Press.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Normal.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 16,
+                "Scale9Height": 14,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 316.6305,
+                  "Y": 97.2508
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.2474,
+                  "Y": 0.1351
+                },
+                "PreSize": {
+                  "X": 0.1562,
+                  "Y": 0.0694
+                },
+                "LeftMargin": 216.6305,
+                "RightMargin": 863.3695,
+                "TopMargin": 597.7492,
+                "BottomMargin": 72.2508,
+                "Tag": 46,
+                "ActionTag": 272051724,
+                "Size": {
+                  "X": 200.0,
+                  "Y": 50.0
+                },
+                "Name": "btn_test_back",
+                "ctype": "ButtonObjectData"
+              }
+            ],
+            "ActionTag": -847462357,
+            "Size": {
+              "X": 1280.0,
+              "Y": 720.0
+            },
+            "Name": "layout",
+            "ctype": "PanelObjectData"
+          }
+        ],
+        "Size": {
+          "X": 1280.0,
+          "Y": 720.0
+        },
+        "Name": "Layer",
+        "ctype": "LayerObjectData"
+      },
+      "UsedResources": [
+        "Default/Button_Disable.png",
+        "Default/Button_Normal.png",
+        "Default/Button_Press.png",
+        "Default/Sprite.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Layer"
+}
