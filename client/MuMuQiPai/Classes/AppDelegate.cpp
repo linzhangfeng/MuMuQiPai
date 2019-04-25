@@ -1,7 +1,7 @@
 #include "AppDelegate.h"
-//#include "GameHallScene.h"
 //#include "LoadingScene.h"
 //#include "HelloWorldScene.h"
+//#include "HotUpdateLayer.h"
 #include "FlashScene.h"
 #include "GameHallScene.h"
 USING_NS_CC;
@@ -43,8 +43,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);
     FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/MuMuQiPai/cocos2d/cocos/scripting/js-bindings");
     FileUtils::getInstance()->addSearchPath("StudioUI/");
-    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
+//    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
+    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS/output");
     
+//    const Json::Value& dat = {};
+//    auto scene = GameHallLayer::createScene(dat);
     auto scene = GameHallLayer::createScene();
     // run
     director->runWithScene(scene);

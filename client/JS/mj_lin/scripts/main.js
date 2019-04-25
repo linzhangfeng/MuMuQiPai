@@ -1,5 +1,4 @@
-var PackName = "";
-
+var PackName = CommonModel.getInstance().getPackName();
 if (PackName == "") {
     PackName = "mj_lin";
 }

@@ -50,3 +50,8 @@ void CommonModel::hallToRoomV()
     Director::getInstance()->replaceScene(GameHallLayer::createScene());
 }
 
+string CommonModel::getPackName()
+{
+    return "youlinqipai";
+}
+

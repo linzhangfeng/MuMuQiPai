@@ -112,20 +112,22 @@ bool js_lin_CommonModel_hallToRoomV(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_CommonModel_hallToRoomV : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
-bool js_lin_CommonModel_init(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_CommonModel_getPackName(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     CommonModel* cobj = (CommonModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_CommonModel_init : Invalid Native Object");
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_CommonModel_getPackName : Invalid Native Object");
     if (argc == 0) {
-        cobj->init();
-        args.rval().setUndefined();
+        std::string ret = cobj->getPackName();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_CommonModel_init : wrong number of arguments: %d, was expecting %d", argc, 0);
+    JS_ReportError(cx, "js_lin_CommonModel_getPackName : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
 bool js_lin_CommonModel_toHall(JSContext *cx, uint32_t argc, jsval *vp)
@@ -142,6 +144,22 @@ bool js_lin_CommonModel_toHall(JSContext *cx, uint32_t argc, jsval *vp)
     }
 
     JS_ReportError(cx, "js_lin_CommonModel_toHall : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_CommonModel_init(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    CommonModel* cobj = (CommonModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_CommonModel_init : Invalid Native Object");
+    if (argc == 0) {
+        cobj->init();
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_CommonModel_init : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
 bool js_lin_CommonModel_hallToRoomH(JSContext *cx, uint32_t argc, jsval *vp)
@@ -210,8 +228,9 @@ void js_register_lin_CommonModel(JSContext *cx, JS::HandleObject global) {
 
     static JSFunctionSpec funcs[] = {
         JS_FN("hallToRoomV", js_lin_CommonModel_hallToRoomV, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("init", js_lin_CommonModel_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getPackName", js_lin_CommonModel_getPackName, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("toHall", js_lin_CommonModel_toHall, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("init", js_lin_CommonModel_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("hallToRoomH", js_lin_CommonModel_hallToRoomH, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };

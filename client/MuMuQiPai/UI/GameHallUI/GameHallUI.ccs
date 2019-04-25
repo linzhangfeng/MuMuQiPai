@@ -4,6 +4,12 @@
     <Group ctype="ResourceGroup">
       <RootFolder Name=".">
         <Folder Name="StudioUI">
+          <Folder Name="FlashUI">
+            <Folder Name="flash">
+              <Image Name="splash.jpg" />
+            </Folder>
+            <Project Name="FlashLayer.csd" Type="Layer" />
+          </Folder>
           <Folder Name="GameHallUI">
             <Folder Name="background">
               <Image Name="bg1.png" />
@@ -47,13 +53,31 @@
           </Folder>
           <Folder Name="LoadingUI">
             <Folder Name="loading">
+              <Image Name="icon128.png" />
+              <Image Name="icon256.png" />
+              <Image Name="icon512.png" />
+              <Image Name="icon80.png" />
+              <Image Name="loading.png" />
+              <Image Name="loading_1.png" />
+              <Image Name="loading_2.png" />
+              <Image Name="loading_3.png" />
+              <Image Name="loading_4.png" />
+              <Image Name="loading_5.png" />
+              <Image Name="loading_6.png" />
+              <Image Name="loading_7.png" />
+              <Image Name="loading_8.png" />
+              <Image Name="loading_bar_bg.png" />
+              <Image Name="loading_bar_fg.png" />
+              <Image Name="loading_icon.png" />
               <Image Name="loading_ttitle.png" />
+              <Image Name="loading_txt.png" />
+              <Image Name="loading_txt2.png" />
               <Image Name="LoadingBg.png" />
             </Folder>
             <Project Name="LoadingLayer.csd" Type="Layer" />
+            <Project Name="LoadingLayer_0.csd" Type="Layer" />
           </Folder>
           <Folder Name="LoginUI">
-            <Project Name="LoginLayer.csd" Type="Layer" />
             <Folder Name="login">
               <Image Name="bg.jpg" />
               <Image Name="btn_ traveler.png" />
@@ -63,17 +87,13 @@
               <Image Name="LoginBg.png" />
               <Image Name="yonghuxieyi.png" />
             </Folder>
-          </Folder>
-          <Folder Name="FlashUI">
-            <Folder Name="flash">
-              <Image Name="splash.jpg" />
-            </Folder>
-            <Project Name="FlashLayer.csd" Type="Layer" />
+            <Project Name="LoginLayer.csd" Type="Layer" />
           </Folder>
           <Folder Name="MJGameUI">
-            <Project Name="MJTableLayer.csd" Type="Layer" />
             <Folder Name="Table" />
+            <Project Name="MJTableLayer.csd" Type="Layer" />
           </Folder>
+          <Folder Name="NewFolder" />
         </Folder>
       </RootFolder>
     </Group>

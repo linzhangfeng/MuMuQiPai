@@ -1,3 +1,8 @@
 *.pyc
 .DS_Store
 cocos2d
+.idea
+output
+/client/jsProJect
+/client/.DS_Store
+/client/JS/mj_lin/res/.DS_Store

@@ -31,5 +31,6 @@ public:
     void toHall();
     void hallToRoomV();
     void hallToRoomH();
+    string getPackName();
 };
 #endif /* defined(__ZJH__ZJHModel__) */

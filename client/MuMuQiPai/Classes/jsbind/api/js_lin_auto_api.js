@@ -32,17 +32,27 @@ hallToRoomV : function (
 },
 
 /**
- * @method init
+ * @method getPackName
+ * @return {String}
  */
-init : function (
+getPackName : function (
 )
 {
+    return ;
 },
 
 /**
  * @method toHall
  */
 toHall : function (
+)
+{
+},
+
+/**
+ * @method init
+ */
+init : function (
 )
 {
 },

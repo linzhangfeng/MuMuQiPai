@@ -43,7 +43,7 @@ var MJTable = cc.Layer.extend({
 
     },
     release: function () {
-        SoundModel.getInstance().can_play = 1;
+        //SoundModel.getInstance().can_play = 1;
         this.unscheduleAllCallbacks();
         ccs.ArmatureDataManager.destroyInstance();
         cc.spriteFrameCache.removeSpriteFrames();

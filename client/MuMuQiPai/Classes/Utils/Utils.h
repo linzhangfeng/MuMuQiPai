@@ -15,4 +15,5 @@ public:
     static Node* findNode(Node*,const string& key);
     static long long getCurrentTime();
     static long long getCurrentSecend();
+    static std::string getSavePath();
 };

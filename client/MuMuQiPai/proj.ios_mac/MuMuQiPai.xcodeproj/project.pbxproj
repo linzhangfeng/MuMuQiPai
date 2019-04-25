@@ -9,6 +9,17 @@
 /* Begin PBXBuildFile section */
 		0307BE23226DC0FE0011A8E6 /* js_lin_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE20226DC0FE0011A8E6 /* js_lin_auto.cpp */; };
 		0307BE24226DC0FE0011A8E6 /* js_lin_auto_api.js in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE22226DC0FE0011A8E6 /* js_lin_auto_api.js */; };
+		0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE29226F3D020011A8E6 /* HotUpdateLayer.cpp */; };
+		0307BE44226F3FE10011A8E6 /* Android.mk in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE2F226F3FE10011A8E6 /* Android.mk */; };
+		0307BE45226F3FE10011A8E6 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE3C226F3FE10011A8E6 /* json_writer.cpp */; };
+		0307BE46226F3FE10011A8E6 /* json_internalmap.inl in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE3D226F3FE10011A8E6 /* json_internalmap.inl */; };
+		0307BE47226F3FE10011A8E6 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE3E226F3FE10011A8E6 /* json_reader.cpp */; };
+		0307BE48226F3FE10011A8E6 /* sconscript in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE40226F3FE10011A8E6 /* sconscript */; };
+		0307BE49226F3FE10011A8E6 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE41226F3FE10011A8E6 /* json_value.cpp */; };
+		0307BE4A226F3FE10011A8E6 /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE42226F3FE10011A8E6 /* json_valueiterator.inl */; };
+		0307BE4B226F3FE10011A8E6 /* json_internalarray.inl in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE43226F3FE10011A8E6 /* json_internalarray.inl */; };
+		0307BE51226F454A0011A8E6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 509D4AAE17EBB2AB00697056 /* Default.png */; };
+		0307BE71226FF4020011A8E6 /* Loading in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE70226FF4020011A8E6 /* Loading */; };
 		030834142251BAAF00A8AA04 /* FlashScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0308340B2251BAAF00A8AA04 /* FlashScene.cpp */; };
 		030834152251BAAF00A8AA04 /* GameHallScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0308340D2251BAAF00A8AA04 /* GameHallScene.cpp */; };
 		030834172251BAAF00A8AA04 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 030834112251BAAF00A8AA04 /* LoadingScene.cpp */; };
@@ -42,7 +53,6 @@
 		509D4A9117EBB24E00697056 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A922754F1517C094001B78AA /* CoreGraphics.framework */; };
 		509D4ABC17EBB2AB00697056 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 509D4AAC17EBB2AB00697056 /* AppController.mm */; };
 		509D4ABD17EBB2AB00697056 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 509D4AAD17EBB2AB00697056 /* Default-568h@2x.png */; };
-		509D4ABE17EBB2AB00697056 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 509D4AAE17EBB2AB00697056 /* Default.png */; };
 		509D4ABF17EBB2AB00697056 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 509D4AAF17EBB2AB00697056 /* Default@2x.png */; };
 		509D4AC017EBB2AB00697056 /* Icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = 509D4AB017EBB2AB00697056 /* Icon-57.png */; };
 		509D4AC117EBB2AB00697056 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 509D4AB117EBB2AB00697056 /* Icon-72.png */; };
@@ -126,6 +136,27 @@
 		0307BE1F226DC0FE0011A8E6 /* js_lin_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = js_lin_auto.hpp; sourceTree = "<group>"; };
 		0307BE20226DC0FE0011A8E6 /* js_lin_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = js_lin_auto.cpp; sourceTree = "<group>"; };
 		0307BE22226DC0FE0011A8E6 /* js_lin_auto_api.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js_lin_auto_api.js; sourceTree = "<group>"; };
+		0307BE29226F3D020011A8E6 /* HotUpdateLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HotUpdateLayer.cpp; sourceTree = "<group>"; };
+		0307BE2A226F3D020011A8E6 /* HotUpdateLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotUpdateLayer.h; sourceTree = "<group>"; };
+		0307BE2F226F3FE10011A8E6 /* Android.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Android.mk; sourceTree = "<group>"; };
+		0307BE32226F3FE10011A8E6 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		0307BE33226F3FE10011A8E6 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		0307BE34226F3FE10011A8E6 /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = features.h; sourceTree = "<group>"; };
+		0307BE35226F3FE10011A8E6 /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+		0307BE36226F3FE10011A8E6 /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
+		0307BE37226F3FE10011A8E6 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		0307BE38226F3FE10011A8E6 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		0307BE39226F3FE10011A8E6 /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forwards.h; sourceTree = "<group>"; };
+		0307BE3C226F3FE10011A8E6 /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_writer.cpp; sourceTree = "<group>"; };
+		0307BE3D226F3FE10011A8E6 /* json_internalmap.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalmap.inl; sourceTree = "<group>"; };
+		0307BE3E226F3FE10011A8E6 /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_reader.cpp; sourceTree = "<group>"; };
+		0307BE3F226F3FE10011A8E6 /* json_batchallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_batchallocator.h; sourceTree = "<group>"; };
+		0307BE40226F3FE10011A8E6 /* sconscript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sconscript; sourceTree = "<group>"; };
+		0307BE41226F3FE10011A8E6 /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_value.cpp; sourceTree = "<group>"; };
+		0307BE42226F3FE10011A8E6 /* json_valueiterator.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_valueiterator.inl; sourceTree = "<group>"; };
+		0307BE43226F3FE10011A8E6 /* json_internalarray.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalarray.inl; sourceTree = "<group>"; };
+		0307BE6F226F507E0011A8E6 /* lin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lin.h; sourceTree = "<group>"; };
+		0307BE70226FF4020011A8E6 /* Loading */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Loading; path = ../Resources/Loading; sourceTree = "<group>"; };
 		0308340B2251BAAF00A8AA04 /* FlashScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlashScene.cpp; sourceTree = "<group>"; };
 		0308340C2251BAAF00A8AA04 /* FlashScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashScene.h; sourceTree = "<group>"; };
 		0308340D2251BAAF00A8AA04 /* GameHallScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameHallScene.cpp; sourceTree = "<group>"; };
@@ -271,6 +302,63 @@
 			path = api;
 			sourceTree = "<group>";
 		};
+		0307BE2E226F3FE10011A8E6 /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				0307BE2F226F3FE10011A8E6 /* Android.mk */,
+				0307BE30226F3FE10011A8E6 /* include */,
+				0307BE3A226F3FE10011A8E6 /* src */,
+			);
+			name = jsoncpp;
+			path = ../cocos2d/jsoncpp;
+			sourceTree = "<group>";
+		};
+		0307BE30226F3FE10011A8E6 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				0307BE31226F3FE10011A8E6 /* json */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		0307BE31226F3FE10011A8E6 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				0307BE32226F3FE10011A8E6 /* reader.h */,
+				0307BE33226F3FE10011A8E6 /* config.h */,
+				0307BE34226F3FE10011A8E6 /* features.h */,
+				0307BE35226F3FE10011A8E6 /* value.h */,
+				0307BE36226F3FE10011A8E6 /* autolink.h */,
+				0307BE37226F3FE10011A8E6 /* json.h */,
+				0307BE38226F3FE10011A8E6 /* writer.h */,
+				0307BE39226F3FE10011A8E6 /* forwards.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		0307BE3A226F3FE10011A8E6 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0307BE3B226F3FE10011A8E6 /* lib_json */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		0307BE3B226F3FE10011A8E6 /* lib_json */ = {
+			isa = PBXGroup;
+			children = (
+				0307BE3C226F3FE10011A8E6 /* json_writer.cpp */,
+				0307BE3D226F3FE10011A8E6 /* json_internalmap.inl */,
+				0307BE3E226F3FE10011A8E6 /* json_reader.cpp */,
+				0307BE3F226F3FE10011A8E6 /* json_batchallocator.h */,
+				0307BE40226F3FE10011A8E6 /* sconscript */,
+				0307BE41226F3FE10011A8E6 /* json_value.cpp */,
+				0307BE42226F3FE10011A8E6 /* json_valueiterator.inl */,
+				0307BE43226F3FE10011A8E6 /* json_internalarray.inl */,
+			);
+			path = lib_json;
+			sourceTree = "<group>";
+		};
 		0308346E2251C8F700A8AA04 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -303,6 +391,7 @@
 		15628F5B15F0F5C2000CF24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0307BE70226FF4020011A8E6 /* Loading */,
 				030834772252F5D800A8AA04 /* project.json */,
 				030834692251C23600A8AA04 /* Default */,
 				0308346A2251C23600A8AA04 /* StudioUI */,
@@ -347,6 +436,7 @@
 				03DA723A224366DE00B0BD38 /* cocos2d_js_bindings.xcodeproj */,
 				03DA7231224366C800B0BD38 /* cocos2d_libs.xcodeproj */,
 				D4545214156E28EF00887EB5 /* Classes */,
+				0307BE2E226F3FE10011A8E6 /* jsoncpp */,
 				A92275401517C094001B78AA /* Frameworks */,
 				D45446CC156DE73F00887EB5 /* ios */,
 				509D4ACA17EBB2BE00697056 /* mac */,
@@ -415,8 +505,9 @@
 		D4545214156E28EF00887EB5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0307BE1E226DC0FE0011A8E6 /* jsbind */,
-				030C90DD22680C310051A323 /* js.h */,
+				0307BE6F226F507E0011A8E6 /* lin.h */,
+				0307BE29226F3D020011A8E6 /* HotUpdateLayer.cpp */,
+				0307BE2A226F3D020011A8E6 /* HotUpdateLayer.h */,
 				0308347C2253512A00A8AA04 /* CommonModel.cpp */,
 				0308347D2253512A00A8AA04 /* CommonModel.h */,
 				03083479225339E600A8AA04 /* PlatformHelper.cpp */,
@@ -429,6 +520,8 @@
 				0308340E2251BAAF00A8AA04 /* GameHallScene.h */,
 				030834112251BAAF00A8AA04 /* LoadingScene.cpp */,
 				030834122251BAAF00A8AA04 /* LoadingScene.h */,
+				030C90DD22680C310051A323 /* js.h */,
+				0307BE1E226DC0FE0011A8E6 /* jsbind */,
 				0308346E2251C8F700A8AA04 /* Utils */,
 			);
 			name = Classes;
@@ -554,7 +647,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				509D4ABE17EBB2AB00697056 /* Default.png in Resources */,
+				0307BE51226F454A0011A8E6 /* Default.png in Resources */,
 				5091731E17ECDF7A00D62437 /* Icon-80.png in Resources */,
 				5091731F17ECDF7A00D62437 /* Icon-100.png in Resources */,
 				0308346C2251C23600A8AA04 /* StudioUI in Resources */,
@@ -563,13 +656,19 @@
 				5091731A17ECDF7A00D62437 /* Icon-29.png in Resources */,
 				030834782252F5D800A8AA04 /* project.json in Resources */,
 				509D4AC617EBB2AB00697056 /* Icon-152.png in Resources */,
+				0307BE71226FF4020011A8E6 /* Loading in Resources */,
+				0307BE44226F3FE10011A8E6 /* Android.mk in Resources */,
 				030834182251BAAF00A8AA04 /* Utils in Resources */,
+				0307BE4A226F3FE10011A8E6 /* json_valueiterator.inl in Resources */,
 				509D4AC517EBB2AB00697056 /* Icon-144.png in Resources */,
 				509D4AC317EBB2AB00697056 /* Icon-114.png in Resources */,
 				509D4ABD17EBB2AB00697056 /* Default-568h@2x.png in Resources */,
 				509D4ABF17EBB2AB00697056 /* Default@2x.png in Resources */,
+				0307BE4B226F3FE10011A8E6 /* json_internalarray.inl in Resources */,
+				0307BE46226F3FE10011A8E6 /* json_internalmap.inl in Resources */,
 				0308346B2251C23600A8AA04 /* Default in Resources */,
 				509D4AC217EBB2AB00697056 /* Icon-76.png in Resources */,
+				0307BE48226F3FE10011A8E6 /* sconscript in Resources */,
 				5091731B17ECDF7A00D62437 /* Icon-40.png in Resources */,
 				5091731C17ECDF7A00D62437 /* Icon-50.png in Resources */,
 				509D4AC417EBB2AB00697056 /* Icon-120.png in Resources */,
@@ -599,11 +698,15 @@
 				D4545227156E28EF00887EB5 /* AppDelegate.cpp in Sources */,
 				030834712251C8F700A8AA04 /* JsUtils.cpp in Sources */,
 				030834142251BAAF00A8AA04 /* FlashScene.cpp in Sources */,
+				0307BE49226F3FE10011A8E6 /* json_value.cpp in Sources */,
 				030834742252061900A8AA04 /* Utils.cpp in Sources */,
+				0307BE45226F3FE10011A8E6 /* json_writer.cpp in Sources */,
 				030834152251BAAF00A8AA04 /* GameHallScene.cpp in Sources */,
 				0307BE23226DC0FE0011A8E6 /* js_lin_auto.cpp in Sources */,
 				030834172251BAAF00A8AA04 /* LoadingScene.cpp in Sources */,
+				0307BE47226F3FE10011A8E6 /* json_reader.cpp in Sources */,
 				509D4AC817EBB2AB00697056 /* main.m in Sources */,
+				0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */,
 				0308347E2253512A00A8AA04 /* CommonModel.cpp in Sources */,
 				509D4ABC17EBB2AB00697056 /* AppController.mm in Sources */,
 			);
