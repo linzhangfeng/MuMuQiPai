@@ -72,18 +72,20 @@ bool HotUpdateLayer::init()
 void HotUpdateLayer::onLoadEnd(bool is)
 {
     if(is){
-        if( m_index >= 1 ){
+        if( m_index < 1 ){
             if(m_aAssetsMEx){
                 CC_SAFE_RELEASE_NULL(m_aAssetsMEx);
             }
+            Manifest::_baseUrl = "http://119.23.221.227:80/";
             std::string manifestPath = m_data["versionPath"].asString()+"project.manifest";
             std::string storagePath = Utils::getSavePath();
+            std::string versionPath = m_data["versionPath"].asString();
             if(!FileUtils::getInstance()->isFileExist(manifestPath)){
                 m_bFrist = true;
                 this->m_tTip->setString(StringUtils::format("首次进入，游戏正在安装中(%d/%d)...",1,1) );
             }
             
-            m_aAssetsMEx = AssetsManagerEx::create(manifestPath, storagePath);
+            m_aAssetsMEx = AssetsManagerEx::create(manifestPath, storagePath,versionPath);
             m_aAssetsMEx->retain();
             m_index++;
             

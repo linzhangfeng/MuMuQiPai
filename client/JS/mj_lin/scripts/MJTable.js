@@ -32,6 +32,11 @@ var MJTable = cc.Layer.extend({
         btn_test_back.addClickEventListener(function(sender,evt){
             self.btnCallback(sender);
         });
+
+        //版本号
+        var banbenhao = new cc.LabelTTF("版本号：1", "Arial", 20);
+        banbenhao.setPosition(cc.p(size.width*0.5,size.height*0.5));
+        this.addChild(banbenhao,100);
     },
     btnCallback:function(ref){
         var name = ref.getName();

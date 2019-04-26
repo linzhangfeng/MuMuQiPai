@@ -44,7 +44,7 @@ Node* Utils::findNode(Node* node,const string& name)
     return NULL;
 }
 
-static std::string getSavePath()
+std::string Utils::getSavePath()
 {
     std::string result = FileUtils::getInstance()->getWritablePath() + "Assets/";
     log("game save path[%s]",result.c_str());
