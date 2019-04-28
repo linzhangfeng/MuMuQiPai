@@ -1,5 +1,7 @@
 #include "LoadingScene.h"
 
+#include "LoadingScene.h"
+
 #include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "GameHallScene.h"
@@ -16,10 +18,10 @@ Scene* LoadingLayer::createScene()
     
     // 'layer' is an autorelease object
     auto layer = LoadingLayer::create();
-
+    
     // add layer as a child to scene
     scene->addChild(layer);
-
+    
     // return the scene
     return scene;
 }
@@ -46,12 +48,15 @@ void LoadingLayer::initData()
     this->runAction(Sequence::create(DelayTime::create(1.0),CallFunc::create([=](){
         this->toGameHall();
     }), NULL));
-
+    
 }
 
 void LoadingLayer::toGameHall()
 {
     Director::getInstance()->replaceScene(GameHallLayer::createScene());
 }
+
+
+
 
 

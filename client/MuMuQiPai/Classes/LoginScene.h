@@ -1,0 +1,34 @@
+
+#ifndef __LoginLayer_H__
+#define __LoginLayer_H__
+
+#include "lin.h"
+class LoginLayer : public cocos2d::Layer
+{
+public:
+    enum LoginStatus {
+        LoginStatus_Start = 0,
+        LoginStatus_Ok,
+        LoginStatus_Fail,
+    };
+    // there's no 'id' in cpp, so we recommend returning the class instance pointer
+    static cocos2d::Scene* createScene();
+    
+    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+    virtual bool init();
+    
+    // implement the "static create()" method manually
+    CREATE_FUNC(LoginLayer);
+    
+    void initData();
+    void toGameHall();
+    void hideLoginBtns();
+    void showLoginBtns();
+    void setLoginStatus(LoginStatus type);
+private:
+    Node* m_rootNode;
+    Node* m_loginNode;
+    Text* m_loadingConnectTip;
+};
+
+#endif // __HELLOWORLD_SCENE_H__

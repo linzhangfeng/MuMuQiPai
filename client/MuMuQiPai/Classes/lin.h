@@ -10,12 +10,16 @@
 #include "SimpleAudioEngine.h"
 #include "cocostudio/CocoStudio.h"
 #include "PlatformHelper.h"
+
 using namespace std;
 using namespace cocos2d;
 using namespace CocosDenshion;
 using namespace cocos2d::ui;
 using namespace cocostudio::timeline;
 USING_NS_CC_EXT;
+
+//ios
+#include "Ios/IOSToast.h"
 
 typedef std::function<void()> MyCallBack_Null;
 typedef std::function<void(std::string v)> MyCallBack_Str;

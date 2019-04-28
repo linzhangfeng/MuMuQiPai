@@ -37,6 +37,9 @@
 		0308347B225339E600A8AA04 /* PlatformHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03083479225339E600A8AA04 /* PlatformHelper.cpp */; };
 		0308347E2253512A00A8AA04 /* CommonModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0308347C2253512A00A8AA04 /* CommonModel.cpp */; };
 		030C90DF22687DA60051A323 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 030C90DE22687DA60051A323 /* libc++.tbd */; };
+		034548322275869A00F57422 /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 034548302275869A00F57422 /* LoginScene.cpp */; };
+		0345483A2275D5E000F57422 /* IOSToast.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034548362275D5E000F57422 /* IOSToast.mm */; };
+		0345483B2275D5E000F57422 /* iToast.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034548392275D5E000F57422 /* iToast.mm */; };
 		03DA724722436AEE00B0BD38 /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA7239224366C900B0BD38 /* libcocos2d iOS.a */; };
 		03DA724822436B0F00B0BD38 /* libjscocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA7242224366DE00B0BD38 /* libjscocos2d iOS.a */; };
 		1A82F5FB169AC92500C4B13A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
@@ -193,6 +196,12 @@
 		0308347D2253512A00A8AA04 /* CommonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
 		030C90DD22680C310051A323 /* js.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js.h; sourceTree = "<group>"; };
 		030C90DE22687DA60051A323 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/usr/lib/libc++.tbd"; sourceTree = DEVELOPER_DIR; };
+		034548302275869A00F57422 /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
+		034548312275869A00F57422 /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScene.h; sourceTree = "<group>"; };
+		034548362275D5E000F57422 /* IOSToast.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IOSToast.mm; sourceTree = "<group>"; };
+		034548372275D5E000F57422 /* IOSToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSToast.h; sourceTree = "<group>"; };
+		034548382275D5E000F57422 /* iToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iToast.h; sourceTree = "<group>"; };
+		034548392275D5E000F57422 /* iToast.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iToast.mm; sourceTree = "<group>"; };
 		03DA7231224366C800B0BD38 /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		03DA723A224366DE00B0BD38 /* cocos2d_js_bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_js_bindings.xcodeproj; path = "../cocos2d/cocos/scripting/js-bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj"; sourceTree = "<group>"; };
 		1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -402,6 +411,17 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		034548352275D5E000F57422 /* Ios */ = {
+			isa = PBXGroup;
+			children = (
+				034548362275D5E000F57422 /* IOSToast.mm */,
+				034548372275D5E000F57422 /* IOSToast.h */,
+				034548382275D5E000F57422 /* iToast.h */,
+				034548392275D5E000F57422 /* iToast.mm */,
+			);
+			path = Ios;
+			sourceTree = "<group>";
+		};
 		03DA7232224366C800B0BD38 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -537,6 +557,8 @@
 		D4545214156E28EF00887EB5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				034548302275869A00F57422 /* LoginScene.cpp */,
+				034548312275869A00F57422 /* LoginScene.h */,
 				0307BE6F226F507E0011A8E6 /* lin.h */,
 				0307BE80227309F70011A8E6 /* UserModel.cpp */,
 				0307BE81227309F70011A8E6 /* UserModel.h */,
@@ -555,6 +577,7 @@
 				030834112251BAAF00A8AA04 /* LoadingScene.cpp */,
 				030834122251BAAF00A8AA04 /* LoadingScene.h */,
 				030C90DD22680C310051A323 /* js.h */,
+				034548352275D5E000F57422 /* Ios */,
 				0307BE722272EE4E0011A8E6 /* Net */,
 				0307BE1E226DC0FE0011A8E6 /* jsbind */,
 				0308346E2251C8F700A8AA04 /* Utils */,
@@ -747,7 +770,10 @@
 				0307BE47226F3FE10011A8E6 /* json_reader.cpp in Sources */,
 				509D4AC817EBB2AB00697056 /* main.m in Sources */,
 				0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */,
+				0345483A2275D5E000F57422 /* IOSToast.mm in Sources */,
 				0308347E2253512A00A8AA04 /* CommonModel.cpp in Sources */,
+				0345483B2275D5E000F57422 /* iToast.mm in Sources */,
+				034548322275869A00F57422 /* LoginScene.cpp in Sources */,
 				509D4ABC17EBB2AB00697056 /* AppController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

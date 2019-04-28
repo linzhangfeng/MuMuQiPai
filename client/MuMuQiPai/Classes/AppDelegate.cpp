@@ -5,6 +5,8 @@
 #include "FlashScene.h"
 #include "GameHallScene.h"
 #include "LoadingScene.h"
+#include "LoginScene.h"
+#include "Net/HttpAgent.h"
 USING_NS_CC;
 
 AppDelegate::AppDelegate() {
@@ -47,10 +49,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 //    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
     FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS/output");
     
+    std::string url = "http://127.0.0.1:9000/";
+    CCHttpAgent::getInstance()->checkChangeURL(url);
+    CCHttpAgent::getInstance()->setUrl(url);
 //    const Json::Value& dat = {};
 //    auto scene = GameHallLayer::createScene(dat);
-    auto scene = GameHallLayer::createScene();
+//    auto scene = GameHallLayer::createScene();
 //        auto scene = LoadingLayer::createScene();
+    auto scene = LoginLayer::createScene();
     // run
     director->runWithScene(scene);
 

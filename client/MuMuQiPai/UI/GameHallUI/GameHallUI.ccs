@@ -82,9 +82,15 @@
               <Image Name="bg.jpg" />
               <Image Name="btn_ traveler.png" />
               <Image Name="btn_checkbox.png" />
+              <Image Name="btn_fangqi_1.png" />
+              <Image Name="btn_fangqi_2.png" />
+              <Image Name="btn_quxiao_1.png" />
+              <Image Name="btn_quxiao_2.png" />
               <Image Name="btn_weixin.png" />
               <Image Name="check_mark.png" />
               <Image Name="LoginBg.png" />
+              <Image Name="qihu_bg.png" />
+              <Image Name="title.png" />
               <Image Name="yonghuxieyi.png" />
             </Folder>
             <Project Name="LoginLayer.csd" Type="Layer" />

@@ -66,7 +66,6 @@ app.get('/register',function(req,res){
 		}
 	});
 });
-
 app.get('/get_version',function(req,res){
 	var ret = {
 		version:config.VERSION,
@@ -96,25 +95,37 @@ app.get('/guest',function(req,res){
 	send(res,ret);
 });
 
-app.get('/auth',function(req,res){
-	var account = req.query.account;
-	var password = req.query.password;
+app.post('/login',function(req,res){
 
-	db.get_account_info(account,password,function(info){
-		if(info == null){
-			send(res,{errcode:1,errmsg:"invalid account"});
-			return;
-		}
-
-        var account = "vivi_" + req.query.account;
-        var sign = get_md5(account + req.ip + config.ACCOUNT_PRI_KEY);
-        var ret = {
-            errcode:0,
-            errmsg:"ok",
-            account:account,
-            sign:sign
-        }
-        send(res,ret);
+	//有段数据到达就触发（多次）
+	var str = "";
+    req.on('data', data => {
+		str += data
+	});
+  
+	//数据全部到达触发（一次）
+	req.on('end', () => {
+		//console.log(str)
+		var json = JSON.parse(str)
+		console.log(json)
+		var account = json.account;
+		var password = json.password;
+		db.get_account_info(account,password,function(info){
+			if(info == null){
+				send(res,{status:1,errmsg:"account or password error."});
+				return;
+			}
+	
+			var account = "vivi_" + json.account;
+			var sign = get_md5(account + req.ip + config.ACCOUNT_PRI_KEY);
+			var ret = {
+				status:200,
+				errmsg:"ok",
+				account:account,
+				sign:sign
+			}
+			send(res,ret);
+		});
 	});
 });
 
