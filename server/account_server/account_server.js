@@ -74,7 +74,7 @@ app.get('/get_version',function(req,res){
 	send(res,ret);
 });
 
-app.get('/get_serverinfo',function(req,res){
+app.post('/get_serverinfo',function(req,res){
 	var ret = {
 		version:config.VERSION,
 		hall:hallAddr,

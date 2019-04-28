@@ -16,4 +16,11 @@ using namespace CocosDenshion;
 using namespace cocos2d::ui;
 using namespace cocostudio::timeline;
 USING_NS_CC_EXT;
+
+typedef std::function<void()> MyCallBack_Null;
+typedef std::function<void(std::string v)> MyCallBack_Str;
+typedef std::function<void(int v)> MyCallBack_Int;
+typedef std::function<void(Node* node)> MyCallBack_Node;
+typedef std::function<void(Json::Value _json)> MyCallBack_Json;
+
 #endif

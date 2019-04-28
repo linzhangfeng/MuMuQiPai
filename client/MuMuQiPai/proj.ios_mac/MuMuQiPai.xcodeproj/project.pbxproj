@@ -20,6 +20,11 @@
 		0307BE4B226F3FE10011A8E6 /* json_internalarray.inl in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE43226F3FE10011A8E6 /* json_internalarray.inl */; };
 		0307BE51226F454A0011A8E6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 509D4AAE17EBB2AB00697056 /* Default.png */; };
 		0307BE71226FF4020011A8E6 /* Loading in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE70226FF4020011A8E6 /* Loading */; };
+		0307BE7C2272EE4E0011A8E6 /* TcpClient.cc in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE732272EE4E0011A8E6 /* TcpClient.cc */; };
+		0307BE7D2272EE4E0011A8E6 /* Network.cc in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE752272EE4E0011A8E6 /* Network.cc */; };
+		0307BE7E2272EE4E0011A8E6 /* HttpAgent.cc in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE782272EE4E0011A8E6 /* HttpAgent.cc */; };
+		0307BE7F2272EE4E0011A8E6 /* JPacket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE7A2272EE4E0011A8E6 /* JPacket.cc */; };
+		0307BE82227309F70011A8E6 /* UserModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE80227309F70011A8E6 /* UserModel.cpp */; };
 		030834142251BAAF00A8AA04 /* FlashScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0308340B2251BAAF00A8AA04 /* FlashScene.cpp */; };
 		030834152251BAAF00A8AA04 /* GameHallScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0308340D2251BAAF00A8AA04 /* GameHallScene.cpp */; };
 		030834172251BAAF00A8AA04 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 030834112251BAAF00A8AA04 /* LoadingScene.cpp */; };
@@ -157,6 +162,17 @@
 		0307BE43226F3FE10011A8E6 /* json_internalarray.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalarray.inl; sourceTree = "<group>"; };
 		0307BE6F226F507E0011A8E6 /* lin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lin.h; sourceTree = "<group>"; };
 		0307BE70226FF4020011A8E6 /* Loading */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Loading; path = ../Resources/Loading; sourceTree = "<group>"; };
+		0307BE732272EE4E0011A8E6 /* TcpClient.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TcpClient.cc; sourceTree = "<group>"; };
+		0307BE742272EE4E0011A8E6 /* JPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPacket.h; sourceTree = "<group>"; };
+		0307BE752272EE4E0011A8E6 /* Network.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Network.cc; sourceTree = "<group>"; };
+		0307BE762272EE4E0011A8E6 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
+		0307BE772272EE4E0011A8E6 /* HttpAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpAgent.h; sourceTree = "<group>"; };
+		0307BE782272EE4E0011A8E6 /* HttpAgent.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpAgent.cc; sourceTree = "<group>"; };
+		0307BE792272EE4E0011A8E6 /* Queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Queue.h; sourceTree = "<group>"; };
+		0307BE7A2272EE4E0011A8E6 /* JPacket.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JPacket.cc; sourceTree = "<group>"; };
+		0307BE7B2272EE4E0011A8E6 /* TcpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TcpClient.h; sourceTree = "<group>"; };
+		0307BE80227309F70011A8E6 /* UserModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserModel.cpp; sourceTree = "<group>"; };
+		0307BE81227309F70011A8E6 /* UserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
 		0308340B2251BAAF00A8AA04 /* FlashScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlashScene.cpp; sourceTree = "<group>"; };
 		0308340C2251BAAF00A8AA04 /* FlashScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashScene.h; sourceTree = "<group>"; };
 		0308340D2251BAAF00A8AA04 /* GameHallScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameHallScene.cpp; sourceTree = "<group>"; };
@@ -359,6 +375,22 @@
 			path = lib_json;
 			sourceTree = "<group>";
 		};
+		0307BE722272EE4E0011A8E6 /* Net */ = {
+			isa = PBXGroup;
+			children = (
+				0307BE772272EE4E0011A8E6 /* HttpAgent.h */,
+				0307BE782272EE4E0011A8E6 /* HttpAgent.cc */,
+				0307BE732272EE4E0011A8E6 /* TcpClient.cc */,
+				0307BE7B2272EE4E0011A8E6 /* TcpClient.h */,
+				0307BE7A2272EE4E0011A8E6 /* JPacket.cc */,
+				0307BE742272EE4E0011A8E6 /* JPacket.h */,
+				0307BE752272EE4E0011A8E6 /* Network.cc */,
+				0307BE762272EE4E0011A8E6 /* Network.h */,
+				0307BE792272EE4E0011A8E6 /* Queue.h */,
+			);
+			path = Net;
+			sourceTree = "<group>";
+		};
 		0308346E2251C8F700A8AA04 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -506,6 +538,8 @@
 			isa = PBXGroup;
 			children = (
 				0307BE6F226F507E0011A8E6 /* lin.h */,
+				0307BE80227309F70011A8E6 /* UserModel.cpp */,
+				0307BE81227309F70011A8E6 /* UserModel.h */,
 				0307BE29226F3D020011A8E6 /* HotUpdateLayer.cpp */,
 				0307BE2A226F3D020011A8E6 /* HotUpdateLayer.h */,
 				0308347C2253512A00A8AA04 /* CommonModel.cpp */,
@@ -521,6 +555,7 @@
 				030834112251BAAF00A8AA04 /* LoadingScene.cpp */,
 				030834122251BAAF00A8AA04 /* LoadingScene.h */,
 				030C90DD22680C310051A323 /* js.h */,
+				0307BE722272EE4E0011A8E6 /* Net */,
 				0307BE1E226DC0FE0011A8E6 /* jsbind */,
 				0308346E2251C8F700A8AA04 /* Utils */,
 			);
@@ -693,10 +728,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0307BE7C2272EE4E0011A8E6 /* TcpClient.cc in Sources */,
 				0308347B225339E600A8AA04 /* PlatformHelper.cpp in Sources */,
 				509D4AC917EBB2AB00697056 /* RootViewController.mm in Sources */,
 				D4545227156E28EF00887EB5 /* AppDelegate.cpp in Sources */,
+				0307BE7F2272EE4E0011A8E6 /* JPacket.cc in Sources */,
+				0307BE7D2272EE4E0011A8E6 /* Network.cc in Sources */,
 				030834712251C8F700A8AA04 /* JsUtils.cpp in Sources */,
+				0307BE7E2272EE4E0011A8E6 /* HttpAgent.cc in Sources */,
 				030834142251BAAF00A8AA04 /* FlashScene.cpp in Sources */,
 				0307BE49226F3FE10011A8E6 /* json_value.cpp in Sources */,
 				030834742252061900A8AA04 /* Utils.cpp in Sources */,
@@ -704,6 +743,7 @@
 				030834152251BAAF00A8AA04 /* GameHallScene.cpp in Sources */,
 				0307BE23226DC0FE0011A8E6 /* js_lin_auto.cpp in Sources */,
 				030834172251BAAF00A8AA04 /* LoadingScene.cpp in Sources */,
+				0307BE82227309F70011A8E6 /* UserModel.cpp in Sources */,
 				0307BE47226F3FE10011A8E6 /* json_reader.cpp in Sources */,
 				509D4AC817EBB2AB00697056 /* main.m in Sources */,
 				0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */,

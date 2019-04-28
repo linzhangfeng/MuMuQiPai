@@ -14,4 +14,7 @@ public:
     //清空js虚拟机
     static void resetJsVM();
     static void initLoad();
+    
+    static std::string encodeBase64(const unsigned char *in, unsigned int inLength);
+    static std::string decodeBase64(const std::string& dat);
 };

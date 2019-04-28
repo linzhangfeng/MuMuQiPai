@@ -55,6 +55,7 @@ long long Utils::getCurrentTime()
 {
     return Utils::getCurrentSecend();
 }
+
 long long Utils::getCurrentSecend()
 {
     struct timeval tv;

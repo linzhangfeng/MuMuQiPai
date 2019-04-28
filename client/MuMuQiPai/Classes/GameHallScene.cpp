@@ -5,6 +5,7 @@
 #include "Utils/Utils.h"
 #include "HotUpdateLayer.h"
 #include "CommonModel.h"
+#include "Net/HttpAgent.h"
 USING_NS_CC;
 
 using namespace cocostudio::timeline;
@@ -44,11 +45,37 @@ void GameHallLayer::initData()
     
     Button* createRoomBtn = (Button*)Utils::findNode(root,"btn_createroom");
     createRoomBtn->addClickEventListener([=](Ref*){
-        log("lin=enter=js=begin");
         JsUtils::initLoad();
-        log("lin=enter=js=end");
         this->toRoom();
-        log("lin=enter=js");
+        return true;
+    });
+    
+    
+    Button* addRoomBtn = (Button*)Utils::findNode(root,"btn_addroom");
+    
+    std::string url = "http://127.0.0.1:9000/";
+    CCHttpAgent::getInstance()->checkChangeURL(url);
+    addRoomBtn->addClickEventListener([=](Ref*){
+        log("enter=http=test");
+        CCHttpAgent::getInstance()->sendHttpPost([=](std::string tag){
+            CCHttpPacket* loginPacket = CCHttpAgent::getInstance()->packets[tag];
+            
+            if (this->getReferenceCount() <= 0 || this->getReferenceCount() > 10)return;
+            
+            if (loginPacket->status != 3)
+            {
+                PlatformHelper::showToast("请求用户数据失败");
+                return;
+            }
+            
+            if (loginPacket->resultIsOK())
+            {
+                Json::Value data = loginPacket->recvVal["resultMap"]["myInfoVO"];
+                
+                CCHttpAgent::getInstance()->packets.erase(tag);
+                delete loginPacket;
+            }
+        },"get_serverinfo","","serverinfo");
         return true;
     });
 }

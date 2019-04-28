@@ -185,3 +185,19 @@ void JsUtils::initLoad()
     
     
 }
+
+std::string JsUtils::encodeBase64(const unsigned char *in, unsigned int inLength)
+{
+    char * encodedData;
+    int len =  cocos2d::base64Encode((unsigned char*)in, inLength, &encodedData);
+    
+    return std::string(( char *)encodedData,len);
+}
+std::string JsUtils::decodeBase64(const std::string& dat)
+{
+    const char * codedData = dat.c_str();
+    unsigned char * decodedData;
+    int len =  cocos2d::base64Decode((unsigned char*)codedData, (unsigned int)strlen(codedData), &decodedData);
+    
+    return std::string(( char *)decodedData,len);
+}

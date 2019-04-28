@@ -4,6 +4,7 @@
 //#include "HotUpdateLayer.h"
 #include "FlashScene.h"
 #include "GameHallScene.h"
+#include "LoadingScene.h"
 USING_NS_CC;
 
 AppDelegate::AppDelegate() {
@@ -49,6 +50,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 //    const Json::Value& dat = {};
 //    auto scene = GameHallLayer::createScene(dat);
     auto scene = GameHallLayer::createScene();
+//        auto scene = LoadingLayer::createScene();
     // run
     director->runWithScene(scene);
 
