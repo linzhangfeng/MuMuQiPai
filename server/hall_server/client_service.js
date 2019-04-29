@@ -7,9 +7,7 @@ var room_service = require("./room_service");
 var app = express();
 var config = null;
 
-function check_account(req,res){
-	var account = req.query.account;
-	var sign = req.query.sign;
+function check_account(account,sign){
 	if(account == null || sign == null){
 		http.send(res,1,"unknown error");
 		return false;
@@ -34,53 +32,47 @@ app.all('*', function(req, res, next) {
 	next();
 });
 
-app.get('/login',function(req,res){
-	if(!check_account(req,res)){
-		return;
-	}
-	
+app.post('/login',function(req,res){
 	var ip = req.ip;
-	if(ip.indexOf("::ffff:") != -1){
-		ip = ip.substr(7);
-	}
+	http.postCallback(req,res,function(data){
+		var account = data.account;
+		db.get_user_data(account,function(data){
+			if(data == null){
+				http.send(res,0,"ok");
+				return;
+			}
 	
-	var account = req.query.account;
-	db.get_user_data(account,function(data){
-		if(data == null){
-			http.send(res,0,"ok");
-			return;
-		}
-
-		var ret = {
-			account:data.account,
-			userid:data.userid,
-			name:data.name,
-			lv:data.lv,
-			exp:data.exp,
-			coins:data.coins,
-			gems:data.gems,
-			ip:ip,
-			sex:data.sex,
-		};
-
-		db.get_room_id_of_user(data.userid,function(roomId){
-			//如果用户处于房间中，则需要对其房间进行检查。 如果房间还在，则通知用户进入
-			if(roomId != null){
-				//检查房间是否存在于数据库中
-				db.is_room_exist(roomId,function (retval){
-					if(retval){
-						ret.roomid = roomId;
-					}
-					else{
-						//如果房间不在了，表示信息不同步，清除掉用户记录
-						db.set_room_id_of_user(data.userid,null);
-					}
-					http.send(res,0,"ok",ret);
-				});
-			}
-			else {
-				http.send(res,0,"ok",ret);
-			}
+			var ret = {
+				account:data.account,
+				userid:data.userid,
+				name:data.name,
+				lv:data.lv,
+				exp:data.exp,
+				coins:data.coins,
+				gems:data.gems,
+				ip:ip,
+				sex:data.sex,
+			};
+	
+			db.get_room_id_of_user(data.userid,function(roomId){
+				//如果用户处于房间中，则需要对其房间进行检查。 如果房间还在，则通知用户进入
+				if(roomId != null){
+					//检查房间是否存在于数据库中
+					db.is_room_exist(roomId,function (retval){
+						if(retval){
+							ret.roomid = roomId;
+						}
+						else{
+							//如果房间不在了，表示信息不同步，清除掉用户记录
+							db.set_room_id_of_user(data.userid,null);
+						}
+						http.send(res,200,"ok",ret);
+					});
+				}
+				else {
+					http.send(res,200,"ok",ret);
+				}
+			});
 		});
 	});
 });

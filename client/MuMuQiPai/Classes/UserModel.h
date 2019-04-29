@@ -28,48 +28,46 @@ private:
     std::string m_imsi;
     std::string m_imei;
     std::string m_channel;
+    std::string m_account;
+    std::string m_userName;
+    std::string m_ip;
+    int m_sex;
+    int m_level;
+    int m_exp;
 public:
     UserModel();
     virtual ~UserModel();
     /** Return the shared instance **/
     static UserModel *getInstance();
     
-    int getUid()
-    {
-        return m_uid;
-    }
+    int getUid(){return m_uid;}
+    void setUid(int uid){m_uid = uid;}
     
-    void setUid(int uid)
-    {
-        m_uid = uid;
-    }
+    int getLevel(){return m_level;}
+    void setLevel(int lv){m_level = lv;}
     
-    int getMoney()
-    {
-        return m_money;
-    }
+    int getSex(){return m_sex;}
+    void setSex(int sex){m_sex = sex;}
     
-    void setMoney(int money)
-    {
-        m_money = money;
-    }
+    int getMoney(){return m_money;}
+    void setMoney(int money){m_money = money;}
     
-    std::string getImsi(){
-        return m_imsi;
-    }
+    std::string getImsi(){return m_imsi;}
+    void setImsi(std::string imsi){m_imsi = imsi;}
     
-    void setImsi(std::string imsi){
-        m_imsi = imsi;
-    }
+    std::string getChannel(){return m_channel;}
+    void setChannel(std::string channel){m_channel = channel;}
     
-    std::string getChannel()
-    {
-        return m_channel;
-    }
+    std::string getAccount(){return m_account;}
+    void setAccount(std::string account){m_account = account;}
     
-    void setChannel(std::string channel)
-    {
-        m_channel = channel;
-    }
+    std::string getUserName(){return m_userName;}
+    void setUserName(std::string userName){m_userName = userName;}
+    
+    std::string getIp(){return m_ip;}
+    void setIp(std::string ip){m_ip = ip;}
+    
+    int getExp(){return m_exp;}
+    void setExp(int exp){m_exp = exp;}
 };
 #endif /* defined(__ZJH__ZJHModel__) */

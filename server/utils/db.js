@@ -20,6 +20,7 @@ function generateUserId() {
 }
 
 function query(sql,callback){  
+    console.log("sql:"+sql);
     pool.getConnection(function(err,conn){  
         if(err){  
             callback(err,null,null);  
@@ -154,6 +155,7 @@ exports.get_user_data = function(account,callback){
     }
 
     var sql = 'SELECT userid,account,name,lv,exp,coins,gems,roomid FROM t_users WHERE account = "' + account + '"';
+    console.log("get_user_data:sql="+sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             callback(null);

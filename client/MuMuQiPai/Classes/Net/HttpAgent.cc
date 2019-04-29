@@ -471,9 +471,6 @@ void CCHttpAgent::checkChangeURL(std::string curURL)
     if (m_urlList.empty())
     {
         m_urlList.clear();
-        m_urlList.push_back("http://wb.boxwan.cn/chess/");
-        m_urlList.push_back("http://wb.ihuizhi.com/chess/");
-        m_urlList.push_back("http://test1.boxwan.cn/chess/");
         m_urlList.push_back(curURL);
     }
     
@@ -490,14 +487,17 @@ void CCHttpAgent::checkChangeURL(std::string curURL)
             }
         }
         
-        curIndex++;
-        if (curIndex >= m_urlList.size())curIndex -= m_urlList.size();
-        
-        m_url = m_urlList[curIndex];
+        if(curIndex != -1){
+            m_url = m_urlList[curIndex];
+        }else{
+            m_url = curURL;
+            m_urlList.push_back(curURL);
+        }
         Manifest::_baseUrl = m_url;
         UserDefault::getInstance()->setStringForKey("default_use_url",m_url);
         UserDefault::getInstance()->flush();
     }
+     m_url = curURL;
 }
 
 void CCHttpAgent::httpCallback(HttpClient *sender,HttpResponse *response)

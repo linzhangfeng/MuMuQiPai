@@ -2,6 +2,7 @@
 #include "GameHallScene.h"
 #include "LoginScene.h"
 #include "Net/HttpAgent.h"
+#include "UserModel.h"
 //#include "HelloWorldScene.h"
 
 using namespace cocostudio::timeline;
@@ -153,6 +154,7 @@ void LoginLayer::initData()
             
             if (loginPacket->resultIsOK())
             {
+                UserModel::getInstance()->setAccount(account);
                 this->runAction(Sequence::create(DelayTime::create(1.0),CallFunc::create([=](){
                     this->toGameHall();
                 }), NULL));

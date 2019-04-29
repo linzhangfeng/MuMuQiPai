@@ -40,19 +40,11 @@ app.all('*', function(req, res, next) {
 app.post('/register',function(req,res){
 	var str = "";
 
-	var fnFailed = function(){
-		send(res,{status:1,errmsg:"account has been used."});
-	};
-
-	var fnSucceed = function(){
-		send(res,{status:200,errmsg:"ok"});	
-	};
-
     req.on('data', data => {
 		str += data
 	});
   
-	req.on('end', () => {
+	http.callback(req,res,function(json){
 		var json = JSON.parse(str)
 		console.log(json)
 		var account = json.account;
@@ -61,12 +53,17 @@ app.post('/register',function(req,res){
 			if(!exist){
 				db.create_account(account,password,function(ret){
 					if (ret) {
-						fnSucceed();
+						http.send(res,200,"ok.");
 					}
 					else{
-						fnFailed();
+						http.send(res,2,"create_account system error.");
 					}
 				});
+
+				var name = "我是一颗小虎牙";
+				var coins = 1000;
+				var gems = 21;
+				db.create_user(account,name,coins,gems,0,null);
 			}
 			else{
 				fnFailed();

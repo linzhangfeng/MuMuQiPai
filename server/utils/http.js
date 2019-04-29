@@ -172,12 +172,27 @@ exports.getSync = function (url,data,safe,encoding) {
 	return ret;
 };
 
-exports.send = function(res,errcode,errmsg,data){
+exports.send = function(res,status,errmsg,data){
 	if(data == null){
 		data = {};
 	}
-	data.errcode = errcode;
+	data.status = status;
 	data.errmsg = errmsg;
 	var jsonstr = JSON.stringify(data);
 	res.send(jsonstr);
+};
+
+exports.postCallback = function(req,res,callback){
+	var str = "";
+	req.on('data', data => {
+		str += data
+	});
+  
+	req.on('end', () => {
+		var json = JSON.parse(str)
+		console.log(json);
+		if(json != {} || json != null){
+			callback(json);
+		}
+	});
 };

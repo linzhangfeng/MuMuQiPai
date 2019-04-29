@@ -1,15 +1,9 @@
 #include "GameHallScene.h"
-#include "cocostudio/CocoStudio.h"
-#include "ui/CocosGUI.h"
-#include "Utils/JsUtils.h"
-#include "Utils/Utils.h"
 #include "HotUpdateLayer.h"
 #include "CommonModel.h"
 #include "Net/HttpAgent.h"
-USING_NS_CC;
-
-using namespace cocostudio::timeline;
-using namespace cocos2d::ui;
+#include "UserModel.h"
+#include "lin.h"
 Scene* GameHallLayer::createScene()
 {
     // 'scene' is an autorelease object
@@ -40,6 +34,38 @@ bool GameHallLayer::init()
 
 void GameHallLayer::initData()
 {
+    //获取用户数据
+    std::string url = "http://127.0.0.1:9001/";
+    CCHttpAgent::getInstance()->checkChangeURL(url);
+    Json::Value json;
+    json["account"] = UserModel::getInstance()->getAccount();
+    
+    CCHttpAgent::getInstance()->sendHttpPost([=](std::string tag){
+        CCHttpPacket* loginPacket = CCHttpAgent::getInstance()->packets[tag];
+        
+        if (this->getReferenceCount() <= 0 || this->getReferenceCount() > 10)return;
+        
+        if (loginPacket->status != 3)
+        {
+            PlatformHelper::showToast("网络连接错误，请求用户数据失败");
+            return;
+        }
+        
+        if (loginPacket->resultIsOK())
+        {
+            Json::Value data = loginPacket->recvData;
+            //初始化用户信息
+            UserModel::getInstance()->setUid(data["userid"].asInt());
+            UserModel::getInstance()->setMoney(data["coins"].asInt());
+            UserModel::getInstance()->setUserName(data["name"].asString());
+            UserModel::getInstance()->setLevel(data["lv"].asInt());
+            UserModel::getInstance()->setIp(data["ip"].asString());
+            UserModel::getInstance()->setExp(data["exp"].asInt());
+        }else{
+            PlatformHelper::showToast("账号或密码错误");
+        }
+    },"login",json.toStyledString(),"login");
+    
     auto root = CSLoader::createNode("StudioUI/GameHallUI/GameHallLayer.csb");
     addChild(root);
     
@@ -52,9 +78,6 @@ void GameHallLayer::initData()
     
     
     Button* addRoomBtn = (Button*)Utils::findNode(root,"btn_addroom");
-    
-    std::string url = "http://127.0.0.1:9000/";
-    CCHttpAgent::getInstance()->checkChangeURL(url);
     addRoomBtn->addClickEventListener([=](Ref*){
         log("enter=http=test");
         CCHttpAgent::getInstance()->sendHttpPost([=](std::string tag){
