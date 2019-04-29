@@ -114,12 +114,12 @@ exports.get_account_info = function(account,password,callback){
         if(password != null){
             var psw = crypto.md5(password);
             if(rows[0].password == psw){
-                callback(null);
+                callback(rows[0]);
                 return;
             }    
         }
 
-        callback(rows[0]);
+        callback(null);
     }); 
 };
 

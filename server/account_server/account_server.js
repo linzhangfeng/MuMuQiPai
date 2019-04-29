@@ -37,33 +37,41 @@ app.all('*', function(req, res, next) {
 	}).run();
 });
 
-app.get('/register',function(req,res){
-	var account = req.query.account;
-	var password = req.query.password;
+app.post('/register',function(req,res){
+	var str = "";
 
 	var fnFailed = function(){
-		send(res,{errcode:1,errmsg:"account has been used."});
+		send(res,{status:1,errmsg:"account has been used."});
 	};
 
 	var fnSucceed = function(){
-		send(res,{errcode:0,errmsg:"ok"});	
+		send(res,{status:200,errmsg:"ok"});	
 	};
 
-	db.is_user_exist(account,function(exist){
-		if(exist){
-			db.create_account(account,password,function(ret){
-				if (ret) {
-					fnSucceed();
-				}
-				else{
-					fnFailed();
-				}
-			});
-		}
-		else{
-			fnFailed();
-			console.log("account has been used.");			
-		}
+    req.on('data', data => {
+		str += data
+	});
+  
+	req.on('end', () => {
+		var json = JSON.parse(str)
+		console.log(json)
+		var account = json.account;
+		var password = json.password;
+		db.is_user_exist(account,function(exist){
+			if(!exist){
+				db.create_account(account,password,function(ret){
+					if (ret) {
+						fnSucceed();
+					}
+					else{
+						fnFailed();
+					}
+				});
+			}
+			else{
+				fnFailed();
+			}
+		});
 	});
 });
 app.get('/get_version',function(req,res){
@@ -96,14 +104,11 @@ app.get('/guest',function(req,res){
 });
 
 app.post('/login',function(req,res){
-
-	//有段数据到达就触发（多次）
 	var str = "";
     req.on('data', data => {
 		str += data
 	});
   
-	//数据全部到达触发（一次）
 	req.on('end', () => {
 		//console.log(str)
 		var json = JSON.parse(str)
@@ -117,7 +122,8 @@ app.post('/login',function(req,res){
 			}
 	
 			var account = "vivi_" + json.account;
-			var sign = get_md5(account + req.ip + config.ACCOUNT_PRI_KEY);
+			console.log("linzhangfeng="+config.ACCOUNT_PRI_KEY);
+			var sign = crypto.md5(account + req.ip + config.ACCOUNT_PRI_KEY);
 			var ret = {
 				status:200,
 				errmsg:"ok",

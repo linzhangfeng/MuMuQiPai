@@ -6,11 +6,17 @@
 class LoginLayer : public cocos2d::Layer
 {
 public:
-    enum LoginStatus {
-        LoginStatus_Start = 0,
-        LoginStatus_Ok,
-        LoginStatus_Fail,
+    enum Status {
+        Login = 0,
+        Register,
+        Login_Status_Start,
+        Login_Status_Ok,
+        Login_Status_Fail,
+        Register_Status_start,
+        Register_Status_Ok,
+        Register_Status_Fail,
     };
+
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* createScene();
     
@@ -24,10 +30,13 @@ public:
     void toGameHall();
     void hideLoginBtns();
     void showLoginBtns();
-    void setLoginStatus(LoginStatus type);
+    void showDialogs(Status type);
+    void setLoginStatus(Status type);
+    void setRegisterStatus(Status type);
 private:
     Node* m_rootNode;
     Node* m_loginNode;
+    Node* m_registerNode;
     Text* m_loadingConnectTip;
 };
 
