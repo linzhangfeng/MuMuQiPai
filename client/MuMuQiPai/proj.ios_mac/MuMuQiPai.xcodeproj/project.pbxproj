@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0301FB4A22782F320047D130 /* CreateRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0301FB4822782F320047D130 /* CreateRoom.cpp */; };
+		0301FB4E22782F420047D130 /* GameHall in Resources */ = {isa = PBXBuildFile; fileRef = 0301FB4D22782F420047D130 /* GameHall */; };
 		0307BE23226DC0FE0011A8E6 /* js_lin_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE20226DC0FE0011A8E6 /* js_lin_auto.cpp */; };
 		0307BE24226DC0FE0011A8E6 /* js_lin_auto_api.js in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE22226DC0FE0011A8E6 /* js_lin_auto_api.js */; };
 		0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE29226F3D020011A8E6 /* HotUpdateLayer.cpp */; };
@@ -141,6 +143,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0301FB4822782F320047D130 /* CreateRoom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreateRoom.cpp; sourceTree = "<group>"; };
+		0301FB4922782F320047D130 /* CreateRoom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CreateRoom.hpp; sourceTree = "<group>"; };
+		0301FB4D22782F420047D130 /* GameHall */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GameHall; path = ../Resources/GameHall; sourceTree = "<group>"; };
 		0307BE1F226DC0FE0011A8E6 /* js_lin_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = js_lin_auto.hpp; sourceTree = "<group>"; };
 		0307BE20226DC0FE0011A8E6 /* js_lin_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = js_lin_auto.cpp; sourceTree = "<group>"; };
 		0307BE22226DC0FE0011A8E6 /* js_lin_auto_api.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js_lin_auto_api.js; sourceTree = "<group>"; };
@@ -443,6 +448,7 @@
 		15628F5B15F0F5C2000CF24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0301FB4D22782F420047D130 /* GameHall */,
 				0307BE70226FF4020011A8E6 /* Loading */,
 				030834772252F5D800A8AA04 /* project.json */,
 				030834692251C23600A8AA04 /* Default */,
@@ -557,6 +563,8 @@
 		D4545214156E28EF00887EB5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0301FB4822782F320047D130 /* CreateRoom.cpp */,
+				0301FB4922782F320047D130 /* CreateRoom.hpp */,
 				034548302275869A00F57422 /* LoginScene.cpp */,
 				034548312275869A00F57422 /* LoginScene.h */,
 				0307BE6F226F507E0011A8E6 /* lin.h */,
@@ -708,6 +716,7 @@
 				0307BE51226F454A0011A8E6 /* Default.png in Resources */,
 				5091731E17ECDF7A00D62437 /* Icon-80.png in Resources */,
 				5091731F17ECDF7A00D62437 /* Icon-100.png in Resources */,
+				0301FB4E22782F420047D130 /* GameHall in Resources */,
 				0308346C2251C23600A8AA04 /* StudioUI in Resources */,
 				509D4AC117EBB2AB00697056 /* Icon-72.png in Resources */,
 				509D4AC017EBB2AB00697056 /* Icon-57.png in Resources */,
@@ -772,6 +781,7 @@
 				0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */,
 				0345483A2275D5E000F57422 /* IOSToast.mm in Sources */,
 				0308347E2253512A00A8AA04 /* CommonModel.cpp in Sources */,
+				0301FB4A22782F320047D130 /* CreateRoom.cpp in Sources */,
 				0345483B2275D5E000F57422 /* iToast.mm in Sources */,
 				034548322275869A00F57422 /* LoginScene.cpp in Sources */,
 				509D4ABC17EBB2AB00697056 /* AppController.mm in Sources */,

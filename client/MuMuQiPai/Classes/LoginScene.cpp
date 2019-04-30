@@ -3,6 +3,7 @@
 #include "LoginScene.h"
 #include "Net/HttpAgent.h"
 #include "UserModel.h"
+#include "CreateRoom.hpp"
 //#include "HelloWorldScene.h"
 
 using namespace cocostudio::timeline;
@@ -51,7 +52,9 @@ void LoginLayer::initData()
     
     Button* weixinLoginBtn = (Button*)Utils::findNode(m_rootNode,"btn_login_weixin");
     weixinLoginBtn->addClickEventListener([=](Ref*){
-        showDialogs(LoginLayer::Status::Login);
+//        showDialogs(LoginLayer::Status::Login);
+        auto layer = CreateRoom::create();
+        this->addChild(layer,100);
         return true;
     });
     Button* youkeLoginBtn = (Button*)Utils::findNode(m_rootNode,"btn_login_youke");
@@ -166,6 +169,9 @@ void LoginLayer::initData()
 
         return true;
     });
+    
+//    auto layer = CreateRoom::create();
+//    this->addChild(layer,100);
 }
 
 void LoginLayer::hideLoginBtns()
