@@ -100,6 +100,26 @@
             <Project Name="MJTableLayer.csd" Type="Layer" />
           </Folder>
           <Folder Name="NewFolder" />
+          <Folder Name="CreateRoomUI">
+            <Folder Name="createroom">
+              <Image Name="bg2.png" />
+              <Image Name="bg3.png" />
+              <Image Name="c1.png" />
+              <Image Name="c2.png" />
+              <Image Name="create_btn1.png" />
+              <Image Name="create_btn2.png" />
+              <Image Name="create_title.png" />
+              <Image Name="help.png" />
+              <Image Name="line.png" />
+              <Image Name="play_point_check_can.png" />
+              <Image Name="play_point_check_sigle_can.png" />
+              <Image Name="point_hold_kong1.png" />
+              <Image Name="point_hold_kong2.png" />
+              <Image Name="title1.png" />
+              <Image Name="title2.png" />
+            </Folder>
+            <Project Name="CreateRoomLayer.csd" Type="Layer" />
+          </Folder>
         </Folder>
       </RootFolder>
     </Group>

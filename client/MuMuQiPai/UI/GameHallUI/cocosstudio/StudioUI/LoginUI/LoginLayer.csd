@@ -101,7 +101,7 @@
               <AbstractNodeData Name="LoginNode" CanEdit="False" Visible="False" ActionTag="-630111889" Tag="970" IconVisible="True" LeftMargin="640.0000" RightMargin="640.0000" TopMargin="400.0000" BottomMargin="320.0000" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
                 <Children>
-                  <AbstractNodeData Name="Panel_1" ActionTag="-2138917449" Tag="998" IconVisible="False" LeftMargin="-640.0000" RightMargin="-640.0000" TopMargin="-360.0000" BottomMargin="-360.0000" TouchEnable="True" ClipAble="False" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
+                  <AbstractNodeData Name="Panel_1" ActionTag="-2138917449" Tag="998" IconVisible="False" LeftMargin="-640.0000" RightMargin="-640.0000" TopMargin="-360.0000" BottomMargin="-360.0000" TouchEnable="True" ClipAble="False" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
                     <Size X="1280.0000" Y="720.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position />
@@ -148,7 +148,7 @@
                         <PrePosition X="0.4920" Y="0.6524" />
                         <PreSize X="0.3363" Y="0.0729" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="user_password" ActionTag="101869448" Tag="974" IconVisible="False" LeftMargin="287.4745" RightMargin="304.5255" TopMargin="260.7936" BottomMargin="248.2064" TouchEnable="True" FontSize="36" IsCustomSize="True" LabelText="" PlaceHolderText="123456" MaxLengthText="10" ctype="TextFieldObjectData">
+                      <AbstractNodeData Name="user_password" ActionTag="101869448" Tag="974" IconVisible="False" LeftMargin="287.4687" RightMargin="304.5313" TopMargin="260.7917" BottomMargin="248.2083" TouchEnable="True" FontSize="36" IsCustomSize="True" LabelText="" PlaceHolderText="123456" MaxLengthText="10" ctype="TextFieldObjectData">
                         <Size X="300.0000" Y="40.0000" />
                         <AnchorPoint ScaleX="0.5201" ScaleY="0.6697" />
                         <Position X="443.4987" Y="274.9963" />
@@ -314,7 +314,7 @@
                         <FileData Type="Default" Path="Default/Sprite.png" Plist="" />
                         <BlendFunc Src="1" Dst="771" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="user_password" ActionTag="-1933964885" Tag="991" IconVisible="False" LeftMargin="287.4674" RightMargin="304.5326" TopMargin="225.7977" BottomMargin="283.2023" TouchEnable="True" FontSize="36" IsCustomSize="True" LabelText="" PlaceHolderText="123456" MaxLengthText="10" ctype="TextFieldObjectData">
+                      <AbstractNodeData Name="user_password" ActionTag="-1933964885" Tag="991" IconVisible="False" LeftMargin="287.4615" RightMargin="304.5385" TopMargin="225.7958" BottomMargin="283.2042" TouchEnable="True" FontSize="36" IsCustomSize="True" LabelText="" PlaceHolderText="123456" MaxLengthText="10" ctype="TextFieldObjectData">
                         <Size X="300.0000" Y="40.0000" />
                         <AnchorPoint ScaleX="0.5201" ScaleY="0.6697" />
                         <Position X="443.4915" Y="309.9922" />
@@ -356,7 +356,7 @@
                         <OutlineColor A="255" R="255" G="0" B="0" />
                         <ShadowColor A="255" R="110" G="110" B="110" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="user_password1" ActionTag="-979346783" Tag="1001" IconVisible="False" LeftMargin="287.5244" RightMargin="304.4756" TopMargin="313.0991" BottomMargin="195.9009" TouchEnable="True" FontSize="36" IsCustomSize="True" LabelText="" PlaceHolderText="123456" MaxLengthText="10" ctype="TextFieldObjectData">
+                      <AbstractNodeData Name="user_password1" ActionTag="-979346783" Tag="1001" IconVisible="False" LeftMargin="287.5186" RightMargin="304.4814" TopMargin="313.0972" BottomMargin="195.9028" TouchEnable="True" FontSize="36" IsCustomSize="True" LabelText="" PlaceHolderText="123456" MaxLengthText="10" ctype="TextFieldObjectData">
                         <Size X="300.0000" Y="40.0000" />
                         <AnchorPoint ScaleX="0.5201" ScaleY="0.6697" />
                         <Position X="443.5486" Y="222.6908" />

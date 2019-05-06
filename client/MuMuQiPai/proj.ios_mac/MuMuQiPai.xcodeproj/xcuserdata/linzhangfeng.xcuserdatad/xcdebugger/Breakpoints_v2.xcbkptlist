@@ -490,12 +490,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/CreateRoom.cpp"
-            timestampString = "578305185.596577"
+            timestampString = "578820188.5465209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1959"
-            endingLineNumber = "1959"
-            landmarkName = "CreateRoom::initTextData()"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "CreateRoom::updateRoomConfigView()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -506,28 +506,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/CreateRoom.cpp"
-            timestampString = "578305185.596577"
+            timestampString = "578820188.5465209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1977"
-            endingLineNumber = "1977"
-            landmarkName = "CreateRoom::initTextData()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Classes/CreateRoom.cpp"
-            timestampString = "578306022.263111"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "CreateRoom::showUI()"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "CreateRoom::updateRoomConfigView()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -538,12 +522,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/CreateRoom.cpp"
-            timestampString = "578306025.294724"
+            timestampString = "578820188.5465209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1557"
-            endingLineNumber = "1557"
-            landmarkName = "CreateRoom::selectBtnDraw(string titleStr, bool selected, int cellType)"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "CreateRoom::selectBtnOn(Ref*ref)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/CreateRoom.cpp"
+            timestampString = "578822347.0040179"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
+            landmarkName = "CreateRoom::initTextData()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/CreateRoom.cpp"
+            timestampString = "578822347.0040179"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "CreateRoom::initTextData()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
