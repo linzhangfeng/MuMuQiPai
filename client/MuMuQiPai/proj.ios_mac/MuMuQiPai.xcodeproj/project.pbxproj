@@ -42,6 +42,7 @@
 		034548322275869A00F57422 /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 034548302275869A00F57422 /* LoginScene.cpp */; };
 		0345483A2275D5E000F57422 /* IOSToast.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034548362275D5E000F57422 /* IOSToast.mm */; };
 		0345483B2275D5E000F57422 /* iToast.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034548392275D5E000F57422 /* iToast.mm */; };
+		037E179F2283C2DC002CD4FF /* socketioTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037E179D2283C2DC002CD4FF /* socketioTest.cpp */; };
 		03DA724722436AEE00B0BD38 /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA7239224366C900B0BD38 /* libcocos2d iOS.a */; };
 		03DA724822436B0F00B0BD38 /* libjscocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA7242224366DE00B0BD38 /* libjscocos2d iOS.a */; };
 		1A82F5FB169AC92500C4B13A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
@@ -207,6 +208,8 @@
 		034548372275D5E000F57422 /* IOSToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSToast.h; sourceTree = "<group>"; };
 		034548382275D5E000F57422 /* iToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iToast.h; sourceTree = "<group>"; };
 		034548392275D5E000F57422 /* iToast.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iToast.mm; sourceTree = "<group>"; };
+		037E179D2283C2DC002CD4FF /* socketioTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socketioTest.cpp; sourceTree = "<group>"; };
+		037E179E2283C2DC002CD4FF /* socketioTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socketioTest.h; sourceTree = "<group>"; };
 		03DA7231224366C800B0BD38 /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		03DA723A224366DE00B0BD38 /* cocos2d_js_bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_js_bindings.xcodeproj; path = "../cocos2d/cocos/scripting/js-bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj"; sourceTree = "<group>"; };
 		1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -563,6 +566,8 @@
 		D4545214156E28EF00887EB5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				037E179D2283C2DC002CD4FF /* socketioTest.cpp */,
+				037E179E2283C2DC002CD4FF /* socketioTest.h */,
 				0301FB4822782F320047D130 /* CreateRoom.cpp */,
 				0301FB4922782F320047D130 /* CreateRoom.hpp */,
 				034548302275869A00F57422 /* LoginScene.cpp */,
@@ -782,6 +787,7 @@
 				0345483A2275D5E000F57422 /* IOSToast.mm in Sources */,
 				0308347E2253512A00A8AA04 /* CommonModel.cpp in Sources */,
 				0301FB4A22782F320047D130 /* CreateRoom.cpp in Sources */,
+				037E179F2283C2DC002CD4FF /* socketioTest.cpp in Sources */,
 				0345483B2275D5E000F57422 /* iToast.mm in Sources */,
 				034548322275869A00F57422 /* LoginScene.cpp in Sources */,
 				509D4ABC17EBB2AB00697056 /* AppController.mm in Sources */,

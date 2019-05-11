@@ -28,8 +28,10 @@ exports.start = function(conf,mgr){
 	var httpServer = require('http').createServer(app);
 	io = require('socket.io')(httpServer);
 	httpServer.listen(config.CLIENT_PORT);
-	
+	console.log("socket server start");
 	io.sockets.on('connection',function(socket){
+		console.log("client connect server");
+		socket.emit('news', { hello: 'world' });
 		socket.on('login',function(data){
 			data = JSON.parse(data);
 			if(socket.userId != null){

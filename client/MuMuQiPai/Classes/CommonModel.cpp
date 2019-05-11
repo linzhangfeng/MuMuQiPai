@@ -52,6 +52,6 @@ void CommonModel::hallToRoomV()
 
 string CommonModel::getPackName()
 {
-    return "youlinqipai";
+    return "mj_lin";
 }
 

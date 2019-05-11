@@ -47,6 +47,7 @@ bool CreateRoom::initData()
     return true;
 }
 
+
 void CreateRoom::updateRoomConfigView()
 {
     m_butMap.clear();

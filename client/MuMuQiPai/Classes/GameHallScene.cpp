@@ -105,16 +105,16 @@ void GameHallLayer::initData()
 
 void GameHallLayer::toRoom()
 {
-//    const std::string& path = "mj_lin/scripts/main.js";
-    const std::string& path = "youlinqipai/scripts/main.js";
-    string packName =CommonModel::getInstance()->getPackName();
-    Json::Value data;
-    data["entry"] = path;
-    data["remoteManifestUrl"]=packName+"/version/project.manifest";
-    data["remoteVersionUrl"]=packName+"/version/version.manifest";
-    data["versionPath"]=(packName+"/version/");
+//    const std::string& path = "youlinqipai/scripts/main.js";
+//    string packName =CommonModel::getInstance()->getPackName();
+//    Json::Value data;
+//    data["entry"] = path;
+//    data["remoteManifestUrl"]=packName+"/version/project.manifest";
+//    data["remoteVersionUrl"]=packName+"/version/version.manifest";
+//    data["versionPath"]=(packName+"/version/");
+//    
+//    Director::getInstance()->replaceScene(HotUpdateLayer::createScene(data));
     
-    Director::getInstance()->replaceScene(HotUpdateLayer::createScene(data));
-    
-//    JsUtils::runScript(path);
+    const std::string& path = "mj_lin/scripts/main.js";
+    JsUtils::runScript(path);
 }

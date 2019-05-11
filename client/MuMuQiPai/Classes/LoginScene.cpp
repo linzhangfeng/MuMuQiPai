@@ -4,7 +4,9 @@
 #include "Net/HttpAgent.h"
 #include "UserModel.h"
 #include "CreateRoom.hpp"
+#include "Net/TcpClient.h"
 //#include "HelloWorldScene.h"
+#include "socketioTest.h"
 
 using namespace cocostudio::timeline;
 
@@ -53,8 +55,11 @@ void LoginLayer::initData()
     Button* weixinLoginBtn = (Button*)Utils::findNode(m_rootNode,"btn_login_weixin");
     weixinLoginBtn->addClickEventListener([=](Ref*){
 //        showDialogs(LoginLayer::Status::Login);
-        auto layer = CreateRoom::create();
-        this->addChild(layer,100);
+//        auto layer = CreateRoom::create();:9000
+//        this->addChild(layer,100)
+//        CCTcpClient::getInstance(1)->set_host_port("127.0.0.1", 9003);
+//        CCTcpClient::getInstance(1)->connect();
+        SocketTest::getInstance()->connect();
         return true;
     });
     Button* youkeLoginBtn = (Button*)Utils::findNode(m_rootNode,"btn_login_youke");
