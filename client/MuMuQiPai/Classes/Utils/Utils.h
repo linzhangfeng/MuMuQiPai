@@ -19,6 +19,8 @@ public:
     static long long getCurrentTime();
     static long long getCurrentSecend();
     static std::string getSavePath();
+    static void saveItem(const char* itemName,std::string strValue);
+    static std::string getItem(const char* itemName);
     
     static Json::Value ReadFile(string filename)
     {

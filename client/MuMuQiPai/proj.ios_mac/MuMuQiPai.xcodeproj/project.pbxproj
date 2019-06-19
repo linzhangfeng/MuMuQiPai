@@ -39,10 +39,12 @@
 		0308347B225339E600A8AA04 /* PlatformHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03083479225339E600A8AA04 /* PlatformHelper.cpp */; };
 		0308347E2253512A00A8AA04 /* CommonModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0308347C2253512A00A8AA04 /* CommonModel.cpp */; };
 		030C90DF22687DA60051A323 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 030C90DE22687DA60051A323 /* libc++.tbd */; };
+		0340898A228AACE500710785 /* libpthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 03408989228AACE500710785 /* libpthread.tbd */; };
 		034548322275869A00F57422 /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 034548302275869A00F57422 /* LoginScene.cpp */; };
 		0345483A2275D5E000F57422 /* IOSToast.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034548362275D5E000F57422 /* IOSToast.mm */; };
 		0345483B2275D5E000F57422 /* iToast.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034548392275D5E000F57422 /* iToast.mm */; };
 		037E179F2283C2DC002CD4FF /* socketioTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037E179D2283C2DC002CD4FF /* socketioTest.cpp */; };
+		037E17A422868706002CD4FF /* SocketClient.cc in Sources */ = {isa = PBXBuildFile; fileRef = 037E17A222868706002CD4FF /* SocketClient.cc */; };
 		03DA724722436AEE00B0BD38 /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA7239224366C900B0BD38 /* libcocos2d iOS.a */; };
 		03DA724822436B0F00B0BD38 /* libjscocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03DA7242224366DE00B0BD38 /* libjscocos2d iOS.a */; };
 		1A82F5FB169AC92500C4B13A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
@@ -202,6 +204,7 @@
 		0308347D2253512A00A8AA04 /* CommonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
 		030C90DD22680C310051A323 /* js.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js.h; sourceTree = "<group>"; };
 		030C90DE22687DA60051A323 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/usr/lib/libc++.tbd"; sourceTree = DEVELOPER_DIR; };
+		03408989228AACE500710785 /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/usr/lib/libpthread.tbd; sourceTree = DEVELOPER_DIR; };
 		034548302275869A00F57422 /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
 		034548312275869A00F57422 /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScene.h; sourceTree = "<group>"; };
 		034548362275D5E000F57422 /* IOSToast.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IOSToast.mm; sourceTree = "<group>"; };
@@ -210,6 +213,8 @@
 		034548392275D5E000F57422 /* iToast.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iToast.mm; sourceTree = "<group>"; };
 		037E179D2283C2DC002CD4FF /* socketioTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = socketioTest.cpp; sourceTree = "<group>"; };
 		037E179E2283C2DC002CD4FF /* socketioTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socketioTest.h; sourceTree = "<group>"; };
+		037E17A222868706002CD4FF /* SocketClient.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketClient.cc; sourceTree = "<group>"; };
+		037E17A322868706002CD4FF /* SocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketClient.h; sourceTree = "<group>"; };
 		03DA7231224366C800B0BD38 /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		03DA723A224366DE00B0BD38 /* cocos2d_js_bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_js_bindings.xcodeproj; path = "../cocos2d/cocos/scripting/js-bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj"; sourceTree = "<group>"; };
 		1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -293,6 +298,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0340898A228AACE500710785 /* libpthread.tbd in Frameworks */,
 				030C90DF22687DA60051A323 /* libc++.tbd in Frameworks */,
 				03DA724822436B0F00B0BD38 /* libjscocos2d iOS.a in Frameworks */,
 				03DA724722436AEE00B0BD38 /* libcocos2d iOS.a in Frameworks */,
@@ -395,6 +401,8 @@
 		0307BE722272EE4E0011A8E6 /* Net */ = {
 			isa = PBXGroup;
 			children = (
+				037E17A222868706002CD4FF /* SocketClient.cc */,
+				037E17A322868706002CD4FF /* SocketClient.h */,
 				0307BE772272EE4E0011A8E6 /* HttpAgent.h */,
 				0307BE782272EE4E0011A8E6 /* HttpAgent.cc */,
 				0307BE732272EE4E0011A8E6 /* TcpClient.cc */,
@@ -518,6 +526,7 @@
 		A92275401517C094001B78AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				03408989228AACE500710785 /* libpthread.tbd */,
 				030C90DE22687DA60051A323 /* libc++.tbd */,
 				9FA3AE451BE9BBCA00FC9645 /* GameController.framework */,
 				ED545A831B68A21C00C3958E /* libiconv.dylib */,
@@ -784,6 +793,7 @@
 				0307BE47226F3FE10011A8E6 /* json_reader.cpp in Sources */,
 				509D4AC817EBB2AB00697056 /* main.m in Sources */,
 				0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */,
+				037E17A422868706002CD4FF /* SocketClient.cc in Sources */,
 				0345483A2275D5E000F57422 /* IOSToast.mm in Sources */,
 				0308347E2253512A00A8AA04 /* CommonModel.cpp in Sources */,
 				0301FB4A22782F320047D130 /* CreateRoom.cpp in Sources */,

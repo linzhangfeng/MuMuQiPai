@@ -14,9 +14,7 @@ public:
     static SocketTest *getInstance();
     
     virtual void onConnect(SIOClient* client);
-    
     virtual void onMessage(SIOClient* client, const std::string& data);
-    
     virtual void onClose(SIOClient* client);
     virtual void onError(SIOClient* client, const std::string& data);
 

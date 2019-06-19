@@ -168,7 +168,6 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 						});
 					}
 					
-
 					//写入数据库
 					var conf = roomInfo.conf;
 					db.create_room(roomInfo.id,roomInfo.conf,ip,port,createTime,function(uuid){
@@ -273,7 +272,19 @@ exports.enterRoom = function(roomId,userId,userName,callback){
 		});
 	}
 };
-
+exports.getRoomData = function(roomId,callback){
+	db.get_room_data(roomId,function(dbdata){
+		if(dbdata == null){
+			//找不到房间
+			callback(2);
+		}
+		else{
+			room = constructRoomFromDb(dbdata);
+			dbdata.base_info = JSON.parse(dbdata.base_info);
+			callback(0,dbdata);
+		}
+	});
+};
 exports.setReady = function(userId,value){
 	var roomId = exports.getUserRoom(userId);
 	if(roomId == null){

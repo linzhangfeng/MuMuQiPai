@@ -132,9 +132,14 @@ void LoginLayer::initData()
     });
     
     Button* loginBtn = (Button*)Utils::findNode(m_rootNode,"btn_login");
+    TextField* accountTextField = (TextField*)Utils::findNode(m_rootNode,"user_name");
+    TextField* passwordTextFiled = (TextField*)Utils::findNode(m_rootNode,"user_password");
+    std::string user_name = Utils::getItem("user_name");
+    std::string user_password = Utils::getItem("user_password");
+    if(user_name != "")accountTextField->setString(user_name);
+    if(user_password != "")passwordTextFiled->setString(user_password);
+    
     loginBtn->addClickEventListener([=](Ref*){
-        TextField* accountTextField = (TextField*)Utils::findNode(m_rootNode,"user_name");
-        TextField* passwordTextFiled = (TextField*)Utils::findNode(m_rootNode,"user_password");
         std::string account=accountTextField->getString();
         std::string password=passwordTextFiled->getString();
         setLoginStatus(LoginLayer::Status::Login_Status_Start);
@@ -147,6 +152,8 @@ void LoginLayer::initData()
             PlatformHelper::showToast("账号或密码不能为空！");
             return true;
         }
+        Utils::saveItem("user_name", account);
+        Utils::saveItem("user_password", password);
         
         CCHttpAgent::getInstance()->sendHttpPost([=](std::string tag){
             CCHttpPacket* loginPacket = CCHttpAgent::getInstance()->packets[tag];

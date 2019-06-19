@@ -194,6 +194,28 @@ exports.get_user_data_by_userid = function(userid,callback){
     });
 };
 
+exports.update_user_roomid = function(userid,roomid,callback){
+    callback = callback == null? nop:callback;
+    if(userid == null){
+        callback(false);
+        return;
+    }
+    
+    var sql = 'UPDATE t_users SET roomid = ' + roomid + ' WHERE userid = ' + userid;
+    console.log(sql);
+    query(sql,function(err,rows,fields){
+        if(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        else{
+            callback(rows.affectedRows > 0);
+            return; 
+        } 
+    });
+};
+
 /**增加玩家房卡 */
 exports.add_user_gems = function(userid,gems,callback){
     callback = callback == null? nop:callback;

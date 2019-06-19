@@ -6,6 +6,7 @@ var tokenMgr = require('./tokenmgr');
 var roomMgr = require('./roommgr');
 var userMgr = require('./usermgr');
 var http = require('../utils/http');
+var CMD = require('./proto');
 var io = null;
 
 var app = express();
@@ -31,7 +32,61 @@ exports.start = function(conf,mgr){
 	console.log("socket server start");
 	io.sockets.on('connection',function(socket){
 		console.log("client connect server");
-		socket.emit('news', { hello: 'world' });
+		var sendData = {};
+		sendData.data = { hello: 'world' };
+		sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+		socket.emit('data', sendData);
+		
+		socket.on('data',function(data){
+			data = JSON.parse(data);
+			if(data){
+				var cmd = data.cmd;
+				var data = data.data;
+				this.handlerCmd(cmd,data);
+			}
+		});
+
+		function handlerCmd(cmd,data){
+			switch(cmd){
+				case CMD.CMD.CLIENT_LOGIN_REQ:
+					this.handler_client_login_req(data);
+				break;
+				case CMD.CMD.CLIENT_LOGOUT_REQ:
+					this.handler_client_logout_req(data);
+				break;
+				case CMD.CMD.CLIENT_READY_REQ:
+					this.handler_client_ready_req(data);
+				break;
+			}
+		};
+
+		function handler_client_login_req(data){
+			data = JSON.parse(data);
+			var roomid = data["roomid"];
+			var userid = data["userid"];
+
+			userMgr.bind(userid,socket);
+			socket.userid = userid;
+
+			var sendData = {};
+			sendData.data = {};
+			sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+			socket.emit('data', sendData);
+		};
+
+		function handler_client_logout_req(data){
+			var sendData = {};
+			sendData.data = { hello: 'world' };
+			sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+			socket.emit('data', sendData);
+		};
+		function handler_client_ready_req(data){
+			var sendData = {};
+			sendData.data = { hello: 'world' };
+			sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+			socket.emit('data', sendData);
+		};
+
 		socket.on('login',function(data){
 			data = JSON.parse(data);
 			if(socket.userId != null){

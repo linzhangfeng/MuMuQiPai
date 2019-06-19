@@ -10,7 +10,10 @@
 #include "SimpleAudioEngine.h"
 #include "cocostudio/CocoStudio.h"
 #include "PlatformHelper.h"
+#include "network/SocketIO.h"
+#include "network/HttpClient.h"
 
+using namespace cocos2d::network;
 using namespace std;
 using namespace cocos2d;
 using namespace CocosDenshion;

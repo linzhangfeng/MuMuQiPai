@@ -63,3 +63,13 @@ long long Utils::getCurrentSecend()
     long long ms = tv.tv_sec * 1000 + tv.tv_usec / 1000;
     return ms;
 }
+
+std::string Utils::getItem(const char* itemName)
+{
+    return UserDefault::getInstance()->getStringForKey(itemName);
+}
+
+void Utils::saveItem(const char* itemName,std::string strValue)
+{
+    UserDefault::getInstance()->setStringForKey(itemName, strValue);
+}

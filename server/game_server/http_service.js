@@ -11,6 +11,11 @@ var config = null;
 
 var serverIp = "";
 
+function send(res,ret){
+	var str = JSON.stringify(ret);
+	res.send(str)
+}
+
 //测试
 app.all('*', function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -47,36 +52,95 @@ app.get('/get_server_info',function(req,res){
 	http.send(res,0,"ok",{userroominfo:arr});
 });
 
-app.get('/create_room',function(req,res){
-	var userId = parseInt(req.query.userid);
-	var sign = req.query.sign;
-	var gems = req.query.gems;
-	var conf = req.query.conf
-	if(userId == null || sign == null || conf == null){
-		http.send(res,1,"invalid parameters");
-		return;
-	}
+app.post('/create_room',function(req,res){
+	http.postCallback(req,res,function(jsonData){
+		var userId = jsonData.userId;
+		var conf = {};
+		conf.type = 1;
+		conf.difen = 1;
+		conf.zimo = 1;
+		conf.jiangdui = 1;
+		conf.huansanzhang = 1;
+		conf.zuidafanshu = 1;
+		conf.jushuxuanze = 1;
+		conf.dianganghua = 1;
+		conf.menqing = 1;
+		conf.tiandihu = 1;
 
-	var md5 = crypto.md5(userId + conf + gems + config.ROOM_PRI_KEY);
-	if(md5 != req.query.sign){
-		console.log("invalid reuqest.");
-		http.send(res,1,"sign check failed.");
-		return;
-	}
-
-	conf = JSON.parse(conf);
-	roomMgr.createRoom(userId,conf,gems,serverIp,config.CLIENT_PORT,function(errcode,roomId){
-		if(errcode != 0 || roomId == null){
-			http.send(res,errcode,"create failed.");
-			return;	
-		}
-		else{
-			http.send(res,0,"ok",{roomid:roomId});			
-		}
+		var gems = "test";
+		roomMgr.createRoom(userId,conf,gems,serverIp,config.CLIENT_PORT,function(errcode,roomId){
+			if(errcode != 0 || roomId == null){
+				http.send(res,errcode,"create failed.");
+				return;	
+			}
+			else{
+				var sign = crypto.md5(userId + req.ip + config.ACCOUNT_PRI_KEY);
+				var ret = {
+					status:200,
+					errmsg:"ok",
+					roomId:roomId,
+					sign:sign
+				}
+				send(res,ret);
+				
+				db.update_user_roomid(userId,roomId);
+			}
+		});
 	});
 });
 
-app.get('/enter_room',function(req,res){
+app.post('/check_room',function(req,res){
+	http.postCallback(req,res,function(jsonData){
+		var userId = jsonData.userId;
+		userMgr.getUserDataByUserId(userId,function(errcode,userData){
+			if(errcode != 0 || userData == null){
+				http.send(res,errcode,"create failed.");
+				return;	
+			}
+			else{
+				var sign = crypto.md5(userId + req.ip + config.ACCOUNT_PRI_KEY);
+				var roomId = userData["roomId"];
+				var is_room_runing = false;
+				if(roomId > 0){
+					isRoomRuning = true;
+				}
+				var ret = {
+					status:200,
+					errmsg:"ok",
+					roomId:roomId,
+					isRuning:isRoomRuning,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+					sign:sign
+				}
+				send(res,ret);		
+			}
+		});
+	});
+});
+
+app.post('/get_room_info',function(req,res){
+	http.postCallback(req,res,function(jsonData){
+		var roomId = jsonData.roomId;
+		roomMgr.getRoomData(roomId,function(errcode,roomData){
+			var sign = crypto.md5(roomId + req.ip + config.ACCOUNT_PRI_KEY);
+			if(roomData == null){
+				http.send(res,errcode,"create failed.");	
+			}else{
+				var ret = {
+					status:200,
+					errmsg:"ok",
+					roomId:roomId,
+					roomData:roomData,
+					sign:sign
+				}
+				send(res,ret);	
+			}	
+		});
+	});
+});
+
+
+
+app.get('/enter_room1',function(req,res){
 	var userId = parseInt(req.query.userid);
 	var name = req.query.name;
 	var roomId = req.query.roomid;

@@ -13,6 +13,8 @@
 #include <string>
 #include <map>
 
+#include "json.h"
+
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
 
@@ -22,6 +24,8 @@ using namespace CocosDenshion;
 
 class CommonModel : public Ref
 {
+private:
+    Json::Value m_roomData;
 public:
     CommonModel();
     virtual ~CommonModel();
@@ -32,5 +36,11 @@ public:
     void hallToRoomV();
     void hallToRoomH();
     string getPackName();
+    Json::Value getRoomData(){
+        return m_roomData;
+    }
+    void setRoomData(Json::Value roomData){
+        m_roomData = m_roomData;
+    }
 };
 #endif /* defined(__ZJH__ZJHModel__) */

@@ -12,4 +12,6 @@
 #include "Utils/Utils.h"
 #include "Utils/JsUtils.h"
 #include "CommonModel.h"
+#include "UserModel.h"
+#include "Net/SocketClient.h"
 #endif /* js_hpp */

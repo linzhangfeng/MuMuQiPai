@@ -18,6 +18,8 @@ public:
     //common begin
     void initData();
     //common end
+    void createRoom();
+    void getRoomInfo();
     void toRoom();
 };
 

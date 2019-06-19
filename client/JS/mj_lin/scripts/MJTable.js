@@ -33,35 +33,44 @@ var MJTable = cc.Layer.extend({
             self.btnCallback(sender);
         });
 
+        var btn_test_back = Utils.findNode(this.rootNode, "btn_connect");
+        btn_test_back.addClickEventListener(function (sender, evt) {
+            self.btnCallback(sender);
+        });
+
+        var btn_test_back = Utils.findNode(this.rootNode, "btn_send");
+        btn_test_back.addClickEventListener(function (sender, evt) {
+            self.btnCallback(sender);
+        });
+
+        var btn_test_back = Utils.findNode(this.rootNode, "btn_recv");
+        btn_test_back.addClickEventListener(function (sender, evt) {
+            self.btnCallback(sender);
+        });
+
         //版本号
         var banbenhao = new cc.LabelTTF("版本号：1", "Arial", 20);
         banbenhao.setPosition(cc.p(size.width * 0.5, size.height * 0.5));
         this.addChild(banbenhao, 100);
 
-        this.test();
     },
-    window :{},
-    test: function () {
-        cc.log("lin=test=start=1");
-        var ssio = require(getSrcPath("Net/socket-io.js"));
 
-        var opts = {
-            'reconnection':false,
-            'force new connection': true,
-            'transports':['websocket', 'polling']
-        }
-        this.sio = ssio.connect('http://127.0.0.1:9003',opts);
-        this.sio.on('connection', function(msg){
-            console.log('连接上了..')
-        });
-        cc.log("lin=test=start=2");
-        //socket.emit('data', 'dagger')
+    startSocket:function(){
 
     },
     btnCallback: function (ref) {
         var name = ref.getName();
+        cc.log("btnCallback="+name);
         if (name == "btn_test_back") {
             CommonModel.getInstance().toHall();
+        }else if(name == "btn_connect"){
+            SocketClient.getInstance().connect_req();
+        }else if(name == "btn_send"){
+
+        }else if(name == "btn_recv"){
+            var data = SocketClient.getInstance().get();
+            cc.log("recv=data="+data.cmd)
+            cc.log("recv=data="+data.data)
         }
     },
     updateBg: function (isInit) {

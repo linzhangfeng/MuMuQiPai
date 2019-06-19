@@ -258,7 +258,7 @@ void CCHttpAgent::sendHttpPost(const MyCallBack_Str &callback, string action, st
     
     string urlStr;
     if (action.find("http:") == -1)urlStr += m_url;
-    urlStr += action;
+    if (urlStr.find(action) == -1)urlStr += action;
     
     string pkey = param;
 //    string pkey = getJsonStr(param);

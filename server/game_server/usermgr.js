@@ -1,4 +1,5 @@
 var roomMgr = require('./roommgr');
+var db = require('../utils/db');
 var userList = {};
 var userOnline = 0;
 exports.bind = function(userId,socket){
@@ -86,4 +87,14 @@ exports.broacastInRoom = function(event,data,sender,includingSender){
             socket.emit(event,data);
         }
     }
+};
+
+exports.getUserDataByUserId = function(userId,callback){
+    db.get_user_data_by_userid(userId ,function(jsonData){
+        if(jsonData == null){
+            callback(2,null);
+        }else{
+            callback(0,jsonData);
+        }
+    });
 };

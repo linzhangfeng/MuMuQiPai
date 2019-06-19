@@ -25,6 +25,7 @@ class UserModel : public Ref
 private:
     int m_uid;
     int m_money;
+    std::string m_curRoomId;
     std::string m_imsi;
     std::string m_imei;
     std::string m_channel;
@@ -69,5 +70,8 @@ public:
     
     int getExp(){return m_exp;}
     void setExp(int exp){m_exp = exp;}
+    
+    std::string getCurRoomId(){return m_curRoomId;}
+    void setCurRoomId(std::string roomId){m_curRoomId = roomId;}
 };
 #endif /* defined(__ZJH__ZJHModel__) */

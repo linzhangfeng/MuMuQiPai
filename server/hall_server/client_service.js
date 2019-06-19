@@ -60,11 +60,11 @@ app.post('/login',function(req,res){
 					//检查房间是否存在于数据库中
 					db.is_room_exist(roomId,function (retval){
 						if(retval){
-							ret.roomid = roomId;
+							ret.roomId = roomId;
 						}
 						else{
 							//如果房间不在了，表示信息不同步，清除掉用户记录
-							db.set_room_id_of_user(data.userid,null);
+							db.set_room_id_of_user(data.userid,"");
 						}
 						http.send(res,200,"ok",ret);
 					});
