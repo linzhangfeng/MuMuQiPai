@@ -372,7 +372,7 @@ exports.exitRoom = function(userId){
 	}
 	
 	db.set_room_id_of_user(userId,null);
-
+	db.set_room_state_of_roomid(roomId,1);
 	if(numOfPlayers == 0){
 		exports.destroy(roomId);
 	}

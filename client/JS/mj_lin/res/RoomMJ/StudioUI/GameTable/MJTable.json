@@ -163,7 +163,7 @@
                   "Y": 0.1351
                 },
                 "PreSize": {
-                  "X": 0.1563,
+                  "X": 0.1562,
                   "Y": 0.0694
                 },
                 "LeftMargin": 216.6305,
@@ -238,7 +238,7 @@
                   "Y": 0.7399
                 },
                 "PreSize": {
-                  "X": 0.1563,
+                  "X": 0.1562,
                   "Y": 0.0694
                 },
                 "LeftMargin": 717.8248,
@@ -313,7 +313,7 @@
                   "Y": 0.2157
                 },
                 "PreSize": {
-                  "X": 0.1563,
+                  "X": 0.1562,
                   "Y": 0.0694
                 },
                 "LeftMargin": 857.2866,
@@ -388,7 +388,7 @@
                   "Y": 0.5694
                 },
                 "PreSize": {
-                  "X": 0.1563,
+                  "X": 0.1562,
                   "Y": 0.0694
                 },
                 "LeftMargin": 1004.3649,
@@ -402,6 +402,156 @@
                   "Y": 50.0
                 },
                 "Name": "btn_recv",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "FontSize": 30,
+                "ButtonText": "登出",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Disable.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Press.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Normal.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 16,
+                "Scale9Height": 14,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 1125.1188,
+                  "Y": 276.2812
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.879,
+                  "Y": 0.3837
+                },
+                "PreSize": {
+                  "X": 0.1562,
+                  "Y": 0.0694
+                },
+                "LeftMargin": 1025.1188,
+                "RightMargin": 54.8812,
+                "TopMargin": 418.7188,
+                "BottomMargin": 251.2812,
+                "Tag": 8,
+                "ActionTag": -68533118,
+                "Size": {
+                  "X": 200.0,
+                  "Y": 50.0
+                },
+                "Name": "btn_exitRoom",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "FontSize": 30,
+                "ButtonText": "解散",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Disable.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Press.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Normal.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 16,
+                "Scale9Height": 14,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 884.2078,
+                  "Y": 275.2423
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.6908,
+                  "Y": 0.3823
+                },
+                "PreSize": {
+                  "X": 0.1562,
+                  "Y": 0.0694
+                },
+                "LeftMargin": 784.2078,
+                "RightMargin": 295.7922,
+                "TopMargin": 419.7577,
+                "BottomMargin": 250.2423,
+                "Tag": 9,
+                "ActionTag": 1563180527,
+                "Size": {
+                  "X": 200.0,
+                  "Y": 50.0
+                },
+                "Name": "btn_disband",
                 "ctype": "ButtonObjectData"
               }
             ],

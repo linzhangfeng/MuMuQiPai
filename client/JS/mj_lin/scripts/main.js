@@ -14,6 +14,11 @@ var getResPath = function (v) {
 require(getSrcPath("MJScene.js"));
 require(getSrcPath("MJTable.js"));
 require(getSrcPath("Utils.js"));
+require(getSrcPath("MJLogic.js"));
+require(getSrcPath("proto.js"));
+require(getSrcPath("MJModel.js"));
+require(getSrcPath("MJConfig.js"));
+
 cc.game.onStart = function () {
     cc.log("lin=enter=MJJS");
     // Pass true to enable retina display, on Android disabled by default to improve performance
@@ -21,6 +26,11 @@ cc.game.onStart = function () {
 
     // Adjust viewport meta
     cc.view.adjustViewPort(true);
+
+    //获取配置信息
+    MJModel.curRoomID = UserModel.getInstance().getCurRoomId();
+
+    SocketClient.getInstance(MJModel.curRoomID).connect_req();
 
     //load resources
     cc.LoaderScene.preload({}, function () {

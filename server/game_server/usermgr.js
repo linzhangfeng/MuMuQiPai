@@ -1,5 +1,6 @@
 var roomMgr = require('./roommgr');
 var db = require('../utils/db');
+var CMD = require('./proto');
 var userList = {};
 var userOnline = 0;
 exports.bind = function(userId,socket){
@@ -65,8 +66,8 @@ exports.kickAllInRoom = function(roomId){
     }
 };
 
-exports.broacastInRoom = function(event,data,sender,includingSender){
-    var roomId = roomMgr.getUserRoom(sender);
+exports.broacastInRoom = function(event,data,userId,includingSender){
+    var roomId = roomMgr.getUserRoom(userId);
     if(roomId == null){
         return;
     }
@@ -79,7 +80,7 @@ exports.broacastInRoom = function(event,data,sender,includingSender){
         var rs = roomInfo.seats[i];
 
         //如果不需要发给发送方，则跳过
-        if(rs.userId == sender && includingSender != true){
+        if(rs.userId == userId && includingSender != true){
             continue;
         }
         var socket = userList[rs.userId];
@@ -97,4 +98,44 @@ exports.getUserDataByUserId = function(userId,callback){
             callback(0,jsonData);
         }
     });
+};
+exports.disconnect = function(userId){
+	if(!userId){
+		return;
+	}
+
+    var socket = userList[userId];
+
+	var data = {
+		userid:userId,
+        online:false,
+        id:CMD.CMD.SERVER_USER_OFFLINE_BC,
+	};
+
+	//通知房间内其它玩家
+	exports.broacastInRoom('data',data,userId);
+
+	//清除玩家的在线信息
+	exports.del(userId);
+	socket.userId = null;
+};
+
+exports.startHeartBeat = function(userId){
+	var socket = userList[userId];
+    //根据上一次件收到的时间检测是否连接超时，超时则断开连接
+    var heartBeatInterval = setInterval(function () {
+        if (socket) {
+            /**
+             * 如果10秒内没有收到回应，则表明socket.io长连接失败，关闭socket.io连接
+             * 因为socket.io会进行不断的断线重连，因此，强行关闭
+             */
+            console.log("lin=socket=时间间隔="+(Date.now() - socket.lastRecieveTime ));
+            if (Date.now() - socket.lastRecieveTime > 10000) {
+                console.log("lin=socket="+socket.userId +" 断开连接");
+                exports.del(socket.userId);
+                socket.disconnect();
+                clearInterval(heartBeatInterval);
+            }
+        }
+    }.bind(socket), 5000); //心跳为每间隔0.5s检测一次
 };

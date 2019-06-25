@@ -25,7 +25,7 @@ using namespace CocosDenshion;
 class CommonModel : public Ref
 {
 private:
-    Json::Value m_roomData;
+    std::string m_roomData;
 public:
     CommonModel();
     virtual ~CommonModel();
@@ -36,10 +36,10 @@ public:
     void hallToRoomV();
     void hallToRoomH();
     string getPackName();
-    Json::Value getRoomData(){
+    std::string getRoomData(){
         return m_roomData;
     }
-    void setRoomData(Json::Value roomData){
+    void setRoomData(std::string roomData){
         m_roomData = m_roomData;
     }
 };

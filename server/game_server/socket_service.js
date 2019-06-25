@@ -34,57 +34,84 @@ exports.start = function(conf,mgr){
 		console.log("client connect server");
 		var sendData = {};
 		sendData.data = { hello: 'world' };
-		sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+		sendData.id = CMD.CMD.SERVER_CONNECT_SUCC_BC;
 		socket.emit('data', sendData);
 		
+		var self = this;
 		socket.on('data',function(data){
-			data = JSON.parse(data);
-			if(data){
-				var cmd = data.cmd;
-				var data = data.data;
-				this.handlerCmd(cmd,data);
+			jsonData = JSON.parse(data);
+			console.log();
+			if(jsonData){
+				var cmd = jsonData.cmd;
+				var data = jsonData.data;
+				var id = jsonData.id;
+				handlerCmd(id,data);
 			}
 		});
 
 		function handlerCmd(cmd,data){
 			switch(cmd){
 				case CMD.CMD.CLIENT_LOGIN_REQ:
-					this.handler_client_login_req(data);
+					handler_client_login_req(data);
 				break;
 				case CMD.CMD.CLIENT_LOGOUT_REQ:
-					this.handler_client_logout_req(data);
+					handler_client_logout_req(data);
 				break;
 				case CMD.CMD.CLIENT_READY_REQ:
-					this.handler_client_ready_req(data);
+					handler_client_ready_req(data);
+				break;
+				case CMD.CMD.CLIENT_DISBAND_ROOM_REQ:
+					handler_client_disband_room_req(data);
+				break;
+				case CMD.CMD.CLINET_HEART_BEAT_REQ:
+					handler_client_heart_beat_req(data);
 				break;
 			}
 		};
 
-		function handler_client_login_req(data){
-			data = JSON.parse(data);
-			var roomid = data["roomid"];
-			var userid = data["userid"];
+		function handler_client_disband_room_req(data){
+			roomMgr.exitRoom(socket.userId);
 
-			userMgr.bind(userid,socket);
-			socket.userid = userid;
+			var sendData = {};
+			sendData.data = {"state":1};
+			sendData.id = CMD.CMD.SERVER_DISBAND_ROOM_SUCC_BC;
+			socket.emit('data', sendData);
+		};
+		function handler_client_login_req(data){
+			var jsonData = JSON.parse(data);
+			var roomId = jsonData["roomId"];
+			var userId = jsonData["userId"];
+
+			userMgr.bind(userId,socket);
+			socket.userId = userId;
 
 			var sendData = {};
 			sendData.data = {};
-			sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+			sendData.id = CMD.CMD.SERVER_LOGIN_SUCC_UC;
 			socket.emit('data', sendData);
+
+			//开启心跳
+			socket.lastRecieveTime = Date.now();
+			userMgr.startHeartBeat(userId);
 		};
 
 		function handler_client_logout_req(data){
 			var sendData = {};
 			sendData.data = { hello: 'world' };
-			sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+			sendData.cmd = CMD.CMD.SERVER_LOGOUT_SUCC_BC;
 			socket.emit('data', sendData);
 		};
+
 		function handler_client_ready_req(data){
 			var sendData = {};
 			sendData.data = { hello: 'world' };
-			sendData.cmd = CMD.CMD.SERVER_LOGIN_SUCC_UC;
+			sendData.cmd = CMD.CMD.SERVER_READY_SUCC_BC;
 			socket.emit('data', sendData);
+		};
+
+		function handler_client_heart_beat_req(data){
+			console.log("lin=startHeartBeat="+JSON.stringify(data));
+			socket.lastRecieveTime = Date.now();
 		};
 
 		socket.on('login',function(data){

@@ -146,6 +146,26 @@ bool js_lin_CommonModel_toHall(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_CommonModel_toHall : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
+bool js_lin_CommonModel_setRoomData(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    CommonModel* cobj = (CommonModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_CommonModel_setRoomData : Invalid Native Object");
+    if (argc == 1) {
+        std::string arg0;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_CommonModel_setRoomData : Error processing arguments");
+        cobj->setRoomData(arg0);
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_CommonModel_setRoomData : wrong number of arguments: %d, was expecting %d", argc, 1);
+    return false;
+}
 bool js_lin_CommonModel_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -160,6 +180,24 @@ bool js_lin_CommonModel_init(JSContext *cx, uint32_t argc, jsval *vp)
     }
 
     JS_ReportError(cx, "js_lin_CommonModel_init : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_CommonModel_getRoomData(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    CommonModel* cobj = (CommonModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_CommonModel_getRoomData : Invalid Native Object");
+    if (argc == 0) {
+        std::string ret = cobj->getRoomData();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_CommonModel_getRoomData : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
 bool js_lin_CommonModel_hallToRoomH(JSContext *cx, uint32_t argc, jsval *vp)
@@ -230,7 +268,9 @@ void js_register_lin_CommonModel(JSContext *cx, JS::HandleObject global) {
         JS_FN("hallToRoomV", js_lin_CommonModel_hallToRoomV, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getPackName", js_lin_CommonModel_getPackName, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("toHall", js_lin_CommonModel_toHall, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setRoomData", js_lin_CommonModel_setRoomData, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_lin_CommonModel_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getRoomData", js_lin_CommonModel_getRoomData, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("hallToRoomH", js_lin_CommonModel_hallToRoomH, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
@@ -262,174 +302,62 @@ void js_register_lin_CommonModel(JSContext *cx, JS::HandleObject global) {
 JSClass  *jsb_UserModel_class;
 JSObject *jsb_UserModel_prototype;
 
-bool js_lin_UserModel_setUid(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_UserModel_setUserName(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     bool ok = true;
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setUid : Invalid Native Object");
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setUserName : Invalid Native Object");
     if (argc == 1) {
-        int arg0 = 0;
-        ok &= jsval_to_int32(cx, args.get(0), (int32_t *)&arg0);
-        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setUid : Error processing arguments");
-        cobj->setUid(arg0);
+        std::string arg0;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setUserName : Error processing arguments");
+        cobj->setUserName(arg0);
         args.rval().setUndefined();
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_UserModel_setUid : wrong number of arguments: %d, was expecting %d", argc, 1);
+    JS_ReportError(cx, "js_lin_UserModel_setUserName : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
-bool js_lin_UserModel_getMoney(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_UserModel_getCurRoomId(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getMoney : Invalid Native Object");
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getCurRoomId : Invalid Native Object");
     if (argc == 0) {
-        int ret = cobj->getMoney();
-        jsval jsret = JSVAL_NULL;
-        jsret = int32_to_jsval(cx, ret);
-        args.rval().set(jsret);
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_getMoney : wrong number of arguments: %d, was expecting %d", argc, 0);
-    return false;
-}
-bool js_lin_UserModel_getAccount(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getAccount : Invalid Native Object");
-    if (argc == 0) {
-        std::string ret = cobj->getAccount();
+        std::string ret = cobj->getCurRoomId();
         jsval jsret = JSVAL_NULL;
         jsret = std_string_to_jsval(cx, ret);
         args.rval().set(jsret);
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_UserModel_getAccount : wrong number of arguments: %d, was expecting %d", argc, 0);
+    JS_ReportError(cx, "js_lin_UserModel_getCurRoomId : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
-bool js_lin_UserModel_getUid(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getUid : Invalid Native Object");
-    if (argc == 0) {
-        int ret = cobj->getUid();
-        jsval jsret = JSVAL_NULL;
-        jsret = int32_to_jsval(cx, ret);
-        args.rval().set(jsret);
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_getUid : wrong number of arguments: %d, was expecting %d", argc, 0);
-    return false;
-}
-bool js_lin_UserModel_setExp(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_UserModel_setCurRoomId(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     bool ok = true;
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setExp : Invalid Native Object");
-    if (argc == 1) {
-        int arg0 = 0;
-        ok &= jsval_to_int32(cx, args.get(0), (int32_t *)&arg0);
-        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setExp : Error processing arguments");
-        cobj->setExp(arg0);
-        args.rval().setUndefined();
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_setExp : wrong number of arguments: %d, was expecting %d", argc, 1);
-    return false;
-}
-bool js_lin_UserModel_setLevel(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    bool ok = true;
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setLevel : Invalid Native Object");
-    if (argc == 1) {
-        int arg0 = 0;
-        ok &= jsval_to_int32(cx, args.get(0), (int32_t *)&arg0);
-        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setLevel : Error processing arguments");
-        cobj->setLevel(arg0);
-        args.rval().setUndefined();
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_setLevel : wrong number of arguments: %d, was expecting %d", argc, 1);
-    return false;
-}
-bool js_lin_UserModel_getExp(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getExp : Invalid Native Object");
-    if (argc == 0) {
-        int ret = cobj->getExp();
-        jsval jsret = JSVAL_NULL;
-        jsret = int32_to_jsval(cx, ret);
-        args.rval().set(jsret);
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_getExp : wrong number of arguments: %d, was expecting %d", argc, 0);
-    return false;
-}
-bool js_lin_UserModel_getLevel(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getLevel : Invalid Native Object");
-    if (argc == 0) {
-        int ret = cobj->getLevel();
-        jsval jsret = JSVAL_NULL;
-        jsret = int32_to_jsval(cx, ret);
-        args.rval().set(jsret);
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_getLevel : wrong number of arguments: %d, was expecting %d", argc, 0);
-    return false;
-}
-bool js_lin_UserModel_setImsi(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    bool ok = true;
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setImsi : Invalid Native Object");
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setCurRoomId : Invalid Native Object");
     if (argc == 1) {
         std::string arg0;
         ok &= jsval_to_std_string(cx, args.get(0), &arg0);
-        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setImsi : Error processing arguments");
-        cobj->setImsi(arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setCurRoomId : Error processing arguments");
+        cobj->setCurRoomId(arg0);
         args.rval().setUndefined();
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_UserModel_setImsi : wrong number of arguments: %d, was expecting %d", argc, 1);
+    JS_ReportError(cx, "js_lin_UserModel_setCurRoomId : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
 bool js_lin_UserModel_getImsi(JSContext *cx, uint32_t argc, jsval *vp)
@@ -470,6 +398,172 @@ bool js_lin_UserModel_setChannel(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_UserModel_setChannel : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
+bool js_lin_UserModel_getSex(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getSex : Invalid Native Object");
+    if (argc == 0) {
+        int ret = cobj->getSex();
+        jsval jsret = JSVAL_NULL;
+        jsret = int32_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getSex : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_setImsi(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setImsi : Invalid Native Object");
+    if (argc == 1) {
+        std::string arg0;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setImsi : Error processing arguments");
+        cobj->setImsi(arg0);
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_setImsi : wrong number of arguments: %d, was expecting %d", argc, 1);
+    return false;
+}
+bool js_lin_UserModel_getMoney(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getMoney : Invalid Native Object");
+    if (argc == 0) {
+        int ret = cobj->getMoney();
+        jsval jsret = JSVAL_NULL;
+        jsret = int32_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getMoney : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_getLevel(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getLevel : Invalid Native Object");
+    if (argc == 0) {
+        int ret = cobj->getLevel();
+        jsval jsret = JSVAL_NULL;
+        jsret = int32_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getLevel : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_getIp(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getIp : Invalid Native Object");
+    if (argc == 0) {
+        std::string ret = cobj->getIp();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getIp : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_getAccount(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getAccount : Invalid Native Object");
+    if (argc == 0) {
+        std::string ret = cobj->getAccount();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getAccount : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_getUid(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getUid : Invalid Native Object");
+    if (argc == 0) {
+        int ret = cobj->getUid();
+        jsval jsret = JSVAL_NULL;
+        jsret = int32_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getUid : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_getUserName(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getUserName : Invalid Native Object");
+    if (argc == 0) {
+        std::string ret = cobj->getUserName();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getUserName : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_setLevel(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setLevel : Invalid Native Object");
+    if (argc == 1) {
+        int arg0 = 0;
+        ok &= jsval_to_int32(cx, args.get(0), (int32_t *)&arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setLevel : Error processing arguments");
+        cobj->setLevel(arg0);
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_setLevel : wrong number of arguments: %d, was expecting %d", argc, 1);
+    return false;
+}
 bool js_lin_UserModel_setAccount(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -490,62 +584,80 @@ bool js_lin_UserModel_setAccount(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_UserModel_setAccount : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
-bool js_lin_UserModel_setIp(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_UserModel_setExp(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     bool ok = true;
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setIp : Invalid Native Object");
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setExp : Invalid Native Object");
     if (argc == 1) {
-        std::string arg0;
-        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
-        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setIp : Error processing arguments");
-        cobj->setIp(arg0);
+        int arg0 = 0;
+        ok &= jsval_to_int32(cx, args.get(0), (int32_t *)&arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setExp : Error processing arguments");
+        cobj->setExp(arg0);
         args.rval().setUndefined();
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_UserModel_setIp : wrong number of arguments: %d, was expecting %d", argc, 1);
+    JS_ReportError(cx, "js_lin_UserModel_setExp : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
-bool js_lin_UserModel_getSex(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_UserModel_getChannel(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getSex : Invalid Native Object");
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getChannel : Invalid Native Object");
     if (argc == 0) {
-        int ret = cobj->getSex();
+        std::string ret = cobj->getChannel();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_UserModel_getChannel : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_UserModel_getExp(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getExp : Invalid Native Object");
+    if (argc == 0) {
+        int ret = cobj->getExp();
         jsval jsret = JSVAL_NULL;
         jsret = int32_to_jsval(cx, ret);
         args.rval().set(jsret);
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_UserModel_getSex : wrong number of arguments: %d, was expecting %d", argc, 0);
+    JS_ReportError(cx, "js_lin_UserModel_getExp : wrong number of arguments: %d, was expecting %d", argc, 0);
     return false;
 }
-bool js_lin_UserModel_setUserName(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_UserModel_setUid(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     bool ok = true;
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setUserName : Invalid Native Object");
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setUid : Invalid Native Object");
     if (argc == 1) {
-        std::string arg0;
-        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
-        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setUserName : Error processing arguments");
-        cobj->setUserName(arg0);
+        int arg0 = 0;
+        ok &= jsval_to_int32(cx, args.get(0), (int32_t *)&arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setUid : Error processing arguments");
+        cobj->setUid(arg0);
         args.rval().setUndefined();
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_UserModel_setUserName : wrong number of arguments: %d, was expecting %d", argc, 1);
+    JS_ReportError(cx, "js_lin_UserModel_setUid : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
 bool js_lin_UserModel_setMoney(JSContext *cx, uint32_t argc, jsval *vp)
@@ -568,42 +680,6 @@ bool js_lin_UserModel_setMoney(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_UserModel_setMoney : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
-bool js_lin_UserModel_getIp(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getIp : Invalid Native Object");
-    if (argc == 0) {
-        std::string ret = cobj->getIp();
-        jsval jsret = JSVAL_NULL;
-        jsret = std_string_to_jsval(cx, ret);
-        args.rval().set(jsret);
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_getIp : wrong number of arguments: %d, was expecting %d", argc, 0);
-    return false;
-}
-bool js_lin_UserModel_getChannel(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    js_proxy_t *proxy = jsb_get_js_proxy(obj);
-    UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getChannel : Invalid Native Object");
-    if (argc == 0) {
-        std::string ret = cobj->getChannel();
-        jsval jsret = JSVAL_NULL;
-        jsret = std_string_to_jsval(cx, ret);
-        args.rval().set(jsret);
-        return true;
-    }
-
-    JS_ReportError(cx, "js_lin_UserModel_getChannel : wrong number of arguments: %d, was expecting %d", argc, 0);
-    return false;
-}
 bool js_lin_UserModel_setSex(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -624,22 +700,24 @@ bool js_lin_UserModel_setSex(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_UserModel_setSex : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
-bool js_lin_UserModel_getUserName(JSContext *cx, uint32_t argc, jsval *vp)
+bool js_lin_UserModel_setIp(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
     js_proxy_t *proxy = jsb_get_js_proxy(obj);
     UserModel* cobj = (UserModel *)(proxy ? proxy->ptr : NULL);
-    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_getUserName : Invalid Native Object");
-    if (argc == 0) {
-        std::string ret = cobj->getUserName();
-        jsval jsret = JSVAL_NULL;
-        jsret = std_string_to_jsval(cx, ret);
-        args.rval().set(jsret);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_UserModel_setIp : Invalid Native Object");
+    if (argc == 1) {
+        std::string arg0;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_UserModel_setIp : Error processing arguments");
+        cobj->setIp(arg0);
+        args.rval().setUndefined();
         return true;
     }
 
-    JS_ReportError(cx, "js_lin_UserModel_getUserName : wrong number of arguments: %d, was expecting %d", argc, 0);
+    JS_ReportError(cx, "js_lin_UserModel_setIp : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
 bool js_lin_UserModel_getInstance(JSContext *cx, uint32_t argc, jsval *vp)
@@ -691,26 +769,28 @@ void js_register_lin_UserModel(JSContext *cx, JS::HandleObject global) {
     };
 
     static JSFunctionSpec funcs[] = {
-        JS_FN("setUid", js_lin_UserModel_setUid, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getMoney", js_lin_UserModel_getMoney, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getAccount", js_lin_UserModel_getAccount, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getUid", js_lin_UserModel_getUid, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setExp", js_lin_UserModel_setExp, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setLevel", js_lin_UserModel_setLevel, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getExp", js_lin_UserModel_getExp, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getLevel", js_lin_UserModel_getLevel, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setImsi", js_lin_UserModel_setImsi, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setUserName", js_lin_UserModel_setUserName, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getCurRoomId", js_lin_UserModel_getCurRoomId, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setCurRoomId", js_lin_UserModel_setCurRoomId, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getImsi", js_lin_UserModel_getImsi, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setChannel", js_lin_UserModel_setChannel, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setAccount", js_lin_UserModel_setAccount, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setIp", js_lin_UserModel_setIp, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getSex", js_lin_UserModel_getSex, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setUserName", js_lin_UserModel_setUserName, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setMoney", js_lin_UserModel_setMoney, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setImsi", js_lin_UserModel_setImsi, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getMoney", js_lin_UserModel_getMoney, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getLevel", js_lin_UserModel_getLevel, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getIp", js_lin_UserModel_getIp, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("getChannel", js_lin_UserModel_getChannel, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("setSex", js_lin_UserModel_setSex, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getAccount", js_lin_UserModel_getAccount, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getUid", js_lin_UserModel_getUid, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getUserName", js_lin_UserModel_getUserName, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setLevel", js_lin_UserModel_setLevel, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setAccount", js_lin_UserModel_setAccount, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setExp", js_lin_UserModel_setExp, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getChannel", js_lin_UserModel_getChannel, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getExp", js_lin_UserModel_getExp, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setUid", js_lin_UserModel_setUid, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setMoney", js_lin_UserModel_setMoney, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setSex", js_lin_UserModel_setSex, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setIp", js_lin_UserModel_setIp, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -1081,6 +1161,46 @@ bool js_lin_SocketClient_getJsonStr(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_SocketClient_getJsonStr : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
+bool js_lin_SocketClient_seCurRoomId(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    SocketClient* cobj = (SocketClient *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_SocketClient_seCurRoomId : Invalid Native Object");
+    if (argc == 1) {
+        std::string arg0;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_SocketClient_seCurRoomId : Error processing arguments");
+        cobj->seCurRoomId(arg0);
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_SocketClient_seCurRoomId : wrong number of arguments: %d, was expecting %d", argc, 1);
+    return false;
+}
+bool js_lin_SocketClient_setConnectState(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    SocketClient* cobj = (SocketClient *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_SocketClient_setConnectState : Invalid Native Object");
+    if (argc == 1) {
+        bool arg0;
+        arg0 = JS::ToBoolean(args.get(0));
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_SocketClient_setConnectState : Error processing arguments");
+        cobj->setConnectState(arg0);
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_SocketClient_setConnectState : wrong number of arguments: %d, was expecting %d", argc, 1);
+    return false;
+}
 bool js_lin_SocketClient_get(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -1161,6 +1281,24 @@ bool js_lin_SocketClient_onClose(JSContext *cx, uint32_t argc, jsval *vp)
     JS_ReportError(cx, "js_lin_SocketClient_onClose : wrong number of arguments: %d, was expecting %d", argc, 1);
     return false;
 }
+bool js_lin_SocketClient_getCurRoomId(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    SocketClient* cobj = (SocketClient *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_SocketClient_getCurRoomId : Invalid Native Object");
+    if (argc == 0) {
+        std::string ret = cobj->getCurRoomId();
+        jsval jsret = JSVAL_NULL;
+        jsret = std_string_to_jsval(cx, ret);
+        args.rval().set(jsret);
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_SocketClient_getCurRoomId : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
 bool js_lin_SocketClient_create_response(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -1225,6 +1363,22 @@ bool js_lin_SocketClient_create_response(JSContext *cx, uint32_t argc, jsval *vp
     JS_ReportError(cx, "js_lin_SocketClient_create_response : wrong number of arguments: %d, was expecting %d", argc, 2);
     return false;
 }
+bool js_lin_SocketClient_reset_response_queue(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    SocketClient* cobj = (SocketClient *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_SocketClient_reset_response_queue : Invalid Native Object");
+    if (argc == 0) {
+        cobj->reset_response_queue();
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_SocketClient_reset_response_queue : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
 bool js_lin_SocketClient_init(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -1257,6 +1411,28 @@ bool js_lin_SocketClient_isConnect(JSContext *cx, uint32_t argc, jsval *vp)
     }
 
     JS_ReportError(cx, "js_lin_SocketClient_isConnect : wrong number of arguments: %d, was expecting %d", argc, 0);
+    return false;
+}
+bool js_lin_SocketClient_send_Data(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    SocketClient* cobj = (SocketClient *)(proxy ? proxy->ptr : NULL);
+    JSB_PRECONDITION2( cobj, cx, false, "js_lin_SocketClient_send_Data : Invalid Native Object");
+    if (argc == 2) {
+        std::string arg0;
+        int arg1 = 0;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
+        ok &= jsval_to_int32(cx, args.get(1), (int32_t *)&arg1);
+        JSB_PRECONDITION2(ok, cx, false, "js_lin_SocketClient_send_Data : Error processing arguments");
+        cobj->send_Data(arg0, arg1);
+        args.rval().setUndefined();
+        return true;
+    }
+
+    JS_ReportError(cx, "js_lin_SocketClient_send_Data : wrong number of arguments: %d, was expecting %d", argc, 2);
     return false;
 }
 bool js_lin_SocketClient_put(JSContext *cx, uint32_t argc, jsval *vp)
@@ -1356,8 +1532,8 @@ bool js_lin_SocketClient_getInstance(JSContext *cx, uint32_t argc, jsval *vp)
         return true;
     }
     if (argc == 1) {
-        int arg0 = 0;
-        ok &= jsval_to_int32(cx, args.get(0), (int32_t *)&arg0);
+        std::string arg0;
+        ok &= jsval_to_std_string(cx, args.get(0), &arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_lin_SocketClient_getInstance : Error processing arguments");
 
         auto ret = SocketClient::getInstance(arg0);
@@ -1406,12 +1582,17 @@ void js_register_lin_SocketClient(JSContext *cx, JS::HandleObject global) {
     static JSFunctionSpec funcs[] = {
         JS_FN("connect_req", js_lin_SocketClient_connect_req, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getJsonStr", js_lin_SocketClient_getJsonStr, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("seCurRoomId", js_lin_SocketClient_seCurRoomId, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("setConnectState", js_lin_SocketClient_setConnectState, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("get", js_lin_SocketClient_get, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("onError", js_lin_SocketClient_onError, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("onClose", js_lin_SocketClient_onClose, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("getCurRoomId", js_lin_SocketClient_getCurRoomId, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("create_response", js_lin_SocketClient_create_response, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("reset_response_queue", js_lin_SocketClient_reset_response_queue, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_lin_SocketClient_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("isConnect", js_lin_SocketClient_isConnect, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("send_Data", js_lin_SocketClient_send_Data, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("put", js_lin_SocketClient_put, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("data_req", js_lin_SocketClient_data_req, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("disconnect_req", js_lin_SocketClient_disconnect_req, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),

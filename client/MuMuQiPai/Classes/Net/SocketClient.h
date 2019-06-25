@@ -56,7 +56,7 @@ public:
     
 public:
     /** Return the shared instance **/
-    static SocketClient *getInstance(int vid = -1);
+    static SocketClient *getInstance(std::string vid = "");
     /** Relase the shared instance **/
 //    static void destroyInstance();
     SocketClient();
@@ -69,8 +69,19 @@ public:
     void data_req(SocketRequest *request);
     void disconnect_req(SocketRequest *request);
 //    void read_res_pd();
+    void reset_response_queue();
     void create_response(int cmd, std::string data, int id = -1,int seqNo = 0, int svrid = 0);
     std::string getJsonStr(SocketRequest *request);
+    void send_Data(std::string sendData,int cmd);
+    void setConnectState(bool isConnet){
+        m_bConnect = isConnet;
+    }
+    void seCurRoomId(std::string curRoomId){
+        m_curRoomId = curRoomId;
+    }
+    std::string getCurRoomId(){
+        return m_curRoomId;
+    }
 private:
     Queue<SocketRequest*> *m_pRequestQueue;
     Queue<SocketResponse*> *m_pResponseQueue;
@@ -78,6 +89,8 @@ private:
     pthread_t       m_requestThread;
     pthread_t       m_responseThread;
     SIOClient       *m_pSocklient;
+    std::string     m_curRoomId;
+
 public:
     Queue<SocketRequest*> *getRequestQueue(){
         return m_pRequestQueue;

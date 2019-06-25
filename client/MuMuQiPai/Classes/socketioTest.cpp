@@ -29,11 +29,9 @@ void SocketTest::connect()
         _socklient->setTag("init socket");
         _socklient->on("news", [=](SIOClient* c, const std::string& data)
                        {
-                           log("textSocked::textevent called with data %s",data.c_str());
                        });
         _socklient->on("event", [=](SIOClient* c, const std::string& data)
                        {
-                           log("textSocked::event called with data %s",data.c_str());
                        });
     }
     

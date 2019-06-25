@@ -20,6 +20,7 @@ public:
     //common end
     void createRoom();
     void getRoomInfo();
+    void getUserInfo();
     void toRoom();
 };
 

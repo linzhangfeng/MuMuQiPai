@@ -583,6 +583,25 @@ exports.update_next_button = function(roomId,nextButton,callback){
     });
 };
 
+exports.set_room_state_of_roomid = function(roomId,state,callback){
+    callback = callback == null? nop:callback;
+    if(roomId != null){
+        roomId = '"' + roomId + '"';
+    }
+    var sql = 'UPDATE t_rooms SET room_state = '+ state + ' WHERE userid = "' + userId + '"';
+    console.log(sql);
+    query(sql, function(err, rows, fields) {
+        if(err){
+            console.log(err);
+            callback(false);
+            throw err;
+        }
+        else{
+            callback(rows.length > 0);
+        }
+    });
+};
+
 exports.get_room_addr = function(roomId,callback){
     callback = callback == null? nop:callback;
     if(roomId == null){
