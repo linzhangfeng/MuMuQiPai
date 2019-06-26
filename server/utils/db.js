@@ -475,7 +475,8 @@ exports.set_room_id_of_user = function(userId,roomId,callback){
             throw err;
         }
         else{
-            callback(rows.length > 0);
+            console.log("lin=rows.length="+rows.length);
+            callback(true);
         }
     });
 };

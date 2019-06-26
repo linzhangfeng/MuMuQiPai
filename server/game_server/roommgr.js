@@ -1,4 +1,6 @@
 ﻿var db = require('../utils/db');
+var CMD = require('./proto');
+var userMgr = require('./usermgr');
 
 var rooms = {};
 var creatingRooms = {};
@@ -349,8 +351,18 @@ exports.getUserLocations = function(){
 
 exports.exitRoom = function(userId){
 	var location = userLocation[userId];
-	if(location == null)
+	if(location == null){
+		db.set_room_id_of_user(userId,null,function(isOk){
+			console.log("isOk="+isOk);
+			if(isOk){
+				var sendData = {};
+				sendData.data = {"state":1};
+				sendData.id = CMD.CMD.SERVER_DISBAND_ROOM_SUCC_BC;
+				userMgr.sendMsg(userId,'data',sendData);
+			}
+		});
 		return;
+	}
 
 	var roomId = location.roomId;
 	var seatIndex = location.seatIndex;

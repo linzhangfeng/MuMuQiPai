@@ -70,14 +70,11 @@ exports.start = function(conf,mgr){
 		};
 
 		function handler_client_disband_room_req(data){
+			console.log("handler_client_disband_room_req");
 			roomMgr.exitRoom(socket.userId);
-
-			var sendData = {};
-			sendData.data = {"state":1};
-			sendData.id = CMD.CMD.SERVER_DISBAND_ROOM_SUCC_BC;
-			socket.emit('data', sendData);
 		};
 		function handler_client_login_req(data){
+			console.log("handler_client_login_req");
 			var jsonData = JSON.parse(data);
 			var roomId = jsonData["roomId"];
 			var userId = jsonData["userId"];
@@ -96,21 +93,25 @@ exports.start = function(conf,mgr){
 		};
 
 		function handler_client_logout_req(data){
+			console.log("handler_client_logout_req");
 			var sendData = {};
 			sendData.data = { hello: 'world' };
 			sendData.cmd = CMD.CMD.SERVER_LOGOUT_SUCC_BC;
-			socket.emit('data', sendData);
+			userMgr.sendMsg(socket.userId,'data',sendData);
+			
+			userMgr.logout(socket.userId);
 		};
 
 		function handler_client_ready_req(data){
+			console.log("handler_client_ready_req");
 			var sendData = {};
 			sendData.data = { hello: 'world' };
 			sendData.cmd = CMD.CMD.SERVER_READY_SUCC_BC;
-			socket.emit('data', sendData);
+
+			userMgr.sendMsg(socket.userId,'data',sendData);
 		};
 
 		function handler_client_heart_beat_req(data){
-			console.log("lin=startHeartBeat="+JSON.stringify(data));
 			socket.lastRecieveTime = Date.now();
 		};
 

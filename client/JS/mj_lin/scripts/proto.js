@@ -14,4 +14,5 @@ var CMD =
         CLIENT_READY_REQ:           1003, //准备请求
         CLIENT_DISBAND_ROOM_REQ:    1004, //解散请求
         CLINET_HEART_BEAT_REQ:      1005, //心跳请求
+        CLIENT_DISBAND_RESULT_REQ:  1004, //解散请求
     };

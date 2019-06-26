@@ -36,8 +36,9 @@ var sendLogin = function () {
 }
 
 var sendLogout = function () {
-    var packet = createPacket("proto.login.ReqLogout");
-    packet.uid = ZJHModel.getInstance().uid;
+    //var packet = createPacket("proto.login.ReqLogout");
+    var packet = {};
+    packet.uid = UserModel.getInstance().getUid();
     sendPacket(packet, CMD.CLIENT_LOGOUT_REQ);
 }
 
@@ -86,15 +87,18 @@ var sendHeartbeat = function () {
 }
 
 var sendEndRoomREQ = function (v) {
-    var packet = createPacket("proto.game.ReqChooseDisband");
+    //var packet = createPacket("proto.game.ReqChooseDisband");
+    var packet = {};
     packet.Choosestate = v;
-    sendPacket(packet, CMD.CLIENT_DISSOLVE_ROOM_REQ);
+    sendPacket(packet, CMD.CLIENT_DISBAND_ROOM_REQ);
 }
 
 var sendEndRoomResult = function (v) {
-    var packet = createPacket("proto.game.ReqChooseDisband");
+    //var packet = createPacket("proto.game.ReqChooseDisband");
+    var packet = {};
     packet.Choosestate = v;
-    sendPacket(packet, CMD.CLIENT_DISSOLVE_ACTION_REQ);
+    sendPacket(packet, CMD.CLIENT_DISBAND_RESULT_REQ
+    );
 }
 
 var sendOperateCard = function (type, card) {

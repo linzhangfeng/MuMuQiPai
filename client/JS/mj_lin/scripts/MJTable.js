@@ -48,6 +48,16 @@ var MJTable = cc.Layer.extend({
             self.btnCallback(sender);
         });
 
+        var btn_test_back = Utils.findNode(this.rootNode, "btn_disband");
+        btn_test_back.addClickEventListener(function (sender, evt) {
+            self.btnCallback(sender);
+        });
+
+        var btn_test_back = Utils.findNode(this.rootNode, "btn_exitRoom");
+        btn_test_back.addClickEventListener(function (sender, evt) {
+            self.btnCallback(sender);
+        });
+
         //版本号
         var banbenhao = new cc.LabelTTF("版本号：1", "Arial", 20);
         banbenhao.setPosition(cc.p(size.width * 0.5, size.height * 0.5));
@@ -106,6 +116,9 @@ var MJTable = cc.Layer.extend({
     handler_server_disband_succ_bc: function (data, canDelay) {
         cc.log("handler_server_disband_succ_bc");
         var data = parsePacket(data);
+        if(data.state == 1){
+            this.exitRoom(true);
+        }
     },
     handler_server_connect_succ_bc: function (data, canDelay) {
         cc.log("handler_server_connect_succ_bc");
@@ -119,10 +132,21 @@ var MJTable = cc.Layer.extend({
     handler_server_logout_succ_bc: function (data, canDelay) {
         cc.log("handler_server_logout_succ_bc");
         var data = parsePacket(data);
+        if(data.seatId == 1){
+            this.release();
+            CommonModel.getInstance().toHall();
+        }
     },
     handler_server_ready_succ_bc: function (data, canDelay) {
         cc.log("handler_server_ready_succ_bc");
         var data = parsePacket(data);
+    },
+    exitRoom: function (isCloseHall) {
+        this.release();
+        sendLogout();
+        if (isCloseHall) {
+            CommonModel.getInstance().toHall();
+        }
     },
     startSocket: function () {
 
@@ -145,17 +169,9 @@ var MJTable = cc.Layer.extend({
                 cc.log("recv=data=" + data.data)
             }
         } else if (name == "btn_exitRoom") {
-            var data = SocketClient.getInstance().get();
-            if (data) {
-                cc.log("recv=data=" + data.cmd)
-                cc.log("recv=data=" + data.data)
-            }
+            sendEndRoomREQ(1)
         } else if (name == "btn_disband") {
-            var data = SocketClient.getInstance().get();
-            if (data) {
-                cc.log("recv=data=" + data.cmd)
-                cc.log("recv=data=" + data.data)
-            }
+            sendEndRoomREQ(2)
         }
     },
     updateBg: function (isInit) {

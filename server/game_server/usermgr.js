@@ -43,6 +43,10 @@ exports.sendMsg = function(userId,event,msgdata){
     socket.emit(event,msgdata);
 };
 
+exports.logout = function(userId,socket){
+   exports.disconnect(userId);
+};
+
 exports.kickAllInRoom = function(roomId){
     if(roomId == null){
         return;
