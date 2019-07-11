@@ -1,0 +1,75 @@
+<Solution>
+  <PropertyGroup Name="configMj" Version="3.10.0.0" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="cards_2d">
+          <Folder Name="hand_0">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="hand_1">
+            <Image Name="00.png" />
+          </Folder>
+          <Folder Name="hand_2">
+            <Image Name="00.png" />
+          </Folder>
+          <Folder Name="hand_3">
+            <Image Name="00.png" />
+          </Folder>
+          <Folder Name="out_0">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="out_1">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="out_2">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="out_3">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="peng_end_0">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="peng_end_1">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="peng_end_2">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+          <Folder Name="peng_end_3">
+            <Image Name="00.png" />
+            <Image Name="01.png" />
+          </Folder>
+        </Folder>
+        <Project Name="card_config2d.csd" Type="Layer" />
+        <Project Name="card_config2d_2ren.csd" Type="Layer" />
+        <Project Name="end0_2d.csd" Type="Node" />
+        <Project Name="end1_2d.csd" Type="Node" />
+        <Project Name="end2_2d.csd" Type="Node" />
+        <Project Name="end3_2d.csd" Type="Node" />
+        <Project Name="hand0_2d.csd" Type="Node" />
+        <Project Name="hand1_2d.csd" Type="Node" />
+        <Project Name="hand2_2d.csd" Type="Node" />
+        <Project Name="hand3_2d.csd" Type="Node" />
+        <Project Name="out0_2d.csd" Type="Node" />
+        <Project Name="out1_2d.csd" Type="Node" />
+        <Project Name="out2_2d.csd" Type="Node" />
+        <Project Name="out3_2d.csd" Type="Node" />
+        <Project Name="peng0_2d.csd" Type="Node" />
+        <Project Name="peng1_2d.csd" Type="Node" />
+        <Project Name="peng2_2d.csd" Type="Node" />
+        <Project Name="peng3_2d.csd" Type="Node" />
+        <Image Name="table_bg_0_0.png" />
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>

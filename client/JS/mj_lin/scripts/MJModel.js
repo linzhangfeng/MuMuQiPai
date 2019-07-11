@@ -6,8 +6,6 @@ var PlayerModel = cc.Class.extend({
     avatar: "",
     money: 0,
     ready: 0,
-    start_money: 0,
-    zhuan_surplustime: 0,
 
     reset: function () {
         this.uid = -1;
@@ -17,7 +15,6 @@ var PlayerModel = cc.Class.extend({
         this.sex = 0;
         this.avatar = "";
         this.money = 0;
-        this.zhuan_surplustime = 0;
     },
 });
 
@@ -25,6 +22,27 @@ var MJModel =
 {
     //***************通用数据*****************//
     curRoomID: 0,
+    roomType: 0,
+    table: null,
+    roomState: 0,
+    sceneState: 0,
+    playNum: 4,
+    players: {},
+    configNode: null,
+    seatId: -1,
+    //测试
+    testCount: 0,
+
+    //setting
+    font: "xieshi", //jianjie,xieshi,gexing
+    fontSize: "dahao",
+    light: "baitian",
+    paiban: "horizontal",
+    tableView: "25d",
+    bgUse: 1,//桌面 1:2d 0:25d
+    style: "shishang", //jingdian,shishang,huaijiu
+    fangyan: "putonghua",
+    yinyue: "jingdian", //jingdian,jingkuai,suhuan
 
     changeTcpIp: function () {
         this.cur_ip_index++;
@@ -80,12 +98,11 @@ var MJModel =
             CCTcpClient.getInstance(MJModel.curRoomID).set_host_port(host, this.port);
         }
     },
-    init: function () {
-        for (var i = 0; i < this.Play_num; i++) {
+    initData: function () {
+        for (var i = 0; i < this.playNum; i++) {
             var player = new PlayerModel();
             player.seatid = i;
             this.players[i] = player;
-            this.mj_mo_cards.push(-1);
         }
         this.initParam();
     },
@@ -231,52 +248,17 @@ var MJModel =
     getPosBySeatid: function (seatid) {
         if (seatid == 255 || seatid == -1) return -1;//服务器默认值有些是255 坑爹的服务器
         var rePos = 0;
-
-        if (this.seatid == -1) {
-            if (this.tempSeatid != -1) {
-                var index = seatid - this.tempSeatid;
-                if (index >= 0) {
-                    rePos = index;
-                } else {
-                    rePos = index + this.Play_num;
-                }
-
-            } else {
-                rePos = seatid;
-            }
+        var index = seatid - this.seatId;
+        if (index >= 0) {
+            rePos = index;
         } else {
-            var index = seatid - this.seatid;
-            if (index >= 0) {
-                rePos = index;
-            } else {
-                rePos = index + this.Play_num;
-            }
+            rePos = index + this.playNum;
         }
-
-        if (this.mj_roomType == 1) {
-            if (rePos == 2) {
-                if (this.seatid == -1) {
-                    rePos = 3;
-                } else {
-                    if (this.seatid == 0) {
-                        rePos = 3;
-                    } else if (this.seatid == 2) {
-                        rePos = 1;
-                    }
-                }
-            }
-        } else if (this.mj_roomType == 2) {
-            if (rePos == 1 || rePos == 3) {
-                rePos = 2;
-            }
-        }
-
         //防错措施 避免闪退
         if (rePos < 0 || rePos > 3) {
             rePos = 0;
         }
         return rePos;
-
     },
     getIndexFromBanker: function (seatid) {
         var dseatid = seatid - MJModel.banker_seatid;

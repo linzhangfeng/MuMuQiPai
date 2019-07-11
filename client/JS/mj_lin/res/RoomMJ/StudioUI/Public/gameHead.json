@@ -1,0 +1,939 @@
+{
+  "ID": "4f0be7c0-16fd-4b47-b218-d46d619b804b",
+  "Version": "2.3.4",
+  "Name": "gameHead",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 2484,
+        "Children": [
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/head/bg.png",
+              "Plist": ""
+            },
+            "Scale9Width": 1280,
+            "Scale9Height": 27,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 1.0
+            },
+            "Position": {
+              "X": 1.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -639.0,
+            "RightMargin": -641.0,
+            "BottomMargin": -56.0,
+            "Tag": 177,
+            "ActionTag": -2061507474,
+            "Size": {
+              "X": 1280.0,
+              "Y": 56.0
+            },
+            "VisibleForFrame": false,
+            "Name": "bg_down",
+            "ctype": "ImageViewObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/head/bg.png",
+              "Plist": ""
+            },
+            "Scale9OriginX": 422,
+            "Scale9OriginY": 8,
+            "Scale9Width": 436,
+            "Scale9Height": 11,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 1.0
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -640.0,
+            "RightMargin": -640.0,
+            "BottomMargin": -28.0,
+            "Tag": 178,
+            "ActionTag": -1146248354,
+            "Size": {
+              "X": 1280.0,
+              "Y": 28.0
+            },
+            "Name": "bg_up",
+            "ctype": "ImageViewObjectData"
+          },
+          {
+            "FontSize": 22,
+            "LabelText": "房号:054282",
+            "HorizontalAlignmentType": "HT_Center",
+            "VerticalAlignmentType": "VT_Center",
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": -447.498,
+              "Y": -14.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -509.498,
+            "RightMargin": 385.498,
+            "TopMargin": 1.0,
+            "BottomMargin": -27.0,
+            "Tag": 2487,
+            "ActionTag": 220294121,
+            "Size": {
+              "X": 124.0,
+              "Y": 26.0
+            },
+            "Name": "code",
+            "ctype": "TextObjectData"
+          },
+          {
+            "FontSize": 22,
+            "LabelText": "牌局:1/8",
+            "HorizontalAlignmentType": "HT_Center",
+            "VerticalAlignmentType": "VT_Center",
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "AnchorPoint": {
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": -625.0,
+              "Y": -14.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -625.0,
+            "RightMargin": 544.0,
+            "TopMargin": 1.0,
+            "BottomMargin": -27.0,
+            "Tag": 2488,
+            "ActionTag": -347042564,
+            "Size": {
+              "X": 81.0,
+              "Y": 26.0
+            },
+            "Name": "jushu",
+            "ctype": "TextObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/head/net4.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 405.0,
+              "Y": -18.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": 395.0,
+            "RightMargin": -415.0,
+            "TopMargin": 7.0,
+            "BottomMargin": -29.0,
+            "Tag": 199,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "100ms",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 20.0,
+                  "Y": 13.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 1.0,
+                  "Y": 0.5909
+                },
+                "PreSize": {
+                  "X": 3.05,
+                  "Y": 1.0455
+                },
+                "LeftMargin": 20.0,
+                "RightMargin": -61.0,
+                "TopMargin": -2.5,
+                "BottomMargin": 1.5,
+                "Tag": 200,
+                "ActionTag": 1957491775,
+                "Size": {
+                  "X": 61.0,
+                  "Y": 23.0
+                },
+                "Name": "netDelay",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": -726443143,
+            "Size": {
+              "X": 20.0,
+              "Y": 22.0
+            },
+            "Name": "netTip",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FontSize": 22,
+            "LabelText": "16:11",
+            "HorizontalAlignmentType": "HT_Center",
+            "VerticalAlignmentType": "VT_Center",
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "AnchorPoint": {
+              "ScaleX": 1.0,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 625.0,
+              "Y": -14.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": 571.0,
+            "RightMargin": -625.0,
+            "TopMargin": 1.0,
+            "BottomMargin": -27.0,
+            "Tag": 2489,
+            "ActionTag": 1524963875,
+            "Size": {
+              "X": 54.0,
+              "Y": 26.0
+            },
+            "Name": "time",
+            "ctype": "TextObjectData"
+          },
+          {
+            "AnchorPoint": {},
+            "Position": {
+              "X": 525.0,
+              "Y": -14.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": true,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": 525.0,
+            "RightMargin": -525.0,
+            "TopMargin": 14.0,
+            "BottomMargin": -14.0,
+            "Tag": 2491,
+            "Children": [
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/head/power/power_icon1.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 200,
+                  "G": 200,
+                  "B": 200
+                },
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -20.5,
+                "RightMargin": -20.5,
+                "TopMargin": -12.5,
+                "BottomMargin": -12.5,
+                "Tag": 2492,
+                "ActionTag": -308592469,
+                "Size": {
+                  "X": 41.0,
+                  "Y": 25.0
+                },
+                "Name": "power1",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/head/power/power_icon2.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 200,
+                  "G": 200,
+                  "B": 200
+                },
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -20.5,
+                "RightMargin": -20.5,
+                "TopMargin": -12.5,
+                "BottomMargin": -12.5,
+                "Tag": 2493,
+                "ActionTag": -290318700,
+                "Size": {
+                  "X": 41.0,
+                  "Y": 25.0
+                },
+                "Name": "power2",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/head/power/power_icon3.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 200,
+                  "G": 200,
+                  "B": 200
+                },
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -20.5,
+                "RightMargin": -20.5,
+                "TopMargin": -12.5,
+                "BottomMargin": -12.5,
+                "Tag": 2494,
+                "ActionTag": 761720225,
+                "Size": {
+                  "X": 41.0,
+                  "Y": 25.0
+                },
+                "Name": "power3",
+                "ctype": "SpriteObjectData"
+              }
+            ],
+            "ActionTag": -24406046,
+            "Size": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Name": "power",
+            "ctype": "SingleNodeObjectData"
+          },
+          {
+            "AnchorPoint": {},
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": true,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Tag": 2496,
+            "Children": [
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Disable.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Normal",
+                  "Path": "common/head/more.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/head/more.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 6,
+                "Scale9OriginY": 6,
+                "Scale9Width": 8,
+                "Scale9Height": 8,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 335.0,
+                  "Y": -14.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 322.5,
+                "RightMargin": -347.5,
+                "TopMargin": 1.5,
+                "BottomMargin": -26.5,
+                "Tag": 2497,
+                "ActionTag": -525495891,
+                "Size": {
+                  "X": 25.0,
+                  "Y": 25.0
+                },
+                "VisibleForFrame": false,
+                "Name": "down",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Default",
+                  "Path": "Default/Button_Disable.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Normal",
+                  "Path": "common/head/more.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/head/more.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 6,
+                "Scale9OriginY": 6,
+                "Scale9Width": 8,
+                "Scale9Height": 8,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 335.0,
+                  "Y": -14.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "RotationSkewX": 180.0,
+                "RotationSkewY": 180.0,
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 322.5,
+                "RightMargin": -347.5,
+                "TopMargin": 1.5,
+                "BottomMargin": -26.5,
+                "Tag": 2499,
+                "ActionTag": 1199361897,
+                "Size": {
+                  "X": 25.0,
+                  "Y": 25.0
+                },
+                "VisibleForFrame": false,
+                "Name": "up",
+                "ctype": "ButtonObjectData"
+              }
+            ],
+            "ActionTag": 407557269,
+            "Size": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Name": "btns",
+            "ctype": "SingleNodeObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/table/card_num_bg.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": -540.0,
+              "Y": -55.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -558.0,
+            "RightMargin": 522.0,
+            "TopMargin": 30.5,
+            "BottomMargin": -79.5,
+            "Tag": 175,
+            "Children": [
+              {
+                "CharWidth": 14,
+                "CharHeight": 18,
+                "LabelText": "0",
+                "StartChar": "0",
+                "LabelAtlasFileImage_CNB": {
+                  "Type": "Normal",
+                  "Path": "common/table/card_num.png",
+                  "Plist": ""
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 18.0,
+                  "Y": 24.5
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.3889,
+                  "Y": 0.3673
+                },
+                "LeftMargin": 11.0,
+                "RightMargin": 11.0,
+                "TopMargin": 15.5,
+                "BottomMargin": 15.5,
+                "Tag": 176,
+                "ActionTag": 2115639375,
+                "Size": {
+                  "X": 14.0,
+                  "Y": 18.0
+                },
+                "Name": "card_num",
+                "ctype": "TextAtlasObjectData"
+              }
+            ],
+            "ActionTag": 1048238945,
+            "Size": {
+              "X": 36.0,
+              "Y": 49.0
+            },
+            "Name": "card_num_bg",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FontSize": 20,
+            "LabelText": "封顶40 不能炮胡 自摸加4番 点炮三家给钱 自摸加4番 点炮三家给钱",
+            "HorizontalAlignmentType": "HT_Center",
+            "VerticalAlignmentType": "VT_Center",
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0007,
+              "Y": -14.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -296.4993,
+            "RightMargin": -296.5007,
+            "TopMargin": 2.5,
+            "BottomMargin": -25.5,
+            "Tag": 2500,
+            "ActionTag": 1277458324,
+            "Size": {
+              "X": 593.0,
+              "Y": 23.0
+            },
+            "Name": "roomConfig",
+            "ctype": "TextObjectData"
+          },
+          {
+            "FontSize": 20,
+            "LabelText": "封顶40 不能炮胡 自摸加4番 点炮三家给钱 自摸加4番 点炮三家给钱 点炮三家给钱 自摸加4番 点炮三家给钱",
+            "HorizontalAlignmentType": "HT_Center",
+            "VerticalAlignmentType": "VT_Center",
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0011,
+              "Y": -42.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -470.4989,
+            "RightMargin": -470.5011,
+            "TopMargin": 30.5,
+            "BottomMargin": -53.5,
+            "Tag": 2709,
+            "ActionTag": -706725176,
+            "Size": {
+              "X": 941.0,
+              "Y": 23.0
+            },
+            "VisibleForFrame": false,
+            "Name": "roomConfig2",
+            "ctype": "TextObjectData"
+          }
+        ],
+        "Size": {
+          "X": 0.0,
+          "Y": 0.0
+        },
+        "Name": "Node",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "common/head/bg.png",
+        "common/head/more.png",
+        "common/head/net4.png",
+        "common/head/power/power_icon1.png",
+        "common/head/power/power_icon2.png",
+        "common/head/power/power_icon3.png",
+        "common/table/card_num.png",
+        "common/table/card_num_bg.png",
+        "Default/Button_Disable.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Node"
+}

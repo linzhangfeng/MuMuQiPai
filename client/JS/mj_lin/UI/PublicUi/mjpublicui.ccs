@@ -1,0 +1,254 @@
+<Solution>
+  <PropertyGroup Name="mjpublicui" Version="3.10.0.0" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="common">
+          <Folder Name="dialog">
+            <Folder Name="bigresult">
+              <Image Name="back.png" />
+              <Image Name="bg.png" />
+              <Image Name="coop_zhanji_n.png" />
+              <Image Name="coop_zhanji_s.png" />
+              <Image Name="copy_btn1.png" />
+              <Image Name="copy_btn2.png" />
+              <Image Name="head_margin.png" />
+              <Image Name="line.png" />
+              <Image Name="logo.png" />
+              <Image Name="most_lose.png" />
+              <Image Name="most_win.png" />
+              <Image Name="num_lose.png" />
+              <Image Name="num_win.png" />
+              <Image Name="owner_icon.png" />
+              <Image Name="share1.png" />
+              <Image Name="share2.png" />
+              <Image Name="title.png" />
+              <Image Name="title_bg.png" />
+              <Image Name="total_bg.png" />
+              <Image Name="wx_share_n.png" />
+              <Image Name="wx_share_s.png" />
+              <Image Name="xl_share_n.png" />
+              <Image Name="xl_share_s.png" />
+            </Folder>
+            <Folder Name="chat">
+              <Folder Name="face">
+                <Image Name="1.png" />
+                <Image Name="2.png" />
+                <Image Name="3.png" />
+                <Image Name="4.png" />
+                <Image Name="5.png" />
+                <Image Name="6.png" />
+                <Image Name="7.png" />
+                <Image Name="8.png" />
+                <Image Name="9.png" />
+              </Folder>
+              <Image Name="bg.png" />
+              <Image Name="bigface1.png" />
+              <Image Name="bigface2.png" />
+              <Image Name="chat1.png" />
+              <Image Name="chat2.png" />
+              <Image Name="check_bottom1.png" />
+              <Image Name="check_bottom2.png" />
+              <Image Name="check_middle1.png" />
+              <Image Name="check_middle2.png" />
+              <Image Name="check_top1.png" />
+              <Image Name="check_top2.png" />
+              <Image Name="input.png" />
+              <Image Name="input_tip.png" />
+              <Image Name="line.png" />
+              <Image Name="record1.png" />
+              <Image Name="record2.png" />
+              <Image Name="send.png" />
+            </Folder>
+            <Folder Name="gamesetting">
+              <Image Name="1.png" />
+              <Image Name="2.png" />
+              <Image Name="3.png" />
+              <Image Name="4.png" />
+              <Image Name="choice.png" />
+              <Image Name="icon_25d.png" />
+              <Image Name="icon_2d.png" />
+              <Image Name="table_25d.png" />
+              <Image Name="table_2d.png" />
+              <Image Name="table_tip.png" />
+            </Folder>
+            <Folder Name="gps">
+              <Image Name="goon.png" />
+              <Image Name="head_bg.png" />
+              <Image Name="jieshan.png" />
+              <Image Name="juli1.png" />
+              <Image Name="juli2.png" />
+              <Image Name="line3.png" />
+              <Image Name="line4.png" />
+              <Image Name="title.png" />
+            </Folder>
+            <Folder Name="help">
+              <Image Name="check1.png" />
+              <Image Name="check2.png" />
+              <Image Name="check3.png" />
+              <Image Name="config1.png" />
+              <Image Name="config2.png" />
+              <Image Name="detail1.png" />
+              <Image Name="detail2.png" />
+            </Folder>
+            <Folder Name="jieshan">
+              <Image Name="no.png" />
+              <Image Name="ok.png" />
+              <Image Name="progress.png" />
+              <Image Name="timebg.png" />
+              <Image Name="tip1.png" />
+              <Image Name="tip2.png" />
+              <Image Name="tip3.png" />
+              <Image Name="tip4.png" />
+              <Image Name="title.png" />
+            </Folder>
+            <Folder Name="light">
+              <Image Name="bg_light.png" />
+              <Image Name="close1.png" />
+              <Image Name="close2.png" />
+              <Image Name="di.png" />
+              <Image Name="logo.png" />
+              <Image Name="movepoint1.png" />
+              <Image Name="movepoint2.png" />
+              <Image Name="tiao.png" />
+              <Image Name="tip.png" />
+            </Folder>
+            <Folder Name="public">
+              <Image Name="bg_top.png" />
+              <Image Name="bg1.png" />
+              <Image Name="bg2.png" />
+              <Image Name="bg3.png" />
+              <Image Name="btn_green.png" />
+              <Image Name="btn_yellow.png" />
+              <Image Name="cancel.png" />
+              <Image Name="close.png" />
+              <Image Name="sure.png" />
+            </Folder>
+            <Folder Name="setting">
+              <Image Name="1.png" />
+              <Image Name="10.png" />
+              <Image Name="11.png" />
+              <Image Name="12.png" />
+              <Image Name="13.png" />
+              <Image Name="14.png" />
+              <Image Name="15.png" />
+              <Image Name="16.png" />
+              <Image Name="17.png" />
+              <Image Name="18.png" />
+              <Image Name="19.png" />
+              <Image Name="2.png" />
+              <Image Name="20.png" />
+              <Image Name="21.png" />
+              <Image Name="22.png" />
+              <Image Name="23.png" />
+              <Image Name="3.png" />
+              <Image Name="4.png" />
+              <Image Name="5.png" />
+              <Image Name="6.png" />
+              <Image Name="7.png" />
+              <Image Name="8.png" />
+              <Image Name="9.png" />
+            </Folder>
+            <Folder Name="speed">
+              <Image Name="check.png" />
+              <Image Name="speed_1.png" />
+              <Image Name="speed_2.png" />
+              <Image Name="speed_3.png" />
+              <Image Name="speed_4.png" />
+              <Image Name="speed_5.png" />
+              <Image Name="speed_tittle.png" />
+            </Folder>
+            <Folder Name="zhanji">
+              <Image Name="head_default.png" />
+              <Image Name="item_bg1.png" />
+              <Image Name="item_bg2.png" />
+              <Image Name="name_bg.png" />
+              <Image Name="title.png" />
+            </Folder>
+          </Folder>
+          <Folder Name="head">
+            <Folder Name="power">
+              <Image Name="power_icon1.png" />
+              <Image Name="power_icon2.png" />
+              <Image Name="power_icon3.png" />
+            </Folder>
+            <Image Name="bg.png" />
+            <Image Name="more.png" />
+            <Image Name="net1.png" />
+            <Image Name="net2.png" />
+            <Image Name="net3.png" />
+            <Image Name="net4.png" />
+            <Image Name="top_bg.png" />
+            <Image Name="top_bg2.png" />
+          </Folder>
+          <Folder Name="pretable">
+            <Image Name="bg.png" />
+            <Image Name="cooproom_n.png" />
+            <Image Name="cooproom_s.png" />
+            <Image Name="copy1.png" />
+            <Image Name="copy2.png" />
+            <Image Name="ready1.png" />
+            <Image Name="ready2.png" />
+            <Image Name="rule_bg.png" />
+            <Image Name="share1.png" />
+            <Image Name="share2.png" />
+            <Image Name="wx_yaoqing_n.png" />
+            <Image Name="wx_yaoqing_s.png" />
+            <Image Name="xl_yaoqing_n.png" />
+            <Image Name="xl_yaoqing_s.png" />
+          </Folder>
+          <Folder Name="table">
+            <Image Name="bg.png" />
+            <Image Name="btn_copyroom1.png" />
+            <Image Name="btn_copyroom2.png" />
+            <Image Name="btn_yaoqing1.png" />
+            <Image Name="btn_yaoqing2.png" />
+            <Image Name="card_num.png" />
+            <Image Name="card_num_bg.png" />
+            <Image Name="chat.png" />
+            <Image Name="exit_icon.png" />
+            <Image Name="gps.png" />
+            <Image Name="gps1.png" />
+            <Image Name="gps2.png" />
+            <Image Name="head_bg.png" />
+            <Image Name="head_black_bg.png" />
+            <Image Name="help_icon.png" />
+            <Image Name="jieshan.png" />
+            <Image Name="light1.png" />
+            <Image Name="light2.png" />
+            <Image Name="more.png" />
+            <Image Name="name_bg.png" />
+            <Image Name="offline_tip.png" />
+            <Image Name="player_bg.png" />
+            <Image Name="player_icon.png" />
+            <Image Name="ready_icon.png" />
+            <Image Name="ready1.png" />
+            <Image Name="ready2.png" />
+            <Image Name="setting_icon.png" />
+            <Image Name="sound.png" />
+            <Image Name="speed_icon.png" />
+            <Image Name="ting.png" />
+            <Image Name="tuoguan_icon.png" />
+          </Folder>
+        </Folder>
+        <Project Name="action.csd" Type="Layer" />
+        <Project Name="chat.csd" Type="Node" />
+        <Project Name="chat_fast_item.csd" Type="Node" />
+        <Project Name="gameHead.csd" Type="Node" />
+        <Project Name="gameRecord.csd" Type="Layer" />
+        <Project Name="gameRecord_Item.csd" Type="Node" />
+        <Project Name="gps.csd" Type="Node" />
+        <Project Name="help.csd" Type="Node" />
+        <Project Name="jiesanfangjian.csd" Type="Node" />
+        <Project Name="jiesanfangjian_item.csd" Type="Node" />
+        <Project Name="more.csd" Type="Node" />
+        <Project Name="player.csd" Type="Node" />
+        <Project Name="preScene.csd" Type="Layer" />
+        <Project Name="setting.csd" Type="Node" />
+        <Project Name="speed_seeting.csd" Type="Node" />
+        <Project Name="zhanjiBox.csd" Type="Node" />
+        <Project Name="zhanjiBox_item.csd" Type="Layer" />
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>

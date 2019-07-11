@@ -1,0 +1,953 @@
+{
+  "ID": "03be50f4-0d67-440a-a2c4-272240052fce",
+  "Version": "2.3.4",
+  "Name": "speed_seeting",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 5350,
+        "Children": [
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/public/bg2.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -1.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -383.0,
+            "RightMargin": -383.0,
+            "TopMargin": -223.0,
+            "BottomMargin": -225.0,
+            "Tag": 5351,
+            "Children": [
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/public/bg_top.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 383.0,
+                  "Y": 395.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.8817
+                },
+                "PreSize": {
+                  "X": 0.6319,
+                  "Y": 0.1473
+                },
+                "LeftMargin": 141.0,
+                "RightMargin": 141.0,
+                "TopMargin": 20.0,
+                "BottomMargin": 362.0,
+                "Tag": 4247,
+                "ActionTag": -1373907411,
+                "Size": {
+                  "X": 484.0,
+                  "Y": 66.0
+                },
+                "Name": "bg_top_1",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_tittle.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 383.0,
+                  "Y": 395.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.8817
+                },
+                "PreSize": {
+                  "X": 0.2167,
+                  "Y": 0.0893
+                },
+                "LeftMargin": 300.0,
+                "RightMargin": 300.0,
+                "TopMargin": 33.0,
+                "BottomMargin": 375.0,
+                "Tag": 5354,
+                "ActionTag": 667300124,
+                "Size": {
+                  "X": 166.0,
+                  "Y": 40.0
+                },
+                "Name": "tittle",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/public/close.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 1,
+                "Scale9Height": 8,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 715.0,
+                  "Y": 400.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.9334,
+                  "Y": 0.8929
+                },
+                "PreSize": {
+                  "X": 0.0392,
+                  "Y": 0.067
+                },
+                "LeftMargin": 700.0,
+                "RightMargin": 36.0,
+                "TopMargin": 33.0,
+                "BottomMargin": 385.0,
+                "Tag": 5352,
+                "ActionTag": -1604031477,
+                "Size": {
+                  "X": 30.0,
+                  "Y": 30.0
+                },
+                "Name": "close",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/public/btn_yellow.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 196,
+                "Scale9Height": 70,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 383.0,
+                  "Y": 65.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.1451
+                },
+                "PercentWidthEnable": true,
+                "PercentWidthEnabled": true,
+                "PreSize": {
+                  "X": 0.295,
+                  "Y": 0.2054
+                },
+                "LeftMargin": 270.015,
+                "RightMargin": 270.015,
+                "TopMargin": 337.0,
+                "BottomMargin": 19.0,
+                "Tag": 5353,
+                "Children": [
+                  {
+                    "FileData": {
+                      "Type": "Normal",
+                      "Path": "common/dialog/public/sure.png",
+                      "Plist": ""
+                    },
+                    "BlendFunc": {
+                      "Src": 1,
+                      "Dst": 771
+                    },
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 113.0,
+                      "Y": 53.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": false,
+                    "PositionPercentXEnabled": true,
+                    "PrePosition": {
+                      "X": 0.5001,
+                      "Y": 0.5761
+                    },
+                    "PreSize": {
+                      "X": 0.6461,
+                      "Y": 0.5
+                    },
+                    "LeftMargin": 40.0,
+                    "RightMargin": 39.97,
+                    "TopMargin": 16.0,
+                    "BottomMargin": 30.0,
+                    "Tag": 4248,
+                    "ActionTag": 1362882199,
+                    "Size": {
+                      "X": 146.0,
+                      "Y": 46.0
+                    },
+                    "Name": "tip",
+                    "ctype": "SpriteObjectData"
+                  }
+                ],
+                "ActionTag": 1921147654,
+                "Size": {
+                  "X": 225.97,
+                  "Y": 92.0
+                },
+                "Name": "sure",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "NormalBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_1.png",
+                  "Plist": ""
+                },
+                "PressedBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_1.png",
+                  "Plist": ""
+                },
+                "DisableBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_1.png",
+                  "Plist": ""
+                },
+                "NodeNormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "NodeDisableFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 110.0,
+                  "Y": 224.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.1436,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.1488,
+                  "Y": 0.2366
+                },
+                "LeftMargin": 53.0,
+                "RightMargin": 599.0,
+                "TopMargin": 171.0,
+                "BottomMargin": 171.0,
+                "Tag": 5355,
+                "Children": [
+                  {
+                    "IsCustomSize": true,
+                    "FontSize": 32,
+                    "LabelText": "老人模式",
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 55.0,
+                      "Y": 53.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {
+                      "G": 254,
+                      "B": 200
+                    },
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.4825,
+                      "Y": 0.5
+                    },
+                    "PreSize": {
+                      "X": 0.5614,
+                      "Y": 0.6981
+                    },
+                    "LeftMargin": 23.0,
+                    "RightMargin": 27.0,
+                    "TopMargin": 16.0,
+                    "BottomMargin": 16.0,
+                    "Tag": 4249,
+                    "ActionTag": 1920335214,
+                    "Size": {
+                      "X": 64.0,
+                      "Y": 74.0
+                    },
+                    "Name": "text",
+                    "ctype": "TextObjectData"
+                  }
+                ],
+                "ActionTag": -1623087210,
+                "Size": {
+                  "X": 114.0,
+                  "Y": 106.0
+                },
+                "Name": "speed_1",
+                "ctype": "CheckBoxObjectData"
+              },
+              {
+                "NormalBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_2.png",
+                  "Plist": ""
+                },
+                "PressedBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_2.png",
+                  "Plist": ""
+                },
+                "DisableBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_2.png",
+                  "Plist": ""
+                },
+                "NodeNormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "NodeDisableFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 246.0,
+                  "Y": 224.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.3211,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.1488,
+                  "Y": 0.2366
+                },
+                "LeftMargin": 189.0,
+                "RightMargin": 463.0,
+                "TopMargin": 171.0,
+                "BottomMargin": 171.0,
+                "Tag": 5356,
+                "Children": [
+                  {
+                    "IsCustomSize": true,
+                    "FontSize": 32,
+                    "LabelText": "休闲模式",
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 55.0,
+                      "Y": 53.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {
+                      "G": 254,
+                      "B": 200
+                    },
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.4825,
+                      "Y": 0.5
+                    },
+                    "PreSize": {
+                      "X": 0.5614,
+                      "Y": 0.6981
+                    },
+                    "LeftMargin": 23.0,
+                    "RightMargin": 27.0,
+                    "TopMargin": 16.0,
+                    "BottomMargin": 16.0,
+                    "Tag": 4250,
+                    "ActionTag": -874528469,
+                    "Size": {
+                      "X": 64.0,
+                      "Y": 74.0
+                    },
+                    "Name": "text",
+                    "ctype": "TextObjectData"
+                  }
+                ],
+                "ActionTag": -174144888,
+                "Size": {
+                  "X": 114.0,
+                  "Y": 106.0
+                },
+                "Name": "speed_2",
+                "ctype": "CheckBoxObjectData"
+              },
+              {
+                "NormalBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_3.png",
+                  "Plist": ""
+                },
+                "PressedBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_3.png",
+                  "Plist": ""
+                },
+                "DisableBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_3.png",
+                  "Plist": ""
+                },
+                "NodeNormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "NodeDisableFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 383.0,
+                  "Y": 222.9248
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.4976
+                },
+                "PreSize": {
+                  "X": 0.1488,
+                  "Y": 0.2366
+                },
+                "LeftMargin": 326.0,
+                "RightMargin": 326.0,
+                "TopMargin": 172.0752,
+                "BottomMargin": 169.9248,
+                "Tag": 5357,
+                "Children": [
+                  {
+                    "IsCustomSize": true,
+                    "FontSize": 32,
+                    "LabelText": "休闲模式",
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 55.0,
+                      "Y": 53.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {
+                      "G": 254,
+                      "B": 200
+                    },
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.4825,
+                      "Y": 0.5
+                    },
+                    "PreSize": {
+                      "X": 0.5614,
+                      "Y": 0.6981
+                    },
+                    "LeftMargin": 23.0,
+                    "RightMargin": 27.0,
+                    "TopMargin": 16.0,
+                    "BottomMargin": 16.0,
+                    "Tag": 4251,
+                    "ActionTag": 1463186736,
+                    "Size": {
+                      "X": 64.0,
+                      "Y": 74.0
+                    },
+                    "Name": "text",
+                    "ctype": "TextObjectData"
+                  }
+                ],
+                "ActionTag": -1274279752,
+                "Size": {
+                  "X": 114.0,
+                  "Y": 106.0
+                },
+                "Name": "speed_3",
+                "ctype": "CheckBoxObjectData"
+              },
+              {
+                "NormalBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_4.png",
+                  "Plist": ""
+                },
+                "PressedBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_4.png",
+                  "Plist": ""
+                },
+                "DisableBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_4.png",
+                  "Plist": ""
+                },
+                "NodeNormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "NodeDisableFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 519.0,
+                  "Y": 224.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.6775,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.1488,
+                  "Y": 0.2366
+                },
+                "LeftMargin": 462.0,
+                "RightMargin": 190.0,
+                "TopMargin": 171.0,
+                "BottomMargin": 171.0,
+                "Tag": 5358,
+                "Children": [
+                  {
+                    "IsCustomSize": true,
+                    "FontSize": 32,
+                    "LabelText": "休闲模式",
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 55.0,
+                      "Y": 53.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {
+                      "G": 254,
+                      "B": 200
+                    },
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.4825,
+                      "Y": 0.5
+                    },
+                    "PreSize": {
+                      "X": 0.5614,
+                      "Y": 0.6981
+                    },
+                    "LeftMargin": 23.0,
+                    "RightMargin": 27.0,
+                    "TopMargin": 16.0,
+                    "BottomMargin": 16.0,
+                    "Tag": 4252,
+                    "ActionTag": -327228961,
+                    "Size": {
+                      "X": 64.0,
+                      "Y": 74.0
+                    },
+                    "Name": "text",
+                    "ctype": "TextObjectData"
+                  }
+                ],
+                "ActionTag": 1867368752,
+                "Size": {
+                  "X": 114.0,
+                  "Y": 106.0
+                },
+                "Name": "speed_4",
+                "ctype": "CheckBoxObjectData"
+              },
+              {
+                "NormalBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_5.png",
+                  "Plist": ""
+                },
+                "PressedBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_5.png",
+                  "Plist": ""
+                },
+                "DisableBackFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/speed_5.png",
+                  "Plist": ""
+                },
+                "NodeNormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "NodeDisableFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/speed/check.png",
+                  "Plist": ""
+                },
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 656.0,
+                  "Y": 224.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.8564,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.1488,
+                  "Y": 0.2366
+                },
+                "LeftMargin": 599.0,
+                "RightMargin": 53.0,
+                "TopMargin": 171.0,
+                "BottomMargin": 171.0,
+                "Tag": 5359,
+                "Children": [
+                  {
+                    "IsCustomSize": true,
+                    "FontSize": 32,
+                    "LabelText": "激情模式",
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 55.0,
+                      "Y": 53.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {
+                      "G": 254,
+                      "B": 200
+                    },
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.4825,
+                      "Y": 0.5
+                    },
+                    "PreSize": {
+                      "X": 0.5614,
+                      "Y": 0.6981
+                    },
+                    "LeftMargin": 23.0,
+                    "RightMargin": 27.0,
+                    "TopMargin": 16.0,
+                    "BottomMargin": 16.0,
+                    "Tag": 4253,
+                    "ActionTag": -895614254,
+                    "Size": {
+                      "X": 64.0,
+                      "Y": 74.0
+                    },
+                    "Name": "text",
+                    "ctype": "TextObjectData"
+                  }
+                ],
+                "ActionTag": -1466850098,
+                "Size": {
+                  "X": 114.0,
+                  "Y": 106.0
+                },
+                "Name": "speed_5",
+                "ctype": "CheckBoxObjectData"
+              }
+            ],
+            "ActionTag": 2120308945,
+            "Size": {
+              "X": 766.0,
+              "Y": 448.0
+            },
+            "Name": "bg",
+            "ctype": "SpriteObjectData"
+          }
+        ],
+        "Size": {
+          "X": 0.0,
+          "Y": 0.0
+        },
+        "Name": "Node",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "common/dialog/public/bg_top.png",
+        "common/dialog/public/bg2.png",
+        "common/dialog/public/btn_yellow.png",
+        "common/dialog/public/close.png",
+        "common/dialog/public/sure.png",
+        "common/dialog/speed/check.png",
+        "common/dialog/speed/speed_1.png",
+        "common/dialog/speed/speed_2.png",
+        "common/dialog/speed/speed_3.png",
+        "common/dialog/speed/speed_4.png",
+        "common/dialog/speed/speed_5.png",
+        "common/dialog/speed/speed_tittle.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Node"
+}

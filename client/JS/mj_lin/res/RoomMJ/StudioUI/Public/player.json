@@ -1,0 +1,763 @@
+{
+  "ID": "9eafdc38-f84b-48fc-8d38-a4e9cb1c1653",
+  "Version": "2.3.4",
+  "Name": "player",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 321,
+        "Children": [
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/table/head_bg.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -58.0,
+            "RightMargin": -58.0,
+            "TopMargin": -58.0,
+            "BottomMargin": -58.0,
+            "Tag": 50,
+            "ActionTag": -996479240,
+            "Size": {
+              "X": 116.0,
+              "Y": 116.0
+            },
+            "Name": "avatar_bg",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FontSize": 14,
+            "ButtonText": "",
+            "TextColor": {
+              "R": 65,
+              "G": 65,
+              "B": 70
+            },
+            "DisabledFileData": {
+              "Type": "Default",
+              "Path": "Default/Button_Disable.png",
+              "Plist": ""
+            },
+            "PressedFileData": {
+              "Type": "Normal",
+              "Path": "common/table/player_bg.png",
+              "Plist": ""
+            },
+            "NormalFileData": {
+              "Type": "Normal",
+              "Path": "common/table/player_bg.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 15,
+            "Scale9OriginY": 11,
+            "Scale9Width": 64,
+            "Scale9Height": 72,
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "TouchEnable": true,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": -0.0001,
+              "Y": 5.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -47.0001,
+            "RightMargin": -46.9999,
+            "TopMargin": -52.0,
+            "BottomMargin": -42.0,
+            "Tag": 2775,
+            "ActionTag": 1702423710,
+            "Size": {
+              "X": 94.0,
+              "Y": 94.0
+            },
+            "Name": "btn",
+            "ctype": "ButtonObjectData"
+          },
+          {
+            "AnchorPoint": {},
+            "Position": {
+              "X": 0.0,
+              "Y": 5.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": true,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "TopMargin": -5.0,
+            "BottomMargin": 5.0,
+            "Tag": 323,
+            "ActionTag": -123803847,
+            "Size": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Name": "avatar",
+            "ctype": "SingleNodeObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/table/tuoguan_icon.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -58.0,
+            "RightMargin": -58.0,
+            "TopMargin": -58.0,
+            "BottomMargin": -58.0,
+            "Tag": 42,
+            "ActionTag": 1560071236,
+            "Size": {
+              "X": 116.0,
+              "Y": 116.0
+            },
+            "VisibleForFrame": false,
+            "Name": "tuoguan",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/table/name_bg.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0007,
+              "Y": -40.0001
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -42.9993,
+            "RightMargin": -43.0007,
+            "TopMargin": 25.0001,
+            "BottomMargin": -55.0001,
+            "Tag": 95,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "小萝卜头",
+                "HorizontalAlignmentType": "HT_Center",
+                "VerticalAlignmentType": "VT_Center",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 43.0,
+                  "Y": 15.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.9302,
+                  "Y": 0.7667
+                },
+                "LeftMargin": 3.0,
+                "RightMargin": 3.0,
+                "TopMargin": 3.5,
+                "BottomMargin": 3.5,
+                "Tag": 326,
+                "ActionTag": -1197112095,
+                "Size": {
+                  "X": 80.0,
+                  "Y": 23.0
+                },
+                "Name": "name",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": -1136493472,
+            "Size": {
+              "X": 86.0,
+              "Y": 30.0
+            },
+            "Name": "name_bg",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/table/name_bg.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -71.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -43.0,
+            "RightMargin": -43.0,
+            "TopMargin": 56.0,
+            "BottomMargin": -86.0,
+            "Tag": 96,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "2000",
+                "HorizontalAlignmentType": "HT_Center",
+                "VerticalAlignmentType": "VT_Center",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 43.0,
+                  "Y": 15.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.5233,
+                  "Y": 0.7667
+                },
+                "LeftMargin": 20.5,
+                "RightMargin": 20.5,
+                "TopMargin": 3.5,
+                "BottomMargin": 3.5,
+                "Tag": 325,
+                "ActionTag": 1337386663,
+                "Size": {
+                  "X": 45.0,
+                  "Y": 23.0
+                },
+                "Name": "money",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": 1410279641,
+            "Size": {
+              "X": 86.0,
+              "Y": 30.0
+            },
+            "Name": "money_bg",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/table/name_bg.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -102.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -43.0,
+            "RightMargin": -43.0,
+            "TopMargin": 87.0,
+            "BottomMargin": -117.0,
+            "Tag": 15,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "2000",
+                "HorizontalAlignmentType": "HT_Center",
+                "VerticalAlignmentType": "VT_Center",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 43.0,
+                  "Y": 15.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.5233,
+                  "Y": 0.7667
+                },
+                "LeftMargin": 20.5,
+                "RightMargin": 20.5,
+                "TopMargin": 3.5,
+                "BottomMargin": 3.5,
+                "Tag": 16,
+                "ActionTag": -665328555,
+                "Size": {
+                  "X": 45.0,
+                  "Y": 23.0
+                },
+                "Name": "money",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": -2096879864,
+            "Size": {
+              "X": 86.0,
+              "Y": 30.0
+            },
+            "VisibleForFrame": false,
+            "Name": "other_bg",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "AnchorPoint": {},
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": true,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Tag": 50,
+            "Children": [
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": -0.6425,
+                  "Y": 0.8251
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -0.6425,
+                "RightMargin": 0.6425,
+                "TopMargin": -0.8251,
+                "BottomMargin": 0.8251,
+                "Tag": 51,
+                "ActionTag": -1324814785,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "p_1",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 1.9525,
+                  "Y": 51.6054
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 1.9525,
+                "RightMargin": -1.9525,
+                "TopMargin": -51.6054,
+                "BottomMargin": 51.6054,
+                "Tag": 52,
+                "ActionTag": -663279564,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "p_2",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": -53.1663,
+                  "Y": -0.0276
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -53.1663,
+                "RightMargin": 53.1663,
+                "TopMargin": 0.0276,
+                "BottomMargin": -0.0276,
+                "Tag": 53,
+                "ActionTag": -1828017224,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "p_3",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 46.5042,
+                  "Y": 0.6474
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 46.5042,
+                "RightMargin": -46.5042,
+                "TopMargin": -0.6474,
+                "BottomMargin": 0.6474,
+                "Tag": 54,
+                "ActionTag": 1597513510,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "p_4",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": -34.2337,
+                  "Y": 34.7523
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -34.2337,
+                "RightMargin": 34.2337,
+                "TopMargin": -34.7523,
+                "BottomMargin": 34.7523,
+                "Tag": 55,
+                "ActionTag": 1176527533,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "p_5",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 33.4122,
+                  "Y": 34.7523
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 33.4122,
+                "RightMargin": -33.4122,
+                "TopMargin": -34.7523,
+                "BottomMargin": 34.7523,
+                "Tag": 56,
+                "ActionTag": -162905995,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "p_6",
+                "ctype": "SingleNodeObjectData"
+              }
+            ],
+            "ActionTag": 216737508,
+            "Size": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Name": "flagNode",
+            "ctype": "SingleNodeObjectData"
+          }
+        ],
+        "Size": {
+          "X": 0.0,
+          "Y": 0.0
+        },
+        "Name": "Node",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "common/table/head_bg.png",
+        "common/table/name_bg.png",
+        "common/table/player_bg.png",
+        "common/table/tuoguan_icon.png",
+        "Default/Button_Disable.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Node"
+}

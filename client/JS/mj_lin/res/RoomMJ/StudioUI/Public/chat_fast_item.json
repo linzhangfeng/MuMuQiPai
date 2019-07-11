@@ -1,0 +1,187 @@
+{
+  "ID": "5775f914-5a32-4e9a-b414-9912e1a8efed",
+  "Version": "2.3.4",
+  "Name": "chat_fast_item",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 25,
+        "Children": [
+          {
+            "ClipAble": false,
+            "BackColorAlpha": 0,
+            "ComboBoxIndex": 1,
+            "SingleColor": {
+              "R": 150,
+              "G": 200
+            },
+            "FirstColor": {
+              "R": 150,
+              "G": 200
+            },
+            "EndColor": {},
+            "ColorVector": {
+              "ScaleY": 1.0
+            },
+            "Scale9Width": 1,
+            "Scale9Height": 1,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -210.0,
+            "RightMargin": -210.0,
+            "TopMargin": -40.0,
+            "BottomMargin": -40.0,
+            "Tag": 97,
+            "Children": [
+              {
+                "IsCustomSize": true,
+                "FontSize": 32,
+                "LabelText": "哈哈哈哈哈哈哈哈哈哈哈哈",
+                "HorizontalAlignmentType": "HT_Center",
+                "VerticalAlignmentType": "VT_Center",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 210.0,
+                  "Y": 40.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.8,
+                  "Y": 0.4
+                },
+                "LeftMargin": 42.0,
+                "RightMargin": 42.0,
+                "TopMargin": 24.0,
+                "BottomMargin": 24.0,
+                "Tag": 28,
+                "ActionTag": -1180718286,
+                "Size": {
+                  "X": 336.0,
+                  "Y": 32.0
+                },
+                "Name": "fast_chat",
+                "ctype": "TextObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/chat/line.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 210.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.9976,
+                  "Y": 0.025
+                },
+                "LeftMargin": 0.5,
+                "RightMargin": 0.5,
+                "TopMargin": 79.0,
+                "BottomMargin": -1.0,
+                "Tag": 98,
+                "ActionTag": 1247629856,
+                "Size": {
+                  "X": 419.0,
+                  "Y": 2.0
+                },
+                "Name": "line",
+                "ctype": "SpriteObjectData"
+              }
+            ],
+            "ActionTag": 764510954,
+            "Size": {
+              "X": 420.0,
+              "Y": 80.0
+            },
+            "Name": "fast_bg",
+            "ctype": "PanelObjectData"
+          }
+        ],
+        "Size": {
+          "X": 0.0,
+          "Y": 0.0
+        },
+        "Name": "Node",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "common/dialog/chat/line.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Node"
+}

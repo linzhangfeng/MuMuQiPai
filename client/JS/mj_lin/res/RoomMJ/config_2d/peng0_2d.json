@@ -1,0 +1,212 @@
+{
+  "ID": "0d4ca984-3ab8-41e2-82bc-e40c15c5a8d5",
+  "Version": "2.3.4",
+  "Name": "peng0_2d",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 1013,
+        "Children": [
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "cards_2d_lingqiu/peng_end_0/01.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": -66.0001,
+              "Y": -0.0004
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -101.0001,
+            "RightMargin": 31.0001,
+            "TopMargin": -48.9996,
+            "BottomMargin": -49.0004,
+            "Tag": 1015,
+            "ActionTag": -1938862006,
+            "Size": {
+              "X": 70.0,
+              "Y": 98.0
+            },
+            "Name": "p_0",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "cards_2d_lingqiu/peng_end_0/01.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -35.0,
+            "RightMargin": -35.0,
+            "TopMargin": -49.0,
+            "BottomMargin": -49.0,
+            "Tag": 1014,
+            "ActionTag": -69741218,
+            "Size": {
+              "X": 70.0,
+              "Y": 98.0
+            },
+            "Name": "p_1",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "cards_2d_lingqiu/peng_end_0/01.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 65.9997,
+              "Y": -0.0004
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": 30.9997,
+            "RightMargin": -100.9997,
+            "TopMargin": -48.9996,
+            "BottomMargin": -49.0004,
+            "Tag": 1016,
+            "ActionTag": 1873084683,
+            "Size": {
+              "X": 70.0,
+              "Y": 98.0
+            },
+            "Name": "p_2",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "cards_2d_lingqiu/peng_end_0/01.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0327,
+              "Y": 18.9998
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -34.9673,
+            "RightMargin": -35.0327,
+            "TopMargin": -67.9998,
+            "BottomMargin": -30.0002,
+            "Tag": 1017,
+            "ActionTag": -1916957369,
+            "Size": {
+              "X": 70.0,
+              "Y": 98.0
+            },
+            "Name": "p_3",
+            "ctype": "SpriteObjectData"
+          }
+        ],
+        "Size": {
+          "X": 0.0,
+          "Y": 0.0
+        },
+        "Name": "Node",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "cards_2d_lingqiu/peng_end_0/01.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Node"
+}

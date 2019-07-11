@@ -1,4 +1,3 @@
-
 var SEX_ID =
 {
     SEX_MAN: 1,
@@ -119,6 +118,11 @@ var SOCKETCMD =
     DISCONNECT_RES: 6,
 };
 
+var CommonOrder = {
+    BEST_TOP: 1000,
+    POP_LAYER: 999,
+};
+
 var MJConfig =
 {
     getTablePos: function () {
@@ -128,60 +132,57 @@ var MJConfig =
 
     getPlayerChatPos: function (pos) {
         var p = this.getPlayerPos(pos);
-        if (pos == 0){
+        if (pos == 0) {
             p.y += 50;
-        }else if (pos == 1){
+        } else if (pos == 1) {
             p.y += 50;
         }
-        else if (pos == 2){
+        else if (pos == 2) {
 
         }
-        else if (pos == 3){
+        else if (pos == 3) {
             p.y += 50;
         }
         return p;
     },
     getPlayerPos: function (index) {
         var point = this.getWorldPosition("player", "player" + index);
-        if(index == 3 && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
-            point.y -= 75;
-        }
         return point;
     },
 
     getOutCardPos: function (pos, index) {
         if (MJModel.mj_roomType == 2) {
-            index = index%58;
+            index = index % 58;
             return this.getWorldPosition("out_" + pos, "o_" + index);
         }
 
         if (MJModel.mj_bg_use == 1) {
-            if(pos == 0 || pos == 2){
-                index = index%26;
-            }else {
-                if(MJModel.mj_paiban == "vertical"){
-                    index = index%28;
-                }else {
-                    index = index%30;
+            if (pos == 0 || pos == 2) {
+                index = index % 26;
+            } else {
+                if (MJModel.mj_paiban == "vertical") {
+                    index = index % 28;
+                } else {
+                    index = index % 30;
                 }
             }
         } else {
-            if(MJModel.has_hu_layout == 1){
-                index = index%22;
-            }else {
-                index = index%26;
+            if (MJModel.has_hu_layout == 1) {
+                index = index % 22;
+            } else {
+                index = index % 26;
             }
         }
-        if((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
+        if ((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
             return this.getWorldPosition("out_v_" + pos, "o_" + index);
-        }else {
+        } else {
             return this.getWorldPosition("out_" + pos, "o_" + index);
         }
     },
 
     getOutCardOrder: function (pos, index) {
         if (MJModel.mj_roomType == 2) {
-            index = index%58;
+            index = index % 58;
             var order = null;
             if (MJModel.mj_bg_use == 1) {
                 order = [
@@ -209,9 +210,9 @@ var MJConfig =
                 return order[pos][index];
             } else {
                 if (pos == 0) {
-                    return index%58;
+                    return index % 58;
                 } else if (pos == 2) {
-                    return 57 - index%58;
+                    return 57 - index % 58;
                 }
                 return 0;
             }
@@ -219,17 +220,17 @@ var MJConfig =
 
 
         if (MJModel.mj_bg_use == 1) {
-            if(pos == 0 || pos == 2){
-                index = index%26;
-            }else {
-                if(MJModel.mj_paiban == "vertical"){
-                    index = index%28;
-                }else {
-                    index = index%30;
+            if (pos == 0 || pos == 2) {
+                index = index % 26;
+            } else {
+                if (MJModel.mj_paiban == "vertical") {
+                    index = index % 28;
+                } else {
+                    index = index % 30;
                 }
             }
             var order = null;
-            if((pos == 1 || pos == 3) && MJModel.mj_paiban == "vertical"){
+            if ((pos == 1 || pos == 3) && MJModel.mj_paiban == "vertical") {
                 order = [
                     [
                         3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -256,7 +257,7 @@ var MJConfig =
                         0, 1, 2, 3, 4, 5, 6,
                     ],
                 ];
-            }else {
+            } else {
                 order = [
                     [
                         3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -283,33 +284,33 @@ var MJConfig =
                 ];
             }
             return order[pos][index];
-        }else{
+        } else {
 
-            if(MJModel.has_hu_layout == 1){
-                index = index%22;
-            }else {
-                index = index%26;
+            if (MJModel.has_hu_layout == 1) {
+                index = index % 22;
+            } else {
+                index = index % 26;
             }
 
             var order = [
                 [
-                                0,  1,  2,  3,  4,  5,
-                            6,  7,  8,  9,  10, 11, 12, 13,
-                    14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 , 25,
+                    0, 1, 2, 3, 4, 5,
+                    6, 7, 8, 9, 10, 11, 12, 13,
+                    14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
                 ],
                 [
-                    25 , 24 , 23, 22, 21, 20,
+                    25, 24, 23, 22, 21, 20,
                     19, 18, 17, 16, 15, 14, 13, 12,
                     11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
                 ],
                 [
-                    25 , 24 , 23, 22, 21, 20,
+                    25, 24, 23, 22, 21, 20,
                     19, 18, 17, 16, 15, 14, 13, 12,
                     11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
                 ],
                 [
                     20, 21, 22, 23, 24, 25,
-                    12 , 13, 14, 15, 16, 17, 18, 19,
+                    12, 13, 14, 15, 16, 17, 18, 19,
                     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
                 ],
             ];
@@ -318,7 +319,7 @@ var MJConfig =
     },
 
     getInfoPos: function () {
-        return MJModel.cardConfig.getChildByName("info").getPosition();
+        return MJModel.configNode.getChildByName("info").getPosition();
     },
 
     getDirPos: function (pos) {
@@ -331,7 +332,7 @@ var MJConfig =
     },
 
     getOutingCardPos: function (pos, index) {
-        return MJModel.cardConfig.getChildByName("outting").getChildByName("outting" + pos).getPosition();
+        return MJModel.configNode.getChildByName("outting").getChildByName("outting" + pos).getPosition();
     },
 
     getOutingCardOrder: function (pos, index) {
@@ -366,7 +367,7 @@ var MJConfig =
         if (needRestri) {
             findex = index - 1;
         }
-        if (findex == -1 && MJModel.mj_reflashcardtype == 1){
+        if (findex == -1 && MJModel.mj_reflashcardtype == 1) {
             return MJConfig.getMoCardPos(pos);
         }
         return this.getWorldPosition("hand_" + pos, "h_" + findex);
@@ -403,9 +404,9 @@ var MJConfig =
     },
 
     getPengKangCardPos: function (pos, index) {
-        if((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
+        if ((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
             return this.getWorldPosition("peng_v_" + pos, "p_" + index);
-        }else {
+        } else {
             return this.getWorldPosition("peng_" + pos, "p_" + index);
         }
     },
@@ -416,10 +417,10 @@ var MJConfig =
     },
 
     getPengKangCardPos2: function (pos, index, dex) {
-        if((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
-            return MJModel.cardConfig.getChildByName("peng_v_" + pos).getChildByName("p_" + index).getChildByName("p_" + dex).getPosition();
-        }else {
-            return MJModel.cardConfig.getChildByName("peng_" + pos).getChildByName("p_" + index).getChildByName("p_" + dex).getPosition();
+        if ((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
+            return MJModel.configNode.getChildByName("peng_v_" + pos).getChildByName("p_" + index).getChildByName("p_" + dex).getPosition();
+        } else {
+            return MJModel.configNode.getChildByName("peng_" + pos).getChildByName("p_" + index).getChildByName("p_" + dex).getPosition();
         }
     },
 
@@ -442,58 +443,58 @@ var MJConfig =
     },
 
     getOperatorTipPos: function (pos) {
-        return MJModel.cardConfig.getChildByName("op").getChildByName("op" + pos).getPosition();
+        return MJModel.configNode.getChildByName("op").getChildByName("op" + pos).getPosition();
     },
 
     getScale_new: function (pos, type, index, isCard) {
         var ss = 1;
         cc.log("MJConfig.getScale_new: pos" + pos + "type:" + type + "index:" + index);
-        try{
+        try {
             if (type == CardType.Card_Hand) {
-                ss = MJModel.cardConfig.getChildByName("hand_" + pos).getChildByName("h_" + index).getScale();
+                ss = MJModel.configNode.getChildByName("hand_" + pos).getChildByName("h_" + index).getScale();
             }
             if (type == CardType.Card_Peng && isCard == false) {
-                if((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
-                    ss = MJModel.cardConfig.getChildByName("peng_v_" + pos).getChildByName("p_" + index).getScale();
-                }else {
-                    ss = MJModel.cardConfig.getChildByName("peng_" + pos).getChildByName("p_" + index).getScale();
+                if ((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
+                    ss = MJModel.configNode.getChildByName("peng_v_" + pos).getChildByName("p_" + index).getScale();
+                } else {
+                    ss = MJModel.configNode.getChildByName("peng_" + pos).getChildByName("p_" + index).getScale();
                 }
             }
             if (type == CardType.Card_Peng && isCard == true) {
-                if((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
-                    ss = MJModel.cardConfig.getChildByName("peng_v_" + pos).getChildByName("p_0").getChildByName("p_" + index).getScale();
-                }else {
-                    ss = MJModel.cardConfig.getChildByName("peng_" + pos).getChildByName("p_0").getChildByName("p_" + index).getScale();
+                if ((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
+                    ss = MJModel.configNode.getChildByName("peng_v_" + pos).getChildByName("p_0").getChildByName("p_" + index).getScale();
+                } else {
+                    ss = MJModel.configNode.getChildByName("peng_" + pos).getChildByName("p_0").getChildByName("p_" + index).getScale();
                 }
             }
             if (type == CardType.Card_Out) {
                 if (MJModel.mj_bg_use == 1) {
-                    if(pos == 0 || pos == 2){
-                        index = index%26;
-                    }else {
-                        if(MJModel.mj_paiban == "vertical"){
-                            index = index%28;
-                        }else {
-                            index = index%30;
+                    if (pos == 0 || pos == 2) {
+                        index = index % 26;
+                    } else {
+                        if (MJModel.mj_paiban == "vertical") {
+                            index = index % 28;
+                        } else {
+                            index = index % 30;
                         }
                     }
-                }else {
-                    index = index%26;
+                } else {
+                    index = index % 26;
                 }
-                return MJModel.cardConfig.getChildByName("out_" + pos).getChildByName("o_" + index).getScale();
+                return MJModel.configNode.getChildByName("out_" + pos).getChildByName("o_" + index).getScale();
             }
             if (type == CardType.Card_Outing) {
             }
             if (type == CardType.Card_Public) {
-                ss = MJModel.cardConfig.getChildByName("public_" + pos).getChildByName("p_" + index).getScale();
+                ss = MJModel.configNode.getChildByName("public_" + pos).getChildByName("p_" + index).getScale();
             }
             if (type == CardType.Card_Hu) {
-                ss = MJModel.cardConfig.getChildByName("hu_" + pos).getChildByName("h_" + index).getScale();
+                ss = MJModel.configNode.getChildByName("hu_" + pos).getChildByName("h_" + index).getScale();
             }
             if (type == CardType.Card_End) {
-                ss = MJModel.cardConfig.getChildByName("end_" + pos).getChildByName("e_" + index).getScale();
+                ss = MJModel.configNode.getChildByName("end_" + pos).getChildByName("e_" + index).getScale();
             }
-        }catch(e){
+        } catch (e) {
             ss = 1;
         }
 
@@ -501,18 +502,18 @@ var MJConfig =
     },
 
     getHuCardPos: function (pos, index) {
-        index = index%12;
-        if((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
-            return this.getWorldPosition("hu_v_" + pos , "h_" + index);
+        index = index % 12;
+        if ((pos == 1 || pos == 3) && MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
+            return this.getWorldPosition("hu_v_" + pos, "h_" + index);
 
-        }else {
-            return this.getWorldPosition("hu_" + pos , "h_" + index);
+        } else {
+            return this.getWorldPosition("hu_" + pos, "h_" + index);
         }
     },
 
     getHuCardOrder: function (pos, index) {
-        index = index%12;
-        if(MJModel.mj_bg_use == 0){
+        index = index % 12;
+        if (MJModel.mj_bg_use == 0) {
             var order = [
                 [
                     22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
@@ -528,7 +529,7 @@ var MJConfig =
                 ],
             ];
             return order[pos][index];
-        }else {
+        } else {
             var order = [
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -585,8 +586,8 @@ var MJConfig =
                 _reValue = "public_1/" + c + ".png";
             }
 
-            if(MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
-                if(type == CardType.Card_Out || type == CardType.Card_Hu || type == CardType.Card_Peng){
+            if (MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
+                if (type == CardType.Card_Out || type == CardType.Card_Hu || type == CardType.Card_Peng) {
                     _reValue = "out_0/" + c + ".png";
                 }
             }
@@ -621,8 +622,8 @@ var MJConfig =
                 _reValue = "public_3/" + c + ".png";
             }
 
-            if(MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical"){
-                if(type == CardType.Card_Out || type == CardType.Card_Hu || type == CardType.Card_Peng){
+            if (MJModel.mj_bg_use == 1 && MJModel.mj_paiban == "vertical") {
+                if (type == CardType.Card_Out || type == CardType.Card_Hu || type == CardType.Card_Peng) {
                     _reValue = "out_0/" + c + ".png";
                 }
             }
@@ -635,90 +636,90 @@ var MJConfig =
         return 1;
     },
 
-    getPublicCardPos: function (pos,index) {
-        try{
+    getPublicCardPos: function (pos, index) {
+        try {
             return this.getWorldPosition("public_" + pos, "p_" + index);
-        }catch(e){
-            return cc.p(-1000,-1000);
+        } catch (e) {
+            return cc.p(-1000, -1000);
         }
     },
 
-    getPublicCardOrder: function (pos,index) {
+    getPublicCardOrder: function (pos, index) {
         var mi = parseInt((index / 2) % (MJModel.mj_public_nums[pos] / 2));
         var mj = parseInt(index % 2);
-        if (pos == 1){
+        if (pos == 1) {
             return 20 * mj - mi + 50;
-        }else if (pos == 3) {
+        } else if (pos == 3) {
             return 20 * mj + mi;
-        }else if (pos == 2){
+        } else if (pos == 2) {
             return mj + 1;
-        }else{
+        } else {
             return mj + 100;
         }
     },
 
-    getNiaoEndCardPos:function (pos , index, length , isQiShouHu) {
-        if(isQiShouHu == undefined){
+    getNiaoEndCardPos: function (pos, index, length, isQiShouHu) {
+        if (isQiShouHu == undefined) {
             isQiShouHu = false;
         }
         var begin = cc.p(0, 0);
         var qpos = this.getQiShouHuTipPos(pos);
         var cardSize = cc.size(85, 123);
-        if(pos == 0 || pos == 2){
-            if(pos == 2){
+        if (pos == 0 || pos == 2) {
+            if (pos == 2) {
                 begin.y = qpos.y - 50;
-                if(isQiShouHu){
+                if (isQiShouHu) {
                     begin.y += 50;
                 }
-            }else {
+            } else {
                 begin.y = qpos.y
             }
-            var startX = qpos.x - parseInt(cardSize.width*length/2);
-            begin.x = startX + cardSize.width/2 + index*cardSize.width;
-        }else if(pos == 1){
+            var startX = qpos.x - parseInt(cardSize.width * length / 2);
+            begin.x = startX + cardSize.width / 2 + index * cardSize.width;
+        } else if (pos == 1) {
             begin.y = qpos.y;
-            begin.x = qpos.x - (length - index - 1)*cardSize.width;
-            if(isQiShouHu){
+            begin.x = qpos.x - (length - index - 1) * cardSize.width;
+            if (isQiShouHu) {
                 begin.x -= 50;
             }
-        }else {
+        } else {
             begin.y = qpos.y;
-            begin.x = qpos.x + index*cardSize.width;
-            if(isQiShouHu){
+            begin.x = qpos.x + index * cardSize.width;
+            if (isQiShouHu) {
                 begin.x += 50;
             }
         }
         return begin;
     },
 
-    getNiaoBigCardPos:function (index, length) {
-        if(length > 15){
-            length = parseInt(length/2);
+    getNiaoBigCardPos: function (index, length) {
+        if (length > 15) {
+            length = parseInt(length / 2);
         }
-        var count = parseInt(index/length);
-        index = index%length;
+        var count = parseInt(index / length);
+        index = index % length;
         var begin = cc.p(0, 0);
         var size = cc.director.getWinSize();
         var cardSize = cc.size(83, 125);
-        var startX = parseInt((size.width - cardSize.width * length)/2);
-        begin = cc.p(startX + cardSize.width / 2  + index * cardSize.width, 320 - count * 125 + cardSize.height / 2);
+        var startX = parseInt((size.width - cardSize.width * length) / 2);
+        begin = cc.p(startX + cardSize.width / 2 + index * cardSize.width, 320 - count * 125 + cardSize.height / 2);
         return begin;
     },
 
-    getShaiZiPos:function (index , length) {
+    getShaiZiPos: function (index, length) {
         var begin = cc.p(0, 0);
         var size = cc.director.getWinSize();
         var cardSize = cc.size(100, 100);
         var marginW = -10;
-        var startX = parseInt((size.width - cardSize.width * length - (length - 1) * marginW)/2);
-        begin = cc.p(startX + cardSize.width / 2  + index * (cardSize.width + marginW), 390);
+        var startX = parseInt((size.width - cardSize.width * length - (length - 1) * marginW) / 2);
+        begin = cc.p(startX + cardSize.width / 2 + index * (cardSize.width + marginW), 390);
         return begin;
     },
 
     getQiShouHuTipPos: function (pos) {
         var begin = cc.p(0, 0);
         var size = cc.director.getWinSize();
-        if(MJModel.mj_bg_use == 0){
+        if (MJModel.mj_bg_use == 0) {
             if (pos == 0) {
                 begin = cc.p(size.width / 2, 150);
             }
@@ -731,7 +732,7 @@ var MJConfig =
             else if (pos == 3) {
                 begin = cc.p(230, 383);
             }
-        }else {
+        } else {
             if (pos == 0) {
                 begin = cc.p(size.width / 2, 150);
             }
@@ -750,7 +751,7 @@ var MJConfig =
 
     getWorldPosition: function (parentName, childName) {
         cc.log("parentName:" + parentName + "-------------" + "childName:" + childName);
-        var pNode = MJModel.cardConfig.getChildByName(parentName);
+        var pNode = MJModel.configNode.getChildByName(parentName);
         var childNone = pNode.getChildByName(childName);
         return pNode.convertToWorldSpace(childNone.getPosition());
     },

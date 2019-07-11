@@ -18,6 +18,9 @@ require(getSrcPath("MJLogic.js"));
 require(getSrcPath("proto.js"));
 require(getSrcPath("MJModel.js"));
 require(getSrcPath("MJConfig.js"));
+require(getSrcPath("MJPublic.js"));
+require(getSrcPath("MJAction.js"));
+require(getSrcPath("MJPlayer.js"));
 
 cc.game.onStart = function () {
     cc.log("lin=enter=MJJS");

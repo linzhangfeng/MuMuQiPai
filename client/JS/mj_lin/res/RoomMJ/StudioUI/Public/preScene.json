@@ -1,0 +1,809 @@
+{
+  "ID": "8265db2c-a7b4-47b7-8b16-ea8b0a144b3d",
+  "Version": "2.3.4",
+  "Name": "preScene",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 26,
+        "Children": [
+          {
+            "AnchorPoint": {},
+            "Position": {
+              "X": 640.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": true,
+            "PrePosition": {
+              "X": 0.5,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "HorizontalEdge": "BothEdge",
+            "VerticalEdge": "BottomEdge",
+            "LeftMargin": 640.0,
+            "RightMargin": 640.0,
+            "TopMargin": 720.0,
+            "Tag": 27,
+            "Children": [
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/share2.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/share2.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/share1.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 236,
+                "Scale9Height": 78,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": -270.0,
+                  "Y": 159.3154
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -403.0,
+                "RightMargin": 137.0,
+                "TopMargin": -209.3154,
+                "BottomMargin": 109.3154,
+                "Tag": 33,
+                "ActionTag": 731922084,
+                "Size": {
+                  "X": 266.0,
+                  "Y": 100.0
+                },
+                "Name": "yaoqing",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "PressedFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/ready2.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/ready1.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 236,
+                "Scale9Height": 78,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 0.0,
+                  "Y": 159.3154
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -133.0,
+                "RightMargin": -133.0,
+                "TopMargin": -209.3154,
+                "BottomMargin": 109.3154,
+                "Tag": 35,
+                "ActionTag": -1710734403,
+                "Size": {
+                  "X": 266.0,
+                  "Y": 100.0
+                },
+                "Name": "ready",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/copy2.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/copy2.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/copy1.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 236,
+                "Scale9Height": 78,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 270.0,
+                  "Y": 159.3154
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 137.0,
+                "RightMargin": -403.0,
+                "TopMargin": -209.3154,
+                "BottomMargin": 109.3154,
+                "Tag": 34,
+                "ActionTag": 844699503,
+                "Size": {
+                  "X": 266.0,
+                  "Y": 100.0
+                },
+                "Name": "copyshare",
+                "ctype": "ButtonObjectData"
+              },
+              {
+                "FontSize": 14,
+                "ButtonText": "",
+                "TextColor": {
+                  "R": 65,
+                  "G": 65,
+                  "B": 70
+                },
+                "DisabledFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/xl_yaoqing_s.png",
+                  "Plist": ""
+                },
+                "PressedFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/xl_yaoqing_s.png",
+                  "Plist": ""
+                },
+                "NormalFileData": {
+                  "Type": "Normal",
+                  "Path": "common/pretable/xl_yaoqing_n.png",
+                  "Plist": ""
+                },
+                "Scale9Enable": true,
+                "Scale9OriginX": 15,
+                "Scale9OriginY": 11,
+                "Scale9Width": 82,
+                "Scale9Height": 86,
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "TouchEnable": true,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 150.0,
+                  "Y": 44.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 94.0,
+                "RightMargin": -206.0,
+                "TopMargin": -98.0,
+                "BottomMargin": -10.0,
+                "Tag": 116,
+                "ActionTag": 2097361592,
+                "Size": {
+                  "X": 112.0,
+                  "Y": 108.0
+                },
+                "VisibleForFrame": false,
+                "Name": "xlshare",
+                "ctype": "ButtonObjectData"
+              }
+            ],
+            "ActionTag": 1472097732,
+            "Size": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Name": "btns",
+            "ctype": "SingleNodeObjectData"
+          },
+          {
+            "AnchorPoint": {},
+            "Position": {
+              "X": 640.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": true,
+            "PrePosition": {
+              "X": 0.5,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "HorizontalEdge": "BothEdge",
+            "VerticalEdge": "BottomEdge",
+            "LeftMargin": 640.0,
+            "RightMargin": 640.0,
+            "TopMargin": 720.0,
+            "Tag": 28,
+            "Children": [
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": -0.0012,
+                  "Y": 305.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -0.0012,
+                "RightMargin": 0.0012,
+                "TopMargin": -305.0,
+                "BottomMargin": 305.0,
+                "Tag": 30,
+                "ActionTag": 867103847,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "player0",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 340.0,
+                  "Y": 445.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": 340.0,
+                "RightMargin": -340.0,
+                "TopMargin": -445.0,
+                "BottomMargin": 445.0,
+                "Tag": 29,
+                "ActionTag": -1296730082,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "player1",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": -0.0012,
+                  "Y": 595.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -0.0012,
+                "RightMargin": 0.0012,
+                "TopMargin": -595.0,
+                "BottomMargin": 595.0,
+                "Tag": 32,
+                "ActionTag": 637001364,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "player2",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": -340.0,
+                  "Y": 445.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "LeftMargin": -340.0,
+                "RightMargin": 340.0,
+                "TopMargin": -445.0,
+                "BottomMargin": 445.0,
+                "Tag": 31,
+                "ActionTag": 1233349570,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "player3",
+                "ctype": "SingleNodeObjectData"
+              }
+            ],
+            "ActionTag": -1470652741,
+            "Size": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Name": "players",
+            "ctype": "SingleNodeObjectData"
+          },
+          {
+            "FontSize": 14,
+            "ButtonText": "",
+            "TextColor": {
+              "R": 65,
+              "G": 65,
+              "B": 70
+            },
+            "NormalFileData": {
+              "Type": "Normal",
+              "Path": "common/table/gps.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 15,
+            "Scale9OriginY": 11,
+            "Scale9Width": 10,
+            "Scale9Height": 24,
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "TouchEnable": true,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 40.0,
+              "Y": 663.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0313,
+              "Y": 0.9208
+            },
+            "PreSize": {
+              "X": 0.0313,
+              "Y": 0.0639
+            },
+            "HorizontalEdge": "LeftEdge",
+            "VerticalEdge": "TopEdge",
+            "LeftMargin": 20.0,
+            "RightMargin": 1220.0,
+            "TopMargin": 34.0,
+            "BottomMargin": 640.0,
+            "Tag": 36,
+            "ActionTag": -995325659,
+            "Size": {
+              "X": 40.0,
+              "Y": 46.0
+            },
+            "Name": "gps",
+            "ctype": "ButtonObjectData"
+          },
+          {
+            "FontSize": 14,
+            "ButtonText": "",
+            "TextColor": {
+              "R": 65,
+              "G": 65,
+              "B": 70
+            },
+            "NormalFileData": {
+              "Type": "Normal",
+              "Path": "common/table/more.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 15,
+            "Scale9OriginY": 11,
+            "Scale9Width": 61,
+            "Scale9Height": 69,
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "TouchEnable": true,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 1221.0491,
+              "Y": 631.93
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.9539,
+              "Y": 0.8777
+            },
+            "PreSize": {
+              "X": 0.0711,
+              "Y": 0.1264
+            },
+            "HorizontalEdge": "RightEdge",
+            "VerticalEdge": "TopEdge",
+            "LeftMargin": 1175.5491,
+            "RightMargin": 13.4509,
+            "TopMargin": 42.57,
+            "BottomMargin": 586.43,
+            "Tag": 37,
+            "ActionTag": 1985445929,
+            "Size": {
+              "X": 91.0,
+              "Y": 91.0
+            },
+            "Name": "more",
+            "ctype": "ButtonObjectData"
+          },
+          {
+            "FontSize": 14,
+            "ButtonText": "",
+            "TextColor": {
+              "R": 65,
+              "G": 65,
+              "B": 70
+            },
+            "NormalFileData": {
+              "Type": "Normal",
+              "Path": "common/table/chat.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 15,
+            "Scale9OriginY": 11,
+            "Scale9Width": 61,
+            "Scale9Height": 69,
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "TouchEnable": true,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 1222.04,
+              "Y": 349.7475
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.9547,
+              "Y": 0.4858
+            },
+            "PreSize": {
+              "X": 0.0711,
+              "Y": 0.1264
+            },
+            "HorizontalEdge": "RightEdge",
+            "LeftMargin": 1176.54,
+            "RightMargin": 12.46,
+            "TopMargin": 324.7525,
+            "BottomMargin": 304.2475,
+            "Tag": 38,
+            "ActionTag": -445319176,
+            "Size": {
+              "X": 91.0,
+              "Y": 91.0
+            },
+            "Name": "chat",
+            "ctype": "ButtonObjectData"
+          },
+          {
+            "FontSize": 14,
+            "ButtonText": "",
+            "TextColor": {
+              "R": 65,
+              "G": 65,
+              "B": 70
+            },
+            "NormalFileData": {
+              "Type": "Normal",
+              "Path": "common/table/sound.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 15,
+            "Scale9OriginY": 11,
+            "Scale9Width": 61,
+            "Scale9Height": 69,
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "TouchEnable": true,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 1222.0399,
+              "Y": 270.739
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.9547,
+              "Y": 0.376
+            },
+            "PreSize": {
+              "X": 0.0711,
+              "Y": 0.1264
+            },
+            "HorizontalEdge": "RightEdge",
+            "LeftMargin": 1176.5399,
+            "RightMargin": 12.4601,
+            "TopMargin": 403.761,
+            "BottomMargin": 225.239,
+            "Tag": 39,
+            "ActionTag": 985420230,
+            "Size": {
+              "X": 91.0,
+              "Y": 91.0
+            },
+            "Name": "sound",
+            "ctype": "ButtonObjectData"
+          }
+        ],
+        "Size": {
+          "X": 1280.0,
+          "Y": 720.0
+        },
+        "Name": "Layer",
+        "ctype": "LayerObjectData"
+      },
+      "UsedResources": [
+        "common/pretable/copy1.png",
+        "common/pretable/copy2.png",
+        "common/pretable/ready1.png",
+        "common/pretable/ready2.png",
+        "common/pretable/share1.png",
+        "common/pretable/share2.png",
+        "common/pretable/xl_yaoqing_n.png",
+        "common/pretable/xl_yaoqing_s.png",
+        "common/table/chat.png",
+        "common/table/gps.png",
+        "common/table/more.png",
+        "common/table/sound.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Layer"
+}

@@ -7,6 +7,10 @@ var CMD =
         SERVER_CONNECT_SUCC_BC:         4003,//准备成功
         SERVER_DISBAND_ROOM_SUCC_BC:    4004,//解散房间成功
         SERVER_USER_OFFLINE_BC:         4005,//广播玩家掉线
+        SERVER_UPTABLE_SUCCC_BC:        4006,//上桌成功
+        SERVER_DOWNTABLE_SUCCC_BC:      4007,//下桌成功
+        SERVER_TABLE_INFO_UC:           4008,//桌面信息
+        SERVER_GAME_SCENE:              4009,//游戏场景
 
         //客户端请求
         CLIENT_LOGIN_REQ:           1001, //登录请求
