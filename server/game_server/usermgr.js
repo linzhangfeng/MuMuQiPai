@@ -3,8 +3,17 @@ var db = require('../utils/db');
 var CMD = require('./proto');
 var userList = {};
 var userOnline = 0;
-exports.bind = function(userId,socket){
+exports.bind = function(userId,socket,callback){
     userList[userId] = socket;
+    exports.getUserDataByUserId(userId,function(userData){
+        if(userData != null){
+            socket.userData = {
+                gps:"",
+                name:userData[""]
+            };
+            callback(0);
+        }
+    });
     userOnline++;
 };
 
@@ -47,6 +56,20 @@ exports.logout = function(userId,socket){
    exports.disconnect(userId);
 };
 
+exports.upTable = function(socket){
+    //广播当前玩家上桌信息
+    var sendData = {};
+    sendData.data = {
+        seatId:roomMgr.getUserSeatId(),
+        name:"",
+        uId:152,
+        money:10000,
+        sex:sex,
+        avatar:"fasd",
+    };
+    sendData.id = CMD.CMD.SERVER_UPTABLE_SUCCC_BC;
+    socket.emit('data', sendData);
+};
 exports.kickAllInRoom = function(roomId){
     if(roomId == null){
         return;

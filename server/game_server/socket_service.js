@@ -65,7 +65,7 @@ exports.start = function(conf,mgr){
 				break;
 				case CMD.CMD.CLINET_HEART_BEAT_REQ:
 					handler_client_heart_beat_req(data);
-				break;
+				break; 
 			}
 		};
 
@@ -81,15 +81,16 @@ exports.start = function(conf,mgr){
 
 			userMgr.bind(userId,socket);
 			socket.userId = userId;
-
+			
 			var sendData = {};
 			sendData.data = {};
 			sendData.id = CMD.CMD.SERVER_LOGIN_SUCC_UC;
 			socket.emit('data', sendData);
-
+			
 			//开启心跳
 			socket.lastRecieveTime = Date.now();
 			userMgr.startHeartBeat(userId);
+
 		};
 
 		function handler_client_logout_req(data){
@@ -100,6 +101,7 @@ exports.start = function(conf,mgr){
 			userMgr.sendMsg(socket.userId,'data',sendData);
 			
 			userMgr.logout(socket.userId);
+			userMgr.upTable(socket);
 		};
 
 		function handler_client_ready_req(data){
@@ -164,7 +166,7 @@ exports.start = function(conf,mgr){
 			//返回房间信息
 			var roomInfo = roomMgr.getRoom(roomId);
 			
-			var seatIndex = roomMgr.getUserSeat(userId);
+			var seatIndex = roomMgr.getUserSeatId(userId);
 			roomInfo.seats[seatIndex].ip = socket.handshake.address;
 
 			var userData = null;

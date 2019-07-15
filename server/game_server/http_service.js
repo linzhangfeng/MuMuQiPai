@@ -138,7 +138,45 @@ app.post('/get_room_info',function(req,res){
 	});
 });
 
+app.post('/add_room',function(req,res){
+	http.postCallback(req,res,function(jsonData){
+		var roomId = jsonData.roomId;
+		var userId = jsonData.userId;
+		//更新房间信息
+		roomMgr.updateRoomInfo(roomId,userId,function(reslut,seatId){
+			var roomInfo = roomMgr.getRoom(roomId);
+			var seatInfo = roomInfo.seats[seatId];
+			
+			if(reslut != 0){
+				var ret = {
+					status:200,
+					errmsg:"ok",
+					roomId:roomId,
+					sign:sign
+				}
+				send(res,ret);	
+				return;
+			}
+			//获取当前用户信息
+			userMgr.getUserDataByUserId(userId,function(userData){
+				if(userData != null){
+					seatInfo.userId = userId;
+					seatInfo.score = userData["coins"];
+					seatInfo.name = userData["name"];
+				}
+				var ret = {
+					status:200,
+					errmsg:"ok",
+					roomId:roomId,
+					sign:sign
+				}
+				send(res,ret);	
+			});
 
+
+		});
+	});
+});
 
 app.get('/enter_room1',function(req,res){
 	var userId = parseInt(req.query.userid);

@@ -10,3 +10,5 @@ output
 .svn
 cocos2d.zip
 /client/MuMuQiPai_3.17.2
+*.udf
+/client/JS/mj_lin/UI/PublicUi/mjpublicui.udf

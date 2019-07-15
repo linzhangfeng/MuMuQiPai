@@ -501,13 +501,14 @@ exports.get_room_id_of_user = function(userId,callback){
 };
 
 
-exports.create_room = function(roomId,conf,ip,port,create_time,callback){
+exports.create_room = function(roomId,conf,ip,port,create_time,seats,callback){
     callback = callback == null? nop:callback;
-    var sql = "INSERT INTO t_rooms(uuid,id,base_info,ip,port,create_time) \
-                VALUES('{0}','{1}','{2}','{3}',{4},{5})";
+    var sql = "INSERT INTO t_rooms(uuid,id,base_info,ip,port,create_time,seats) \
+                VALUES('{0}','{1}','{2}','{3}',{4},{5},'{6}')";
     var uuid = Date.now() + roomId;
     var baseInfo = JSON.stringify(conf);
-    sql = sql.format(uuid,roomId,baseInfo,ip,port,create_time);
+    var seatsInfo = JSON.stringify(seats);
+    sql = sql.format(uuid,roomId,baseInfo,ip,port,create_time,seatsInfo);
     console.log(sql);
     query(sql,function(err,row,fields){
         if(err){
@@ -540,6 +541,23 @@ exports.update_seat_info = function(roomId,seatIndex,userId,icon,name,callback){
     name = crypto.toBase64(name);
     sql = sql.format(seatIndex,userId,icon,name,roomId);
     //console.log(sql);
+    query(sql,function(err,row,fields){
+        if(err){
+            callback(false);
+            throw err;
+        }
+        else{
+            callback(true);
+        }
+    });
+}
+
+exports.update_seats_info = function(roomId,seats,callback){
+    callback = callback == null? nop:callback;
+    var seatsStr = JSON.stringify(seats);
+    var sql = 'UPDATE t_rooms SET seats = "{1}" WHERE id = "{0}"';
+    name = crypto.toBase64(name);
+    sql = sql.format(roomId,seatsStr);
     query(sql,function(err,row,fields){
         if(err){
             callback(false);

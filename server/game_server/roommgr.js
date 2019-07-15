@@ -47,7 +47,7 @@ function constructRoomFromDb(dbdata){
 		s.score = dbdata["user_score" + i];
 		s.name = dbdata["user_name" + i];
 		s.ready = false;
-		s.seatIndex = i;
+		s.seatId = i;
 		s.numZiMo = 0;
 		s.numJiePao = 0;
 		s.numDianPao = 0;
@@ -58,7 +58,7 @@ function constructRoomFromDb(dbdata){
 		if(s.userId > 0){
 			userLocation[s.userId] = {
 				roomId:roomId,
-				seatIndex:i
+				seatId:i
 			};
 		}
 	}
@@ -154,13 +154,14 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 					}
 					console.log(roomInfo.conf);
 					
+					var seats = {};
 					for(var i = 0; i < 4; ++i){
 						roomInfo.seats.push({
 							userId:0,
 							score:0,
 							name:"",
 							ready:false,
-							seatIndex:i,
+							seatId:i,
 							numZiMo:0,
 							numJiePao:0,
 							numDianPao:0,
@@ -168,11 +169,15 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 							numMingGang:0,
 							numChaJiao:0,
 						});
+						seats[i] = "";
+						if(i == 0){
+							seats[i] = userId;	
+						}
 					}
 					
 					//写入数据库
 					var conf = roomInfo.conf;
-					db.create_room(roomInfo.id,roomInfo.conf,ip,port,createTime,function(uuid){
+					db.create_room(roomInfo.id,roomInfo.conf,ip,port,createTime,seats,function(uuid){
 						delete creatingRooms[roomId];
 						if(uuid != null){
 							roomInfo.uuid = uuid;
@@ -191,6 +196,10 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 	}
 
 	fnCreate();
+};
+
+exports.addRoom = function(roomId,userId,callback){
+
 };
 
 exports.destroy = function(roomId){
@@ -228,6 +237,27 @@ exports.isCreator = function(roomId,userId){
 	return roomInfo.conf.creator == userId;
 };
 
+exports.updateRoomInfo = function (roomId,userId,callback) {
+	callback = callback == null? nop:callback;
+	exports.getRoomData(roomId,function(errcode,roomData){
+		if(roomData != null){
+			var seatId = -1;
+			var seatsStr = roomData["seats"];
+			var seatsJson = JSON.parse(seatsStr);
+			for(var i = 0; i < 4;i ++){
+				if(seatsJson[i] == ""){
+					seatsJson[i] = userId;
+					seatId = i;
+					break;
+				}
+			}
+			db.update_user_roomid(userId,roomId);
+			db.update_seats_info(roomId,seatsJson);
+			callback(0,seatId);
+		}	
+	});
+};
+
 exports.enterRoom = function(roomId,userId,userName,callback){
 	var fnTakeSeat = function(room){
 		if(exports.getUserRoom(userId) == roomId){
@@ -242,7 +272,7 @@ exports.enterRoom = function(roomId,userId,userName,callback){
 				seat.name = userName;
 				userLocation[userId] = {
 					roomId:roomId,
-					seatIndex:i
+					seatId:i
 				};
 				//console.log(userLocation[userId]);
 				db.update_seat_info(roomId,i,seat.userId,"",seat.name);
@@ -274,6 +304,7 @@ exports.enterRoom = function(roomId,userId,userName,callback){
 		});
 	}
 };
+
 exports.getRoomData = function(roomId,callback){
 	db.get_room_data(roomId,function(dbdata){
 		if(dbdata == null){
@@ -336,11 +367,10 @@ exports.getUserRoom = function(userId){
 	return null;
 };
 
-exports.getUserSeat = function(userId){
+exports.getUserSeatId = function(userId){
 	var location = userLocation[userId];
-	//console.log(userLocation[userId]);
 	if(location != null){
-		return location.seatIndex;
+		return location.seatId;
 	}
 	return null;
 };
