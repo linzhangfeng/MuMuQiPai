@@ -58,18 +58,6 @@ app.get('/register_gs',function(req,res){
 		serverid:id,
 		sign:crypto.md5(id+config.ROOM_PRI_KEY)
 	};
-	//获取服务器信息
-	http.get(ip,httpPort,"/get_server_info",reqdata,function(ret,data){
-		if(ret && data.errcode == 0){
-			for(var i = 0; i < data.userroominfo.length; i += 2){
-				var userId = data.userroominfo[i];
-				var roomId = data.userroominfo[i+1];
-			}
-		}
-		else{
-			console.log(data.errmsg);
-		}
-	});
 });
 
 function chooseServer(){

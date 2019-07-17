@@ -26,32 +26,6 @@ app.all('*', function(req, res, next) {
 	next();
 });
 
-app.get('/get_server_info',function(req,res){
-	var serverId = req.query.serverid;
-	var sign = req.query.sign;
-	console.log(serverId);
-	console.log(sign);
-	if(serverId  != config.SERVER_ID || sign == null){
-		http.send(res,1,"invalid parameters");
-		return;
-	}
-
-	var md5 = crypto.md5(serverId + config.ROOM_PRI_KEY);
-	if(md5 != sign){
-		http.send(res,1,"sign check failed.");
-		return;
-	}
-
-	var locations = roomMgr.getUserLocations();
-	var arr = [];
-	for(var userId in locations){
-		var roomId = locations[userId].roomId;
-		arr.push(userId);
-		arr.push(roomId);
-	}
-	http.send(res,0,"ok",{userroominfo:arr});
-});
-
 app.post('/create_room',function(req,res){
 	http.postCallback(req,res,function(jsonData){
 		var userId = jsonData.userId;
@@ -130,7 +104,7 @@ app.post('/get_room_info',function(req,res){
 					errmsg:"ok",
 					roomId:roomId,
 					roomData:roomData,
-					sign:sign
+					sign:sign 
 				}
 				send(res,ret);	
 			}	
@@ -149,8 +123,8 @@ app.post('/add_room',function(req,res){
 			
 			if(reslut != 0){
 				var ret = {
-					status:200,
-					errmsg:"ok",
+					status:-1,
+					errmsg:"error",
 					roomId:roomId,
 					sign:sign
 				}
@@ -178,95 +152,8 @@ app.post('/add_room',function(req,res){
 	});
 });
 
-app.get('/enter_room1',function(req,res){
-	var userId = parseInt(req.query.userid);
-	var name = req.query.name;
-	var roomId = req.query.roomid;
-	var sign = req.query.sign;
-	if(userId == null || roomId == null || sign == null){
-		http.send(res,1,"invalid parameters");
-		return;
-	}
-
-	var md5 = crypto.md5(userId + name + roomId + config.ROOM_PRI_KEY);
-	console.log(req.query);
-	console.log(md5);
-	if(md5 != sign){
-		http.send(res,2,"sign check failed.");
-		return;
-	}
-
-	//安排玩家坐下
-	roomMgr.enterRoom(roomId,userId,name,function(ret){
-		if(ret != 0){
-			if(ret == 1){
-				http.send(res,4,"room is full.");
-			}
-			else if(ret == 2){
-				http.send(res,3,"can't find room.");
-			}	
-			return;		
-		}
-
-		var token = tokenMgr.createToken(userId,5000);
-		http.send(res,0,"ok",{token:token});
-	});
-});
-
-app.get('/is_room_runing',function(req,res){
-	var roomId = req.query.roomid;
-	var sign = req.query.sign;
-	if(roomId == null || sign == null){
-		http.send(res,1,"invalid parameters");
-		return;
-	}
-
-	var md5 = crypto.md5(roomId + config.ROOM_PRI_KEY);
-	if(md5 != sign){
-		http.send(res,2,"sign check failed.");
-		return;
-	}
-	
-	//var roomInfo = roomMgr.getRoom(roomId);
-	http.send(res,0,"ok",{runing:true});
-});
-
-var gameServerInfo = null;
-var lastTickTime = 0;
-
-//向大厅服定时心跳
-function update(){
-	if(lastTickTime + config.HTTP_TICK_TIME < Date.now()){
-		lastTickTime = Date.now();
-		gameServerInfo.load = roomMgr.getTotalRooms();
-		http.get(config.HALL_IP,config.HALL_PORT,"/register_gs",gameServerInfo,function(ret,data){
-			if(ret == true){
-				if(data.errcode != 0){
-					console.log(data.errmsg);
-				}
-				
-				if(data.ip != null){
-					serverIp = data.ip;
-				}
-			}
-			else{
-				//
-				lastTickTime = 0;
-			}
-		});
-
-		var mem = process.memoryUsage();
-		var format = function(bytes) {  
-              return (bytes/1024/1024).toFixed(2)+'MB';  
-        }; 
-		//console.log('Process: heapTotal '+format(mem.heapTotal) + ' heapUsed ' + format(mem.heapUsed) + ' rss ' + format(mem.rss));
-	}
-}
-
 exports.start = function($config){
 	config = $config;
-
-	//
 	gameServerInfo = {
 		id:config.SERVER_ID,
 		clientip:config.CLIENT_IP,
@@ -274,8 +161,6 @@ exports.start = function($config){
 		httpPort:config.HTTP_PORT,
 		load:roomMgr.getTotalRooms(),
 	};
-
-	setInterval(update,1000);
 	app.listen(config.HTTP_PORT,config.FOR_HALL_IP);
 	console.log("game server is listening on " + config.FOR_HALL_IP + ":" + config.HTTP_PORT);
 };

@@ -3,17 +3,8 @@ var db = require('../utils/db');
 var CMD = require('./proto');
 var userList = {};
 var userOnline = 0;
-exports.bind = function(userId,socket,callback){
+exports.bind = function(userId,socket){
     userList[userId] = socket;
-    exports.getUserDataByUserId(userId,function(userData){
-        if(userData != null){
-            socket.userData = {
-                gps:"",
-                name:userData[""]
-            };
-            callback(0);
-        }
-    });
     userOnline++;
 };
 
