@@ -169,10 +169,6 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 							numMingGang:0,
 							numChaJiao:0,
 						});
-						seats[i] = "";
-						if(i == 0){
-							seats[i] = userId;	
-						}
 					}
 					
 					//写入数据库
