@@ -112,21 +112,6 @@ void SocketClient::onError(SIOClient* client, const std::string& data)
     log("%s is Error %s",client->getTag(),data.c_str());
 }
 
-void SocketClient::fireEventToScript(SIOClient* client, const std::string& eventName, const std::string& data) {
-    CC_UNUSED_PARAM(client);
-    
-    if(eventName == "disconnect"){
-        m_pSocklient = NULL;
-        setConnectState(false);
-        g_socketClients[getCurRoomId()] = NULL;
-        
-        //连接关闭
-        Json::Value data;
-        create_response(DISCONNECT_RES, data.toStyledString());
-    }
-    CCLOG("SIODelegate event '%s' fired with data: %s", eventName.c_str(), data.c_str());
-};
-
 void SocketClient::init()
 {
     m_pRequestQueue = new Queue<SocketRequest*>();
@@ -179,7 +164,7 @@ void SocketClient::send_Data(std::string sendData, int id)
 
 void SocketClient::connect_req()
 {
-    m_pSocklient = SocketIO::connect("127.0.0.1:10000",*this);
+    m_pSocklient = SocketIO::connect(SocketClient::m_url,*this);
     if (m_pSocklient)
     {
         m_pSocklient->setTag("initsocket");

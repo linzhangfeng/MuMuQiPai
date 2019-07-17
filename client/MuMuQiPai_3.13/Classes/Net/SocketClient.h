@@ -53,7 +53,6 @@ class SocketClient :public Ref,SocketIO::SIODelegate
 public:
     virtual void onClose(SIOClient* client);
     virtual void onError(SIOClient* client, const std::string& data);
-    virtual void fireEventToScript(SIOClient* client, const std::string& eventName, const std::string& data);
     
 public:
     /** Return the shared instance **/
@@ -93,6 +92,8 @@ private:
     std::string     m_curRoomId;
 
 public:
+    static std::string m_url;
+    
     Queue<SocketRequest*> *getRequestQueue(){
         return m_pRequestQueue;
     }

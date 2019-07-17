@@ -73,3 +73,4 @@ void Utils::saveItem(const char* itemName,std::string strValue)
 {
     UserDefault::getInstance()->setStringForKey(itemName, strValue);
 }
+

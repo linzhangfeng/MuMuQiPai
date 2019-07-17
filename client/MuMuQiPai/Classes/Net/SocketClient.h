@@ -92,6 +92,8 @@ private:
     std::string     m_curRoomId;
 
 public:
+    static std::string m_url;
+    
     Queue<SocketRequest*> *getRequestQueue(){
         return m_pRequestQueue;
     }

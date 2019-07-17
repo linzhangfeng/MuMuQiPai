@@ -7,6 +7,7 @@
 #include "LoadingScene.h"
 #include "LoginScene.h"
 #include "Net/HttpAgent.h"
+#include "Net/SocketClient.h"
 USING_NS_CC;
 
 AppDelegate::AppDelegate() {
@@ -49,9 +50,20 @@ bool AppDelegate::applicationDidFinishLaunching() {
     FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
 //    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS/output");
     
-    std::string url = "http://127.0.0.1:9000/";
-    CCHttpAgent::getInstance()->checkChangeURL(url);
-    CCHttpAgent::getInstance()->setUrl(url);
+    if(0){ //本地调试
+        CCHttpAgent::m_accountUrl = "http://127.0.0.1:9000/";
+        CCHttpAgent::m_hallUrl = "http://127.0.0.1:9001/";
+        CCHttpAgent::m_gameUrl = "http://127.0.0.1:9003/";
+        SocketClient::m_url = "127.0.0.1:10000";
+    }else{
+        CCHttpAgent::m_accountUrl = "http://119.23.221.227:9000/";
+        CCHttpAgent::m_hallUrl = "http://119.23.221.227:9001/";
+        CCHttpAgent::m_gameUrl = "http://119.23.221.227:9003/";
+        SocketClient::m_url = "119.23.221.227:10000";
+    }
+
+    CCHttpAgent::getInstance()->checkChangeURL(CCHttpAgent::m_accountUrl);
+    CCHttpAgent::getInstance()->setUrl(CCHttpAgent::m_accountUrl);
 //    const Json::Value& dat = {};
 //    auto scene = GameHallLayer::createScene(dat);
 //    auto scene = GameHallLayer::createScene();

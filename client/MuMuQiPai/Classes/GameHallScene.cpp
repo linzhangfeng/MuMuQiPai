@@ -81,8 +81,7 @@ void GameHallLayer::initData()
 }
 void GameHallLayer::createRoom()
 {
-    std::string url = "http://127.0.0.1:9003/";
-    CCHttpAgent::getInstance()->checkChangeURL(url);
+    CCHttpAgent::getInstance()->checkChangeURL(CCHttpAgent::m_gameUrl);
     
     Json::Value json;
     json["userId"] = UserModel::getInstance()->getUid();
@@ -115,8 +114,7 @@ void GameHallLayer::createRoom()
 
 void GameHallLayer::getRoomInfo()
 {
-    std::string url = "http://127.0.0.1:9003/";
-    CCHttpAgent::getInstance()->checkChangeURL(url);
+    CCHttpAgent::getInstance()->checkChangeURL(CCHttpAgent::m_gameUrl);
     
     Json::Value json;
     json["roomId"] = UserModel::getInstance()->getCurRoomId();
@@ -151,8 +149,7 @@ void GameHallLayer::getRoomInfo()
 void GameHallLayer::getUserInfo()
 {
     //获取用户数据
-    std::string url = "http://127.0.0.1:9001/";
-    CCHttpAgent::getInstance()->checkChangeURL(url);
+    CCHttpAgent::getInstance()->checkChangeURL(CCHttpAgent::m_hallUrl);
     Json::Value json;
     json["account"] = UserModel::getInstance()->getAccount();
     

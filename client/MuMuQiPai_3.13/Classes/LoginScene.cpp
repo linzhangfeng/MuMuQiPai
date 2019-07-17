@@ -57,7 +57,6 @@ void LoginLayer::initData()
 //        showDialogs(LoginLayer::Status::Login);
 //        auto layer = CreateRoom::create();:9000
 //        this->addChild(layer,100)
-//        CCTcpClient::getInstance(1)->set_host_port("127.0.0.1", 9003);
 //        CCTcpClient::getInstance(1)->connect();
         SocketTest::getInstance()->connect();
         return true;

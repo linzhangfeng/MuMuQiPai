@@ -85,6 +85,9 @@ public:
     /** Relase the shared instance **/
     static void destroyInstance();
 	
+    static std::string m_accountUrl;
+    static std::string m_hallUrl;
+    static std::string m_gameUrl;
     CCHttpAgent();
     virtual ~CCHttpAgent();
 public:
