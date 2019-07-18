@@ -36,6 +36,8 @@ app.post('/login',function(req,res){
 	var ip = req.ip;
 	http.postCallback(req,res,function(data){
 		var account = data.account;
+		console.log("recv_hall_login:"+JSON.stringify(data));
+
 		db.get_user_data(account,function(data){
 			if(data == null){
 				http.send(res,0,"ok");

@@ -179,6 +179,7 @@ exports.send = function(res,status,errmsg,data){
 	data.status = status;
 	data.errmsg = errmsg;
 	var jsonstr = JSON.stringify(data);
+	console.log("send:"+jsonstr);
 	res.send(jsonstr);
 };
 

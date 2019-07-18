@@ -9,6 +9,7 @@ var hallAddr = "";
 
 function send(res,ret){
 	var str = JSON.stringify(ret);
+	console.log("send:"+str);
 	res.send(str)
 }
 
@@ -109,7 +110,7 @@ app.post('/login',function(req,res){
 	req.on('end', () => {
 		//console.log(str)
 		var json = JSON.parse(str)
-		console.log(json)
+		console.log("recv_account_login:"+str);
 		var account = json.account;
 		var password = json.password;
 		db.get_account_info(account,password,function(info){

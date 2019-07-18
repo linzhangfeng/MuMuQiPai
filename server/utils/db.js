@@ -20,7 +20,6 @@ function generateUserId() {
 }
 
 function query(sql,callback){  
-    console.log("sql:"+sql);
     pool.getConnection(function(err,conn){  
         if(err){  
             callback(err,null,null);  
@@ -155,7 +154,6 @@ exports.get_user_data = function(account,callback){
     }
 
     var sql = 'SELECT userid,account,name,lv,exp,coins,gems,roomid FROM t_users WHERE account = "' + account + '"';
-    console.log("get_user_data:sql="+sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             callback(null);
@@ -202,7 +200,6 @@ exports.update_user_roomid = function(userid,roomid,callback){
     }
     
     var sql = 'UPDATE t_users SET roomid = ' + roomid + ' WHERE userid = ' + userid;
-    console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             console.log(err);
@@ -225,7 +222,6 @@ exports.add_user_gems = function(userid,gems,callback){
     }
     
     var sql = 'UPDATE t_users SET gems = gems +' + gems + ' WHERE userid = ' + userid;
-    console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             console.log(err);
@@ -285,7 +281,6 @@ exports.get_user_history = function(userId,callback){
             callback(null);    
         }
         else{
-            console.log(history.length);
             history = JSON.parse(history);
             callback(history);
         }        
@@ -301,7 +296,6 @@ exports.update_user_history = function(userId,history,callback){
 
     history = JSON.stringify(history);
     var sql = 'UPDATE t_users SET roomid = null, history = \'' + history + '\' WHERE userid = "' + userId + '"';
-    //console.log(sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             callback(false);
@@ -325,7 +319,6 @@ exports.get_games_of_room = function(room_uuid,callback){
     }
 
     var sql = 'SELECT game_index,create_time,result FROM t_games_archive WHERE room_uuid = "' + room_uuid + '"';
-    //console.log(sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             callback(null);
@@ -348,7 +341,6 @@ exports.get_detail_of_game = function(room_uuid,index,callback){
         return;
     }
     var sql = 'SELECT base_info,action_records FROM t_games_archive WHERE room_uuid = "' + room_uuid + '" AND game_index = ' + index ;
-    //console.log(sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             callback(null);
@@ -380,7 +372,6 @@ exports.create_user = function(account,name,coins,gems,sex,headimg,callback){
 
     var sql = 'INSERT INTO t_users(userid,account,name,coins,gems,sex,headimg) VALUES("{0}", "{1}","{2}",{3},{4},{5},{6})';
     sql = sql.format(userId,account,name,coins,gems,sex,headimg);
-    console.log(sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             throw err;
@@ -405,7 +396,6 @@ exports.update_user_info = function(userid,name,headimg,sex,callback){
     name = crypto.toBase64(name);
     var sql = 'UPDATE t_users SET name="{0}",headimg={1},sex={2} WHERE account="{3}"';
     sql = sql.format(name,headimg,sex,userid);
-    console.log(sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             throw err;
@@ -422,7 +412,6 @@ exports.get_user_base_info = function(userid,callback){
     }
     var sql = 'SELECT name,sex,headimg FROM t_users WHERE userid={0}';
     sql = sql.format(userid);
-    console.log(sql);
     query(sql, function(err, rows, fields) {
         if (err) {
             throw err;
@@ -449,7 +438,6 @@ exports.is_room_exist = function(roomId,callback){
 exports.cost_gems = function(userid,cost,callback){
     callback = callback == null? nop:callback;
     var sql = 'UPDATE t_users SET gems = gems -' + cost + ' WHERE userid = ' + userid;
-    console.log(sql);
     query(sql, function(err, rows, fields) {
         if(err){
             callback(false);
@@ -467,7 +455,6 @@ exports.set_room_id_of_user = function(userId,roomId,callback){
         roomId = '"' + roomId + '"';
     }
     var sql = 'UPDATE t_users SET roomid = '+ roomId + ' WHERE userid = "' + userId + '"';
-    console.log(sql);
     query(sql, function(err, rows, fields) {
         if(err){
             console.log(err);
@@ -475,7 +462,6 @@ exports.set_room_id_of_user = function(userId,roomId,callback){
             throw err;
         }
         else{
-            console.log("lin=rows.length="+rows.length);
             callback(true);
         }
     });
@@ -509,7 +495,6 @@ exports.create_room = function(roomId,conf,ip,port,create_time,seats,callback){
     var baseInfo = JSON.stringify(conf);
     var seatsInfo = JSON.stringify(seats);
     sql = sql.format(uuid,roomId,baseInfo,ip,port,create_time,seatsInfo);
-    console.log(sql);
     query(sql,function(err,row,fields){
         if(err){
             callback(null);
@@ -540,7 +525,6 @@ exports.update_seat_info = function(roomId,seatIndex,userId,icon,name,callback){
     var sql = 'UPDATE t_rooms SET user_id{0} = {1},user_icon{0} = "{2}",user_name{0} = "{3}" WHERE id = "{4}"';
     name = crypto.toBase64(name);
     sql = sql.format(seatIndex,userId,icon,name,roomId);
-    //console.log(sql);
     query(sql,function(err,row,fields){
         if(err){
             callback(false);
@@ -573,7 +557,6 @@ exports.update_num_of_turns = function(roomId,numOfTurns,callback){
     callback = callback == null? nop:callback;
     var sql = 'UPDATE t_rooms SET num_of_turns = {0} WHERE id = "{1}"'
     sql = sql.format(numOfTurns,roomId);
-    //console.log(sql);
     query(sql,function(err,row,fields){
         if(err){
             callback(false);
@@ -590,7 +573,6 @@ exports.update_next_button = function(roomId,nextButton,callback){
     callback = callback == null? nop:callback;
     var sql = 'UPDATE t_rooms SET next_button = {0} WHERE id = "{1}"'
     sql = sql.format(nextButton,roomId);
-    //console.log(sql);
     query(sql,function(err,row,fields){
         if(err){
             callback(false);
@@ -608,7 +590,6 @@ exports.set_room_state_of_roomid = function(roomId,state,callback){
         roomId = '"' + roomId + '"';
     }
     var sql = 'UPDATE t_rooms SET room_state = '+ state + ' WHERE userid = "' + userId + '"';
-    console.log(sql);
     query(sql, function(err, rows, fields) {
         if(err){
             console.log(err);
@@ -676,7 +657,6 @@ exports.delete_room = function(roomId,callback){
     }
     var sql = "DELETE FROM t_rooms WHERE id = '{0}'";
     sql = sql.format(roomId);
-    console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             callback(false);
@@ -692,7 +672,6 @@ exports.create_game = function(room_uuid,index,base_info,callback){
     callback = callback == null? nop:callback;
     var sql = "INSERT INTO t_games(room_uuid,game_index,base_info,create_time) VALUES('{0}',{1},'{2}',unix_timestamp(now()))";
     sql = sql.format(room_uuid,index,base_info);
-    //console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             callback(null);
@@ -711,7 +690,6 @@ exports.delete_games = function(room_uuid,callback){
     }    
     var sql = "DELETE FROM t_games WHERE room_uuid = '{0}'";
     sql = sql.format(room_uuid);
-    console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             callback(false);
@@ -730,7 +708,6 @@ exports.archive_games = function(room_uuid,callback){
     }
     var sql = "INSERT INTO t_games_archive(SELECT * FROM t_games WHERE room_uuid = '{0}')";
     sql = sql.format(room_uuid);
-    console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             callback(false);
@@ -747,7 +724,6 @@ exports.archive_games = function(room_uuid,callback){
 exports.update_game_action_records = function(room_uuid,index,actions,callback){
     callback = callback == null? nop:callback;
     var sql = "UPDATE t_games SET action_records = '"+ actions +"' WHERE room_uuid = '" + room_uuid + "' AND game_index = " + index ;
-    //console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             callback(false);
@@ -767,7 +743,6 @@ exports.update_game_result = function(room_uuid,index,result,callback){
     
     result = JSON.stringify(result);
     var sql = "UPDATE t_games SET result = '"+ result +"' WHERE room_uuid = '" + room_uuid + "' AND game_index = " + index ;
-    //console.log(sql);
     query(sql,function(err,rows,fields){
         if(err){
             callback(false);
