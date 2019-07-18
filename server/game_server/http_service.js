@@ -163,6 +163,8 @@ exports.start = function($config){
 		httpPort:config.HTTP_PORT,
 		load:roomMgr.getTotalRooms(),
 	};
-	app.listen(config.HTTP_PORT,config.FOR_HALL_IP);
-	console.log("game server is listening on " + config.FOR_HALL_IP + ":" + config.HTTP_PORT);
+	app.listen(config.HTTP_PORT,function(){
+  		console.log("game server is listening on port:" + ":" + config.HTTP_PORT);
+	});
+	
 };
