@@ -45,25 +45,25 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
-    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/MuMuQiPai/cocos2d/cocos/scripting/js-bindings");
+//    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/MuMuQiPai/cocos2d/cocos/scripting/js-bindings");
     FileUtils::getInstance()->addSearchPath("StudioUI/");
-    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
+//    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
 //    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS/output");
     
     if(0){ //本地调试
-        CCHttpAgent::m_accountUrl = "http://127.0.0.1:9000/";
-        CCHttpAgent::m_hallUrl = "http://127.0.0.1:9001/";
-        CCHttpAgent::m_gameUrl = "http://127.0.0.1:9003/";
-        SocketClient::m_url = "127.0.0.1:10000";
+        CCHttpAgent::getInstance()->setAccountUrl("http://127.0.0.1:9000/");
+        CCHttpAgent::getInstance()->setHallUrl("http://127.0.0.1:9001/");
+        CCHttpAgent::getInstance()->setGameUrl("http://127.0.0.1:9003/");
+        SocketClient::getInstance()->setUrl("127.0.0.1:10000");
     }else{
-        CCHttpAgent::m_accountUrl = "http://119.23.221.227:9000/";
-        CCHttpAgent::m_hallUrl = "http://119.23.221.227:9001/";
-        CCHttpAgent::m_gameUrl = "http://119.23.221.227:9003/";
-        SocketClient::m_url = "119.23.221.227:10000";
+        CCHttpAgent::getInstance()->setAccountUrl("http://119.23.221.227:9000/");
+        CCHttpAgent::getInstance()->setHallUrl("http://119.23.221.227:9001/");
+        CCHttpAgent::getInstance()->setGameUrl("http://119.23.221.227:9003/");
+        SocketClient::getInstance()->setUrl("119.23.221.227:10000");
     }
 
-    CCHttpAgent::getInstance()->checkChangeURL(CCHttpAgent::m_accountUrl);
-    CCHttpAgent::getInstance()->setUrl(CCHttpAgent::m_accountUrl);
+    CCHttpAgent::getInstance()->checkChangeURL(CCHttpAgent::getInstance()->getAccountUrl());
+    CCHttpAgent::getInstance()->setUrl(CCHttpAgent::getInstance()->getAccountUrl());
 //    const Json::Value& dat = {};
 //    auto scene = GameHallLayer::createScene(dat);
 //    auto scene = GameHallLayer::createScene();

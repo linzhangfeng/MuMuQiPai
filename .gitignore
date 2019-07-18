@@ -13,3 +13,4 @@ cocos2d.zip
 *.udf
 /client/JS/mj_lin/UI/PublicUi/mjpublicui.udf
 /server/.DS_Store
+nohup.out

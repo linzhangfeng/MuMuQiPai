@@ -85,9 +85,6 @@ public:
     /** Relase the shared instance **/
     static void destroyInstance();
 	
-    static std::string m_accountUrl;
-    static std::string m_hallUrl;
-    static std::string m_gameUrl;
     CCHttpAgent();
     virtual ~CCHttpAgent();
 public:
@@ -103,7 +100,14 @@ public:
     bool init(void);
     void setUrl(string str);
     string getUrl(){return m_url;}
-
+    
+    void setAccountUrl(string str){m_accountUrl = str;};
+    string getAccountUrl(){return m_accountUrl;}
+    void setHallUrl(string str){m_hallUrl = str;};
+    string getHallUrl(){return m_hallUrl;}
+    void setGameUrl(string str){m_gameUrl = str;};
+    string getGameUrl(){return m_gameUrl;}
+    
     void setImageUrl(string str);
     void setImageUploadUrl(string str);
     void setImageDownloadUrl(string str);
@@ -145,7 +149,9 @@ private:
     std::stringstream stream;
     std::vector<std::string> m_urlList;
     std::string              m_url;
-    
+    std::string m_accountUrl;
+    std::string m_hallUrl;
+    std::string m_gameUrl;
 };
 
 #endif //_HTTP_AGENT_H_

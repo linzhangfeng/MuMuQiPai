@@ -82,6 +82,8 @@ public:
     std::string getCurRoomId(){
         return m_curRoomId;
     }
+    void setUrl(std::string url){m_url = url;}
+    std::string getUrl(){return m_url;}
 private:
     Queue<SocketRequest*> *m_pRequestQueue;
     Queue<SocketResponse*> *m_pResponseQueue;
@@ -90,9 +92,9 @@ private:
     pthread_t       m_responseThread;
     SIOClient       *m_pSocklient;
     std::string     m_curRoomId;
+    std::string m_url;
 
 public:
-    static std::string m_url;
     
     Queue<SocketRequest*> *getRequestQueue(){
         return m_pRequestQueue;

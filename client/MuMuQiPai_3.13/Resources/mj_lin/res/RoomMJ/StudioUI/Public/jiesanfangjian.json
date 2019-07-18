@@ -1,0 +1,1626 @@
+{
+  "ID": "4e9fba55-3458-4fcb-9e27-958aca6f49fd",
+  "Version": "2.3.4",
+  "Name": "jiesanfangjian",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 1561,
+        "Children": [
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/public/bg2.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -383.0,
+            "RightMargin": -383.0,
+            "TopMargin": -224.0,
+            "BottomMargin": -224.0,
+            "Tag": 1563,
+            "Children": [
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/public/bg_top.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 383.0,
+                  "Y": 400.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.8929
+                },
+                "PreSize": {
+                  "X": 0.6319,
+                  "Y": 0.1473
+                },
+                "LeftMargin": 141.0,
+                "RightMargin": 141.0,
+                "TopMargin": 15.0,
+                "BottomMargin": 367.0,
+                "Tag": 284,
+                "ActionTag": -702468259,
+                "Size": {
+                  "X": 484.0,
+                  "Y": 66.0
+                },
+                "Name": "bg_top_8",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/jieshan/title.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 383.0,
+                  "Y": 400.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.8929
+                },
+                "PreSize": {
+                  "X": 0.2141,
+                  "Y": 0.0893
+                },
+                "LeftMargin": 301.0,
+                "RightMargin": 301.0,
+                "TopMargin": 28.0,
+                "BottomMargin": 380.0,
+                "Tag": 1568,
+                "ActionTag": 297606661,
+                "Size": {
+                  "X": 164.0,
+                  "Y": 40.0
+                },
+                "Name": "jiesan_title",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "RightMargin": 766.0,
+                "TopMargin": 448.0,
+                "Tag": 1566,
+                "Children": [
+                  {
+                    "FontSize": 14,
+                    "ButtonText": "",
+                    "TextColor": {
+                      "R": 65,
+                      "G": 65,
+                      "B": 70
+                    },
+                    "NormalFileData": {
+                      "Type": "Normal",
+                      "Path": "common/dialog/public/btn_green.png",
+                      "Plist": ""
+                    },
+                    "Scale9Enable": true,
+                    "Scale9OriginX": 15,
+                    "Scale9OriginY": 11,
+                    "Scale9Width": 196,
+                    "Scale9Height": 70,
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "TouchEnable": true,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 230.0,
+                      "Y": 65.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 117.0,
+                    "RightMargin": -343.0,
+                    "TopMargin": -111.0,
+                    "BottomMargin": 19.0,
+                    "Tag": 1569,
+                    "Children": [
+                      {
+                        "FileData": {
+                          "Type": "Normal",
+                          "Path": "common/dialog/public/cancel.png",
+                          "Plist": ""
+                        },
+                        "BlendFunc": {
+                          "Src": 1,
+                          "Dst": 771
+                        },
+                        "AnchorPoint": {
+                          "ScaleX": 0.5,
+                          "ScaleY": 0.5
+                        },
+                        "Position": {
+                          "X": 113.0,
+                          "Y": 55.0
+                        },
+                        "Scale": {
+                          "ScaleX": 1.0,
+                          "ScaleY": 1.0
+                        },
+                        "CColor": {},
+                        "IconVisible": false,
+                        "PositionPercentXEnabled": true,
+                        "PrePosition": {
+                          "X": 0.5,
+                          "Y": 0.5978
+                        },
+                        "PreSize": {
+                          "X": 0.646,
+                          "Y": 0.5
+                        },
+                        "LeftMargin": 40.0,
+                        "RightMargin": 40.0,
+                        "TopMargin": 14.0,
+                        "BottomMargin": 32.0,
+                        "Tag": 285,
+                        "ActionTag": -73073125,
+                        "Size": {
+                          "X": 146.0,
+                          "Y": 46.0
+                        },
+                        "Name": "tip",
+                        "ctype": "SpriteObjectData"
+                      }
+                    ],
+                    "ActionTag": -616601872,
+                    "Size": {
+                      "X": 226.0,
+                      "Y": 92.0
+                    },
+                    "Name": "no",
+                    "ctype": "ButtonObjectData"
+                  },
+                  {
+                    "FontSize": 14,
+                    "ButtonText": "",
+                    "TextColor": {
+                      "R": 65,
+                      "G": 65,
+                      "B": 70
+                    },
+                    "NormalFileData": {
+                      "Type": "Normal",
+                      "Path": "common/dialog/public/btn_yellow.png",
+                      "Plist": ""
+                    },
+                    "Scale9Enable": true,
+                    "Scale9OriginX": 15,
+                    "Scale9OriginY": 11,
+                    "Scale9Width": 196,
+                    "Scale9Height": 70,
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "TouchEnable": true,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 536.0,
+                      "Y": 65.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 423.0,
+                    "RightMargin": -649.0,
+                    "TopMargin": -111.0,
+                    "BottomMargin": 19.0,
+                    "Tag": 1570,
+                    "Children": [
+                      {
+                        "FileData": {
+                          "Type": "Normal",
+                          "Path": "common/dialog/public/sure.png",
+                          "Plist": ""
+                        },
+                        "BlendFunc": {
+                          "Src": 1,
+                          "Dst": 771
+                        },
+                        "AnchorPoint": {
+                          "ScaleX": 0.5,
+                          "ScaleY": 0.5
+                        },
+                        "Position": {
+                          "X": 113.0,
+                          "Y": 55.0
+                        },
+                        "Scale": {
+                          "ScaleX": 1.0,
+                          "ScaleY": 1.0
+                        },
+                        "CColor": {},
+                        "IconVisible": false,
+                        "PositionPercentXEnabled": true,
+                        "PrePosition": {
+                          "X": 0.5,
+                          "Y": 0.5978
+                        },
+                        "PreSize": {
+                          "X": 0.646,
+                          "Y": 0.5
+                        },
+                        "LeftMargin": 40.0,
+                        "RightMargin": 40.0,
+                        "TopMargin": 14.0,
+                        "BottomMargin": 32.0,
+                        "Tag": 286,
+                        "ActionTag": 2061960452,
+                        "Size": {
+                          "X": 146.0,
+                          "Y": 46.0
+                        },
+                        "Name": "tip",
+                        "ctype": "SpriteObjectData"
+                      }
+                    ],
+                    "ActionTag": -913231017,
+                    "Size": {
+                      "X": 226.0,
+                      "Y": 92.0
+                    },
+                    "Name": "ok",
+                    "ctype": "ButtonObjectData"
+                  },
+                  {
+                    "FontSize": 14,
+                    "ButtonText": "",
+                    "TextColor": {
+                      "R": 65,
+                      "G": 65,
+                      "B": 70
+                    },
+                    "NormalFileData": {
+                      "Type": "Normal",
+                      "Path": "common/dialog/public/close.png",
+                      "Plist": ""
+                    },
+                    "Scale9Enable": true,
+                    "Scale9OriginX": 15,
+                    "Scale9OriginY": 11,
+                    "Scale9Width": 1,
+                    "Scale9Height": 8,
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "TouchEnable": true,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 719.2507,
+                      "Y": 399.7513
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 704.2507,
+                    "RightMargin": -734.2507,
+                    "TopMargin": -414.7513,
+                    "BottomMargin": 384.7513,
+                    "Tag": 1571,
+                    "ActionTag": 1903199588,
+                    "Size": {
+                      "X": 30.0,
+                      "Y": 30.0
+                    },
+                    "Name": "close",
+                    "ctype": "ButtonObjectData"
+                  }
+                ],
+                "ActionTag": -885889555,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "btns",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "FontSize": 36,
+                "LabelText": "申请解散房间确认",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 383.0,
+                  "Y": 250.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 115,
+                  "G": 46,
+                  "B": 7
+                },
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.558
+                },
+                "PreSize": {
+                  "X": 0.376,
+                  "Y": 0.0938
+                },
+                "LeftMargin": 239.0,
+                "RightMargin": 239.0,
+                "TopMargin": 177.0,
+                "BottomMargin": 229.0,
+                "Tag": 1567,
+                "ActionTag": 904536645,
+                "Size": {
+                  "X": 288.0,
+                  "Y": 42.0
+                },
+                "Name": "tip",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": 1966707339,
+            "Size": {
+              "X": 766.0,
+              "Y": 448.0
+            },
+            "VisibleForFrame": false,
+            "Name": "jiesanshenqing",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/public/bg1.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -483.0,
+            "RightMargin": -483.0,
+            "TopMargin": -284.0,
+            "BottomMargin": -284.0,
+            "Tag": 1572,
+            "Children": [
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/public/bg_top.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 483.0,
+                  "Y": 515.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.9067
+                },
+                "PreSize": {
+                  "X": 0.501,
+                  "Y": 0.1162
+                },
+                "LeftMargin": 241.0,
+                "RightMargin": 241.0,
+                "TopMargin": 20.0,
+                "BottomMargin": 482.0,
+                "Tag": 287,
+                "ActionTag": -1468441216,
+                "Size": {
+                  "X": 484.0,
+                  "Y": 66.0
+                },
+                "Name": "bg_top_11",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/jieshan/title.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 483.0,
+                  "Y": 515.0005
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.9067
+                },
+                "PreSize": {
+                  "X": 0.1698,
+                  "Y": 0.0704
+                },
+                "LeftMargin": 401.0,
+                "RightMargin": 401.0,
+                "TopMargin": 32.9995,
+                "BottomMargin": 495.0005,
+                "Tag": 1575,
+                "ActionTag": 1036559260,
+                "Size": {
+                  "X": 164.0,
+                  "Y": 40.0
+                },
+                "Name": "jiesan_title_0",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "RightMargin": 966.0,
+                "TopMargin": 568.0,
+                "Tag": 1576,
+                "Children": [
+                  {
+                    "FontSize": 14,
+                    "ButtonText": "",
+                    "TextColor": {
+                      "R": 65,
+                      "G": 65,
+                      "B": 70
+                    },
+                    "NormalFileData": {
+                      "Type": "Normal",
+                      "Path": "common/dialog/public/btn_green.png",
+                      "Plist": ""
+                    },
+                    "Scale9Enable": true,
+                    "Scale9OriginX": 15,
+                    "Scale9OriginY": 11,
+                    "Scale9Width": 196,
+                    "Scale9Height": 70,
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "TouchEnable": true,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 300.0,
+                      "Y": 55.0001
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 187.0,
+                    "RightMargin": -413.0,
+                    "TopMargin": -101.0001,
+                    "BottomMargin": 9.0001,
+                    "Tag": 1577,
+                    "Children": [
+                      {
+                        "FileData": {
+                          "Type": "Normal",
+                          "Path": "common/dialog/jieshan/no.png",
+                          "Plist": ""
+                        },
+                        "BlendFunc": {
+                          "Src": 1,
+                          "Dst": 771
+                        },
+                        "AnchorPoint": {
+                          "ScaleX": 0.5,
+                          "ScaleY": 0.5
+                        },
+                        "Position": {
+                          "X": 113.0,
+                          "Y": 55.0
+                        },
+                        "Scale": {
+                          "ScaleX": 1.0,
+                          "ScaleY": 1.0
+                        },
+                        "CColor": {},
+                        "IconVisible": false,
+                        "PositionPercentXEnabled": true,
+                        "PrePosition": {
+                          "X": 0.5,
+                          "Y": 0.5978
+                        },
+                        "PreSize": {
+                          "X": 0.646,
+                          "Y": 0.5
+                        },
+                        "LeftMargin": 40.0,
+                        "RightMargin": 40.0,
+                        "TopMargin": 14.0,
+                        "BottomMargin": 32.0,
+                        "Tag": 472,
+                        "ActionTag": -1259791595,
+                        "Size": {
+                          "X": 146.0,
+                          "Y": 46.0
+                        },
+                        "Name": "tip",
+                        "ctype": "SpriteObjectData"
+                      }
+                    ],
+                    "ActionTag": 548329832,
+                    "Size": {
+                      "X": 226.0,
+                      "Y": 92.0
+                    },
+                    "VisibleForFrame": false,
+                    "Name": "no",
+                    "ctype": "ButtonObjectData"
+                  },
+                  {
+                    "FontSize": 14,
+                    "ButtonText": "",
+                    "TextColor": {
+                      "R": 65,
+                      "G": 65,
+                      "B": 70
+                    },
+                    "NormalFileData": {
+                      "Type": "Normal",
+                      "Path": "common/dialog/public/btn_yellow.png",
+                      "Plist": ""
+                    },
+                    "Scale9Enable": true,
+                    "Scale9OriginX": 15,
+                    "Scale9OriginY": 11,
+                    "Scale9Width": 196,
+                    "Scale9Height": 70,
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "TouchEnable": true,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 666.0,
+                      "Y": 55.0001
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 553.0,
+                    "RightMargin": -779.0,
+                    "TopMargin": -101.0001,
+                    "BottomMargin": 9.0001,
+                    "Tag": 1578,
+                    "Children": [
+                      {
+                        "FileData": {
+                          "Type": "Normal",
+                          "Path": "common/dialog/jieshan/ok.png",
+                          "Plist": ""
+                        },
+                        "BlendFunc": {
+                          "Src": 1,
+                          "Dst": 771
+                        },
+                        "AnchorPoint": {
+                          "ScaleX": 0.5,
+                          "ScaleY": 0.5
+                        },
+                        "Position": {
+                          "X": 113.0,
+                          "Y": 55.0
+                        },
+                        "Scale": {
+                          "ScaleX": 1.0,
+                          "ScaleY": 1.0
+                        },
+                        "CColor": {},
+                        "IconVisible": false,
+                        "PositionPercentXEnabled": true,
+                        "PrePosition": {
+                          "X": 0.5,
+                          "Y": 0.5978
+                        },
+                        "PreSize": {
+                          "X": 0.646,
+                          "Y": 0.5
+                        },
+                        "LeftMargin": 40.0,
+                        "RightMargin": 40.0,
+                        "TopMargin": 14.0,
+                        "BottomMargin": 32.0,
+                        "Tag": 473,
+                        "ActionTag": 1852154420,
+                        "Size": {
+                          "X": 146.0,
+                          "Y": 46.0
+                        },
+                        "Name": "tip",
+                        "ctype": "SpriteObjectData"
+                      }
+                    ],
+                    "ActionTag": -1485205249,
+                    "Size": {
+                      "X": 226.0,
+                      "Y": 92.0
+                    },
+                    "VisibleForFrame": false,
+                    "Name": "ok",
+                    "ctype": "ButtonObjectData"
+                  },
+                  {
+                    "FontSize": 14,
+                    "ButtonText": "",
+                    "TextColor": {
+                      "R": 65,
+                      "G": 65,
+                      "B": 70
+                    },
+                    "NormalFileData": {
+                      "Type": "Normal",
+                      "Path": "common/dialog/public/close.png",
+                      "Plist": ""
+                    },
+                    "Scale9Enable": true,
+                    "Scale9OriginX": 15,
+                    "Scale9OriginY": 11,
+                    "Scale9Width": 1,
+                    "Scale9Height": 8,
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "TouchEnable": true,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 919.5015,
+                      "Y": 521.0025
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": false,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 904.5015,
+                    "RightMargin": -934.5015,
+                    "TopMargin": -536.0025,
+                    "BottomMargin": 506.0025,
+                    "Tag": 1579,
+                    "ActionTag": 250859778,
+                    "Size": {
+                      "X": 30.0,
+                      "Y": 30.0
+                    },
+                    "VisibleForFrame": false,
+                    "Name": "close",
+                    "ctype": "ButtonObjectData"
+                  }
+                ],
+                "ActionTag": 1914907766,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "btns",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "FontSize": 28,
+                "LabelText": "玩家 小丸子 正在申请解散房间，全部统一后房间会被解散",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 483.0,
+                  "Y": 450.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 115,
+                  "G": 46,
+                  "B": 7
+                },
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.7923
+                },
+                "PreSize": {
+                  "X": 0.7412,
+                  "Y": 0.0563
+                },
+                "LeftMargin": 125.0,
+                "RightMargin": 125.0,
+                "TopMargin": 102.0,
+                "BottomMargin": 434.0,
+                "Tag": 1580,
+                "ActionTag": 1468049179,
+                "Size": {
+                  "X": 716.0,
+                  "Y": 32.0
+                },
+                "Name": "tip1",
+                "ctype": "TextObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/setting/7.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 483.0001,
+                  "Y": 193.9986
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.3415
+                },
+                "PreSize": {
+                  "X": 0.5176,
+                  "Y": 0.0352
+                },
+                "LeftMargin": 233.0001,
+                "RightMargin": 232.9999,
+                "TopMargin": 364.0014,
+                "BottomMargin": 183.9986,
+                "Tag": 1614,
+                "ActionTag": 447014352,
+                "Size": {
+                  "X": 500.0,
+                  "Y": 20.0
+                },
+                "Name": "jiesan_time_bg",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "ProgressInfo": 100,
+                "ImageFileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/jieshan/progress.png",
+                  "Plist": ""
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 483.0001,
+                  "Y": 193.9986
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.3415
+                },
+                "PreSize": {
+                  "X": 0.5176,
+                  "Y": 0.0352
+                },
+                "LeftMargin": 233.0001,
+                "RightMargin": 232.9999,
+                "TopMargin": 364.0014,
+                "BottomMargin": 183.9986,
+                "Tag": 1613,
+                "ActionTag": 675097767,
+                "Size": {
+                  "X": 500.0,
+                  "Y": 20.0
+                },
+                "Name": "time_loading",
+                "ctype": "LoadingBarObjectData"
+              },
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "common/dialog/jieshan/timebg.png",
+                  "Plist": ""
+                },
+                "BlendFunc": {
+                  "Src": 1,
+                  "Dst": 771
+                },
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 482.9998,
+                  "Y": 68.8434
+                },
+                "Scale": {
+                  "ScaleX": 1.5,
+                  "ScaleY": 1.5
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.1212
+                },
+                "PreSize": {
+                  "X": 0.058,
+                  "Y": 0.0986
+                },
+                "LeftMargin": 454.9998,
+                "RightMargin": 455.0002,
+                "TopMargin": 471.1566,
+                "BottomMargin": 40.8434,
+                "Tag": 146,
+                "Children": [
+                  {
+                    "FontSize": 20,
+                    "LabelText": "299",
+                    "OutlineColor": {
+                      "G": 0,
+                      "B": 0
+                    },
+                    "ShadowColor": {
+                      "R": 110,
+                      "G": 110,
+                      "B": 110
+                    },
+                    "ShadowOffsetX": 2.0,
+                    "ShadowOffsetY": -2.0,
+                    "AnchorPoint": {
+                      "ScaleX": 0.5,
+                      "ScaleY": 0.5
+                    },
+                    "Position": {
+                      "X": 28.0,
+                      "Y": 28.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {
+                      "R": 101,
+                      "G": 85,
+                      "B": 21
+                    },
+                    "IconVisible": false,
+                    "PositionPercentXEnabled": true,
+                    "PositionPercentYEnabled": true,
+                    "PrePosition": {
+                      "X": 0.5,
+                      "Y": 0.5
+                    },
+                    "PreSize": {
+                      "X": 0.6071,
+                      "Y": 0.4107
+                    },
+                    "LeftMargin": 11.0,
+                    "RightMargin": 11.0,
+                    "TopMargin": 16.5,
+                    "BottomMargin": 16.5,
+                    "Tag": 148,
+                    "ActionTag": 1645815071,
+                    "Size": {
+                      "X": 34.0,
+                      "Y": 23.0
+                    },
+                    "Name": "text",
+                    "ctype": "TextObjectData"
+                  }
+                ],
+                "ActionTag": -1307486134,
+                "Size": {
+                  "X": 56.0,
+                  "Y": 56.0
+                },
+                "Name": "time_label",
+                "ctype": "SpriteObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "RightMargin": 966.0,
+                "TopMargin": 568.0,
+                "Tag": 1591,
+                "Children": [
+                  {
+                    "AnchorPoint": {},
+                    "Position": {
+                      "X": 269.0,
+                      "Y": 320.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": true,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 269.0,
+                    "RightMargin": -269.0,
+                    "TopMargin": -320.0,
+                    "BottomMargin": 320.0,
+                    "Tag": 1589,
+                    "ActionTag": -435173590,
+                    "Size": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "Name": "player0",
+                    "ctype": "SingleNodeObjectData"
+                  },
+                  {
+                    "AnchorPoint": {},
+                    "Position": {
+                      "X": 482.0,
+                      "Y": 320.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": true,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 482.0,
+                    "RightMargin": -482.0,
+                    "TopMargin": -320.0,
+                    "BottomMargin": 320.0,
+                    "Tag": 1588,
+                    "ActionTag": -1916454615,
+                    "Size": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "Name": "player1",
+                    "ctype": "SingleNodeObjectData"
+                  },
+                  {
+                    "AnchorPoint": {},
+                    "Position": {
+                      "X": 694.0,
+                      "Y": 320.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": true,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 694.0,
+                    "RightMargin": -694.0,
+                    "TopMargin": -320.0,
+                    "BottomMargin": 320.0,
+                    "Tag": 1590,
+                    "ActionTag": -83486259,
+                    "Size": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "Name": "player2",
+                    "ctype": "SingleNodeObjectData"
+                  }
+                ],
+                "ActionTag": -1806404536,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "player3",
+                "ctype": "SingleNodeObjectData"
+              },
+              {
+                "FontSize": 24,
+                "LabelText": "超时未操作的玩家默认选择 “同意解散”",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 483.0001,
+                  "Y": 143.9988
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 203,
+                  "G": 89,
+                  "B": 24
+                },
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.2535
+                },
+                "PreSize": {
+                  "X": 0.4213,
+                  "Y": 0.0493
+                },
+                "LeftMargin": 279.5001,
+                "RightMargin": 279.4999,
+                "TopMargin": 410.0012,
+                "BottomMargin": 129.9988,
+                "Tag": 1615,
+                "ActionTag": 704823520,
+                "Size": {
+                  "X": 407.0,
+                  "Y": 28.0
+                },
+                "Name": "tip2",
+                "ctype": "TextObjectData"
+              },
+              {
+                "AnchorPoint": {},
+                "Position": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {},
+                "IconVisible": true,
+                "PrePosition": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "PreSize": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "RightMargin": 966.0,
+                "TopMargin": 568.0,
+                "Tag": 1744,
+                "Children": [
+                  {
+                    "AnchorPoint": {},
+                    "Position": {
+                      "X": 164.0,
+                      "Y": 320.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": true,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 164.0,
+                    "RightMargin": -164.0,
+                    "TopMargin": -320.0,
+                    "BottomMargin": 320.0,
+                    "Tag": 1746,
+                    "ActionTag": 645394818,
+                    "Size": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "Name": "player0",
+                    "ctype": "SingleNodeObjectData"
+                  },
+                  {
+                    "AnchorPoint": {},
+                    "Position": {
+                      "X": 377.0,
+                      "Y": 320.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": true,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 377.0,
+                    "RightMargin": -377.0,
+                    "TopMargin": -320.0,
+                    "BottomMargin": 320.0,
+                    "Tag": 1745,
+                    "ActionTag": 214396690,
+                    "Size": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "Name": "player1",
+                    "ctype": "SingleNodeObjectData"
+                  },
+                  {
+                    "AnchorPoint": {},
+                    "Position": {
+                      "X": 589.0,
+                      "Y": 320.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": true,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 589.0,
+                    "RightMargin": -589.0,
+                    "TopMargin": -320.0,
+                    "BottomMargin": 320.0,
+                    "Tag": 1747,
+                    "ActionTag": 657134100,
+                    "Size": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "Name": "player2",
+                    "ctype": "SingleNodeObjectData"
+                  },
+                  {
+                    "AnchorPoint": {},
+                    "Position": {
+                      "X": 801.0,
+                      "Y": 320.0
+                    },
+                    "Scale": {
+                      "ScaleX": 1.0,
+                      "ScaleY": 1.0
+                    },
+                    "CColor": {},
+                    "IconVisible": true,
+                    "PrePosition": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "PreSize": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "LeftMargin": 801.0,
+                    "RightMargin": -801.0,
+                    "TopMargin": -320.0,
+                    "BottomMargin": 320.0,
+                    "Tag": 1748,
+                    "ActionTag": 1110448909,
+                    "Size": {
+                      "X": 0.0,
+                      "Y": 0.0
+                    },
+                    "Name": "player3",
+                    "ctype": "SingleNodeObjectData"
+                  }
+                ],
+                "ActionTag": -272506955,
+                "Size": {
+                  "X": 0.0,
+                  "Y": 0.0
+                },
+                "Name": "player4",
+                "ctype": "SingleNodeObjectData"
+              }
+            ],
+            "ActionTag": 1728052379,
+            "Size": {
+              "X": 966.0,
+              "Y": 568.0
+            },
+            "Name": "jiesantoupiao",
+            "ctype": "SpriteObjectData"
+          }
+        ],
+        "Size": {
+          "X": 0.0,
+          "Y": 0.0
+        },
+        "Name": "Node",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "common/dialog/jieshan/no.png",
+        "common/dialog/jieshan/ok.png",
+        "common/dialog/jieshan/progress.png",
+        "common/dialog/jieshan/timebg.png",
+        "common/dialog/jieshan/title.png",
+        "common/dialog/public/bg_top.png",
+        "common/dialog/public/bg1.png",
+        "common/dialog/public/bg2.png",
+        "common/dialog/public/btn_green.png",
+        "common/dialog/public/btn_yellow.png",
+        "common/dialog/public/cancel.png",
+        "common/dialog/public/close.png",
+        "common/dialog/public/sure.png",
+        "common/dialog/setting/7.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Node"
+}

@@ -164,7 +164,7 @@ void SocketClient::send_Data(std::string sendData, int id)
 
 void SocketClient::connect_req()
 {
-    m_pSocklient = SocketIO::connect(SocketClient::m_url,*this);
+    m_pSocklient = SocketIO::connect(SocketClient::getInstance()->getUrl(),*this);
     if (m_pSocklient)
     {
         m_pSocklient->setTag("initsocket");

@@ -735,7 +735,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "187"
             endingLineNumber = "187"
-            landmarkName = "SocketClient::connect_req()"
+            landmarkName = "SocketClient::disconnect_req(SocketRequest *request)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -941,7 +941,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "171"
             endingLineNumber = "171"
-            landmarkName = "SocketClient::send_Data(std::string sendData, int id)"
+            landmarkName = "SocketClient::connect_req()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1021,7 +1021,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
             endingLineNumber = "117"
-            landmarkName = "SocketClient::fireEventToScript(SIOClient* client, const std::string&amp; eventName, const std::string&amp; data)"
+            landmarkName = "SocketClient::init()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

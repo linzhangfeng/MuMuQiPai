@@ -1,0 +1,626 @@
+{
+  "ID": "7026a71f-66af-4987-844d-2a5587b54f3e",
+  "Version": "2.3.4",
+  "Name": "jiesanfangjian_item",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Tag": 1581,
+        "Children": [
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/gps/head_bg.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": 45.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -45.0,
+            "RightMargin": -45.0,
+            "TopMargin": -90.0,
+            "Tag": 289,
+            "ActionTag": -2052068522,
+            "Size": {
+              "X": 90.0,
+              "Y": 90.0
+            },
+            "Name": "head_bg",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "AnchorPoint": {},
+            "Position": {
+              "X": 0.0042,
+              "Y": 45.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": true,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": 0.0042,
+            "RightMargin": -0.0042,
+            "TopMargin": -45.0,
+            "BottomMargin": 45.0,
+            "Tag": 1583,
+            "ActionTag": -1953276422,
+            "Size": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "Name": "avatar",
+            "ctype": "SingleNodeObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/jieshan/tip1.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 14,
+            "Scale9OriginY": 8,
+            "Scale9Width": 16,
+            "Scale9Height": 10,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -13.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -50.0,
+            "RightMargin": -50.0,
+            "BottomMargin": -26.0,
+            "Tag": 288,
+            "ActionTag": -1016417781,
+            "Size": {
+              "X": 100.0,
+              "Y": 26.0
+            },
+            "Name": "nameBg",
+            "ctype": "ImageViewObjectData"
+          },
+          {
+            "FontSize": 20,
+            "LabelText": "哈哈哈哈",
+            "OutlineColor": {
+              "G": 0,
+              "B": 0
+            },
+            "ShadowColor": {
+              "R": 110,
+              "G": 110,
+              "B": 110
+            },
+            "ShadowOffsetX": 2.0,
+            "ShadowOffsetY": -2.0,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0042,
+              "Y": -13.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {
+              "R": 115,
+              "G": 46,
+              "B": 7
+            },
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -39.9958,
+            "RightMargin": -40.0042,
+            "TopMargin": 1.5,
+            "BottomMargin": -24.5,
+            "Tag": 1584,
+            "ActionTag": -1211514745,
+            "Size": {
+              "X": 80.0,
+              "Y": 23.0
+            },
+            "Name": "name",
+            "ctype": "TextObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/jieshan/tip3.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 16,
+            "Scale9OriginY": 9,
+            "Scale9Width": 18,
+            "Scale9Height": 12,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -55.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -50.0,
+            "RightMargin": -50.0,
+            "TopMargin": 40.0,
+            "BottomMargin": -70.0,
+            "Tag": 291,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "等待中",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 50.0,
+                  "Y": 15.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 115,
+                  "G": 46,
+                  "B": 7
+                },
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.6,
+                  "Y": 0.7667
+                },
+                "LeftMargin": 20.0,
+                "RightMargin": 20.0,
+                "TopMargin": 3.5,
+                "BottomMargin": 3.5,
+                "Tag": 290,
+                "ActionTag": -474153712,
+                "Size": {
+                  "X": 60.0,
+                  "Y": 23.0
+                },
+                "Name": "text",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": 293496035,
+            "Size": {
+              "X": 100.0,
+              "Y": 30.0
+            },
+            "Name": "state0",
+            "ctype": "ImageViewObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/jieshan/tip4.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 16,
+            "Scale9OriginY": 9,
+            "Scale9Width": 18,
+            "Scale9Height": 12,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -55.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -50.0,
+            "RightMargin": -50.0,
+            "TopMargin": 40.0,
+            "BottomMargin": -70.0,
+            "Tag": 292,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "同意",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 50.0,
+                  "Y": 15.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 115,
+                  "G": 46,
+                  "B": 7
+                },
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.4,
+                  "Y": 0.7667
+                },
+                "LeftMargin": 30.0,
+                "RightMargin": 30.0,
+                "TopMargin": 3.5,
+                "BottomMargin": 3.5,
+                "Tag": 293,
+                "ActionTag": 1231678608,
+                "Size": {
+                  "X": 40.0,
+                  "Y": 23.0
+                },
+                "Name": "text",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": -586881205,
+            "Size": {
+              "X": 100.0,
+              "Y": 30.0
+            },
+            "VisibleForFrame": false,
+            "Name": "state1",
+            "ctype": "ImageViewObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/jieshan/tip2.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 16,
+            "Scale9OriginY": 9,
+            "Scale9Width": 18,
+            "Scale9Height": 12,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -55.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -50.0,
+            "RightMargin": -50.0,
+            "TopMargin": 40.0,
+            "BottomMargin": -70.0,
+            "Tag": 294,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "反对",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 50.0,
+                  "Y": 15.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 115,
+                  "G": 46,
+                  "B": 7
+                },
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.4,
+                  "Y": 0.7667
+                },
+                "LeftMargin": 30.0,
+                "RightMargin": 30.0,
+                "TopMargin": 3.5,
+                "BottomMargin": 3.5,
+                "Tag": 295,
+                "ActionTag": -192778104,
+                "Size": {
+                  "X": 40.0,
+                  "Y": 23.0
+                },
+                "Name": "text",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": -1731209538,
+            "Size": {
+              "X": 100.0,
+              "Y": 30.0
+            },
+            "VisibleForFrame": false,
+            "Name": "state2",
+            "ctype": "ImageViewObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "common/dialog/jieshan/tip4.png",
+              "Plist": ""
+            },
+            "Scale9Enable": true,
+            "Scale9OriginX": 16,
+            "Scale9OriginY": 9,
+            "Scale9Width": 18,
+            "Scale9Height": 12,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 0.0,
+              "Y": -55.0
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "PreSize": {
+              "X": 0.0,
+              "Y": 0.0
+            },
+            "LeftMargin": -50.0,
+            "RightMargin": -50.0,
+            "TopMargin": 40.0,
+            "BottomMargin": -70.0,
+            "Tag": 89,
+            "Children": [
+              {
+                "FontSize": 20,
+                "LabelText": "申请人",
+                "OutlineColor": {
+                  "G": 0,
+                  "B": 0
+                },
+                "ShadowColor": {
+                  "R": 110,
+                  "G": 110,
+                  "B": 110
+                },
+                "ShadowOffsetX": 2.0,
+                "ShadowOffsetY": -2.0,
+                "AnchorPoint": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "Position": {
+                  "X": 50.0,
+                  "Y": 15.0
+                },
+                "Scale": {
+                  "ScaleX": 1.0,
+                  "ScaleY": 1.0
+                },
+                "CColor": {
+                  "R": 115,
+                  "G": 46,
+                  "B": 7
+                },
+                "IconVisible": false,
+                "PositionPercentXEnabled": true,
+                "PositionPercentYEnabled": true,
+                "PrePosition": {
+                  "X": 0.5,
+                  "Y": 0.5
+                },
+                "PreSize": {
+                  "X": 0.6,
+                  "Y": 0.7667
+                },
+                "LeftMargin": 20.0,
+                "RightMargin": 20.0,
+                "TopMargin": 3.5,
+                "BottomMargin": 3.5,
+                "Tag": 90,
+                "ActionTag": -310850073,
+                "Size": {
+                  "X": 60.0,
+                  "Y": 23.0
+                },
+                "Name": "text",
+                "ctype": "TextObjectData"
+              }
+            ],
+            "ActionTag": 2130021878,
+            "Size": {
+              "X": 100.0,
+              "Y": 30.0
+            },
+            "VisibleForFrame": false,
+            "Name": "state3",
+            "ctype": "ImageViewObjectData"
+          }
+        ],
+        "Size": {
+          "X": 0.0,
+          "Y": 0.0
+        },
+        "Name": "Node",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "common/dialog/gps/head_bg.png",
+        "common/dialog/jieshan/tip1.png",
+        "common/dialog/jieshan/tip2.png",
+        "common/dialog/jieshan/tip3.png",
+        "common/dialog/jieshan/tip4.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Node"
+}
