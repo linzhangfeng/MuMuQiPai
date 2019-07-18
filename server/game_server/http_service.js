@@ -13,6 +13,7 @@ var serverIp = "";
 
 function send(res,ret){
 	var str = JSON.stringify(ret);
+	http.httpLog(1,"game_server",str);
 	res.send(str)
 }
 
@@ -28,6 +29,7 @@ app.all('*', function(req, res, next) {
 
 app.post('/create_room',function(req,res){
 	http.postCallback(req,res,function(jsonData){
+		http.httpLog(0,"game_server",JSON.stringify(jsonData));
 		var userId = jsonData.userId;
 		var conf = {};
 		conf.type = 1;
@@ -56,7 +58,6 @@ app.post('/create_room',function(req,res){
 					sign:sign
 				}
 				send(res,ret);
-				
 				db.update_user_roomid(userId,roomId);
 			}
 		});
@@ -93,6 +94,7 @@ app.post('/check_room',function(req,res){
 
 app.post('/get_room_info',function(req,res){
 	http.postCallback(req,res,function(jsonData){
+		http.httpLog(1,"game_server",JSON.stringify(jsonData));
 		var roomId = jsonData.roomId;
 		roomMgr.getRoomData(roomId,function(errcode,roomData){
 			var sign = crypto.md5(roomId + req.ip + config.ACCOUNT_PRI_KEY);

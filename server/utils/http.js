@@ -179,7 +179,7 @@ exports.send = function(res,status,errmsg,data){
 	data.status = status;
 	data.errmsg = errmsg;
 	var jsonstr = JSON.stringify(data);
-	console.log("send:"+jsonstr);
+	exports.httpLog(1,"",jsonstr);
 	res.send(jsonstr);
 };
 
@@ -191,9 +191,15 @@ exports.postCallback = function(req,res,callback){
   
 	req.on('end', () => {
 		var json = JSON.parse(str)
-		console.log(json);
 		if(json != {} || json != null){
 			callback(json);
 		}
 	});
+};
+exports.httpLog = function(type,tag,str){
+	var typeStr = "recv_"
+	if(type == 1){
+		typeStr = "send_"
+	}
+	console.log(typeStr + tag +":" + str );
 };

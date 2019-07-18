@@ -101,7 +101,7 @@ exports.start = function(conf,mgr){
 			userMgr.sendMsg(socket.userId,'data',sendData);
 			
 			userMgr.logout(socket.userId);
-			userMgr.upTable(socket);
+			// userMgr.upTable(socket);
 		};
 
 		function handler_client_ready_req(data){

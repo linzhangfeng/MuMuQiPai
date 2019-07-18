@@ -55,7 +55,7 @@ exports.upTable = function(socket){
         name:"",
         uId:152,
         money:10000,
-        sex:sex,
+        sex:1,
         avatar:"fasd",
     };
     sendData.id = CMD.CMD.SERVER_UPTABLE_SUCCC_BC;

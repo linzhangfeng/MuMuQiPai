@@ -108,9 +108,8 @@ app.post('/login',function(req,res){
 	});
   
 	req.on('end', () => {
-		//console.log(str)
 		var json = JSON.parse(str)
-		console.log("recv_account_login:"+str);
+		http.httpLog(0,"account_server",str);
 		var account = json.account;
 		var password = json.password;
 		db.get_account_info(account,password,function(info){
@@ -120,7 +119,6 @@ app.post('/login',function(req,res){
 			}
 	
 			var account = "vivi_" + json.account;
-			console.log("linzhangfeng="+config.ACCOUNT_PRI_KEY);
 			var sign = crypto.md5(account + req.ip + config.ACCOUNT_PRI_KEY);
 			var ret = {
 				status:200,
