@@ -32,6 +32,7 @@
 3 /get_room_info
 请求参数：
 {
+	roomId //放假id
     userId //用户id
 }
 

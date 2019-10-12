@@ -19,9 +19,11 @@ public:
     void initData();
     //common end
     void createRoom();
-    void getRoomInfo();
+    void addRoom(std::string roomId);
     void getUserInfo();
     void toRoom();
+    
+    void showAddRoomLayer();
 };
 
 #endif // __HELLOWORLD_SCENE_H__

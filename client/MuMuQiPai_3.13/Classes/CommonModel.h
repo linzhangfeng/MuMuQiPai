@@ -13,6 +13,8 @@
 #include <string>
 #include <map>
 
+#include "lin.h"
+
 #include "json.h"
 
 #include "cocos2d.h"
@@ -36,6 +38,12 @@ public:
     void hallToRoomV();
     void hallToRoomH();
     string getPackName();
+    void toRoom();
+    
+    void http_getRoomInfo(const MyCallBack_Str &callback,std::string roomId = "");
+    void http_addRoom(const MyCallBack_Str &callback,std::string roomId);
+    void http_register(const MyCallBack_Str &callback,std::string account,std::string password);
+    
     std::string getRoomData(){
         return m_roomData;
     }

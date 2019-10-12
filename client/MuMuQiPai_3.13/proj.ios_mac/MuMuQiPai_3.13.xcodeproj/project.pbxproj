@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		0301FB4A22782F320047D130 /* CreateRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0301FB4822782F320047D130 /* CreateRoom.cpp */; };
 		0301FB4E22782F420047D130 /* GameHall in Resources */ = {isa = PBXBuildFile; fileRef = 0301FB4D22782F420047D130 /* GameHall */; };
-		0306605722E0296C00F793CA /* mj_lin in Resources */ = {isa = PBXBuildFile; fileRef = 0306605522E0296C00F793CA /* mj_lin */; };
 		0306605822E0296C00F793CA /* script in Resources */ = {isa = PBXBuildFile; fileRef = 0306605622E0296C00F793CA /* script */; };
+		0306605B22E0687300F793CA /* JoinRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0306605922E0687300F793CA /* JoinRoom.cpp */; };
 		0307BE23226DC0FE0011A8E6 /* js_lin_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE20226DC0FE0011A8E6 /* js_lin_auto.cpp */; };
 		0307BE24226DC0FE0011A8E6 /* js_lin_auto_api.js in Resources */ = {isa = PBXBuildFile; fileRef = 0307BE22226DC0FE0011A8E6 /* js_lin_auto_api.js */; };
 		0307BE2B226F3D020011A8E6 /* HotUpdateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0307BE29226F3D020011A8E6 /* HotUpdateLayer.cpp */; };
@@ -166,8 +166,9 @@
 		0301FB4822782F320047D130 /* CreateRoom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreateRoom.cpp; sourceTree = "<group>"; };
 		0301FB4922782F320047D130 /* CreateRoom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CreateRoom.hpp; sourceTree = "<group>"; };
 		0301FB4D22782F420047D130 /* GameHall */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GameHall; path = ../Resources/GameHall; sourceTree = "<group>"; };
-		0306605522E0296C00F793CA /* mj_lin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mj_lin; path = ../Resources/mj_lin; sourceTree = "<group>"; };
 		0306605622E0296C00F793CA /* script */ = {isa = PBXFileReference; lastKnownFileType = folder; name = script; path = ../Resources/script; sourceTree = "<group>"; };
+		0306605922E0687300F793CA /* JoinRoom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JoinRoom.cpp; sourceTree = "<group>"; };
+		0306605A22E0687300F793CA /* JoinRoom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JoinRoom.hpp; sourceTree = "<group>"; };
 		0307BE1F226DC0FE0011A8E6 /* js_lin_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = js_lin_auto.hpp; sourceTree = "<group>"; };
 		0307BE20226DC0FE0011A8E6 /* js_lin_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = js_lin_auto.cpp; sourceTree = "<group>"; };
 		0307BE22226DC0FE0011A8E6 /* js_lin_auto_api.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js_lin_auto_api.js; sourceTree = "<group>"; };
@@ -482,7 +483,6 @@
 		15628F5B15F0F5C2000CF24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0306605522E0296C00F793CA /* mj_lin */,
 				0306605622E0296C00F793CA /* script */,
 				0301FB4D22782F420047D130 /* GameHall */,
 				0307BE70226FF4020011A8E6 /* Loading */,
@@ -601,6 +601,8 @@
 		D4545214156E28EF00887EB5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0306605922E0687300F793CA /* JoinRoom.cpp */,
+				0306605A22E0687300F793CA /* JoinRoom.hpp */,
 				037E179D2283C2DC002CD4FF /* socketioTest.cpp */,
 				037E179E2283C2DC002CD4FF /* socketioTest.h */,
 				0301FB4822782F320047D130 /* CreateRoom.cpp */,
@@ -777,7 +779,6 @@
 				5091731A17ECDF7A00D62437 /* Icon-29.png in Resources */,
 				030834782252F5D800A8AA04 /* project.json in Resources */,
 				509D4AC617EBB2AB00697056 /* Icon-152.png in Resources */,
-				0306605722E0296C00F793CA /* mj_lin in Resources */,
 				0307BE71226FF4020011A8E6 /* Loading in Resources */,
 				0307BE44226F3FE10011A8E6 /* Android.mk in Resources */,
 				030834182251BAAF00A8AA04 /* Utils in Resources */,
@@ -826,6 +827,7 @@
 				0307BE7E2272EE4E0011A8E6 /* HttpAgent.cc in Sources */,
 				030834142251BAAF00A8AA04 /* FlashScene.cpp in Sources */,
 				0307BE49226F3FE10011A8E6 /* json_value.cpp in Sources */,
+				0306605B22E0687300F793CA /* JoinRoom.cpp in Sources */,
 				030834742252061900A8AA04 /* Utils.cpp in Sources */,
 				0307BE45226F3FE10011A8E6 /* json_writer.cpp in Sources */,
 				030834152251BAAF00A8AA04 /* GameHallScene.cpp in Sources */,

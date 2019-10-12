@@ -5,6 +5,8 @@
 #include "UserModel.h"
 #include "lin.h"
 #include "UserModel.h"
+#include "JoinRoom.hpp"
+#include "LoginScene.h"
 Scene* GameHallLayer::createScene()
 {
     // 'scene' is an autorelease object
@@ -41,12 +43,24 @@ void GameHallLayer::initData()
     auto root = CSLoader::createNode("StudioUI/GameHallUI/GameHallLayer.csb");
     addChild(root);
     
+    Button* settingBtn = (Button*)Utils::findNode(root,"btn_setting");
+    settingBtn->addClickEventListener([=](Ref*){
+        Director::getInstance()->replaceScene(LoginLayer::createScene());
+        return true;
+    });
+    
     Button* createRoomBtn = (Button*)Utils::findNode(root,"btn_createroom");
     createRoomBtn->addClickEventListener([=](Ref*){
         std::string roomId = UserModel::getInstance()->getCurRoomId();
         if(roomId != ""){
             PlatformHelper::showToast("游戏重连中......");
-            this->getRoomInfo();
+            CommonModel::getInstance()->http_getRoomInfo([=](std::string str){
+                if(str == "normal"){
+                    this->toRoom();
+                }else{
+                    PlatformHelper::showToast("获取房间信息失败......");
+                }
+            });
             return true;
         }
         createRoom();
@@ -56,27 +70,16 @@ void GameHallLayer::initData()
     
     Button* addRoomBtn = (Button*)Utils::findNode(root,"btn_addroom");
     addRoomBtn->addClickEventListener([=](Ref*){
-        log("enter=http=test");
-        CCHttpAgent::getInstance()->sendHttpPost([=](std::string tag){
-            CCHttpPacket* loginPacket = CCHttpAgent::getInstance()->packets[tag];
-            
-            if (this->getReferenceCount() <= 0 || this->getReferenceCount() > 10)return;
-            
-            if (loginPacket->status != 3)
-            {
-                PlatformHelper::showToast("请求用户数据失败");
-                return;
-            }
-            
-            if (loginPacket->resultIsOK())
-            {
-                Json::Value data = loginPacket->recvVal["resultMap"]["myInfoVO"];
-                
-                CCHttpAgent::getInstance()->packets.erase(tag);
-                delete loginPacket;
-            }
-        },"get_serverinfo","","serverinfo");
-        return true;
+        std::string roomId = UserModel::getInstance()->getCurRoomId();
+        if(roomId != ""){
+            CommonModel::getInstance()->http_getRoomInfo([=](std::string str){
+                if(str == "normal"){
+                    this->toRoom();
+                }
+            });
+        }else{
+            addChild(JoinRoom::create());
+        }
     });
 }
 void GameHallLayer::createRoom()
@@ -93,7 +96,7 @@ void GameHallLayer::createRoom()
         
         if (loginPacket->status != 3)
         {
-            PlatformHelper::showToast("请求用户数据失败");
+            PlatformHelper::showToast("请求数据失败");
             return;
         }
         
@@ -106,19 +109,22 @@ void GameHallLayer::createRoom()
             
             if(roomId != ""){
                 PlatformHelper::showToast("正在进入游戏中......");
-                this->getRoomInfo();
+                CommonModel::getInstance()->http_getRoomInfo([=](std::string str){
+                    if(str == "normal"){
+                        this->toRoom();
+                    }
+                });
             }
         }
     },"create_room",json.toStyledString(),"createRoom");
 }
 
-void GameHallLayer::getRoomInfo()
-{
+void GameHallLayer::addRoom(std::string roomId){
     CCHttpAgent::getInstance()->checkChangeURL(CCHttpAgent::getInstance()->getGameUrl());
     
     Json::Value json;
-    json["roomId"] = UserModel::getInstance()->getCurRoomId();
-    
+    json["userId"] = UserModel::getInstance()->getUid();
+    json["roomId"] = roomId;
     CCHttpAgent::getInstance()->sendHttpPost([=](std::string tag){
         CCHttpPacket* loginPacket = CCHttpAgent::getInstance()->packets[tag];
         
@@ -126,24 +132,31 @@ void GameHallLayer::getRoomInfo()
         
         if (loginPacket->status != 3)
         {
-            PlatformHelper::showToast("请求用户数据失败");
+            PlatformHelper::showToast("请求数据失败");
             return;
         }
         
         if (loginPacket->resultIsOK())
         {
-            Json::Value roomData = loginPacket->recvVal["roomData"];
             std::string roomId = loginPacket->recvVal["roomId"].asString();
             UserModel::getInstance()->setCurRoomId(roomId);
-            CommonModel::getInstance()->setRoomData(roomData.toStyledString());
-            
             CCHttpAgent::getInstance()->packets.erase(tag);
             delete loginPacket;
             
-            //进入游戏
-            this->toRoom();
+            if(roomId != ""){
+                PlatformHelper::showToast("正在加入房间......");
+                CommonModel::getInstance()->http_getRoomInfo([=](std::string str){
+                    if(str == "normal"){
+                        this->toRoom();
+                    }
+                });
+            }
         }
-    },"get_room_info",json.toStyledString(),"getRoomInfo");
+    },"add_room",json.toStyledString(),"addRoom");
+}
+
+void GameHallLayer::showAddRoomLayer(){
+    
 }
 
 void GameHallLayer::getUserInfo()

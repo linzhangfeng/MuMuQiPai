@@ -142,7 +142,7 @@ exports.enterRoom = function(userId,name,roomId,fnCallback){
 			console.log(data);
 			if(ret){
 				if(data.errcode == 0){
-					db.set_room_id_of_user(userId,roomId,function(ret){
+					db.updateUsers_roomid(userId,roomId,function(ret){
 						fnCallback(0,{
 							ip:serverinfo.clientip,
 							port:serverinfo.clientport,

@@ -449,7 +449,8 @@ exports.cost_gems = function(userid,cost,callback){
     });
 };
 
-exports.set_room_id_of_user = function(userId,roomId,callback){
+//___t_users
+exports.updateUsers_roomid = function(userId,roomId,callback){
     callback = callback == null? nop:callback;
     if(roomId != null){
         roomId = '"' + roomId + '"';
@@ -540,7 +541,6 @@ exports.update_seats_info = function(roomId,seats,callback){
     callback = callback == null? nop:callback;
     var seatsStr = JSON.stringify(seats);
     var sql = 'UPDATE t_rooms SET seats = "{1}" WHERE id = "{0}"';
-    name = crypto.toBase64(name);
     sql = sql.format(roomId,seatsStr);
     query(sql,function(err,row,fields){
         if(err){
@@ -584,12 +584,14 @@ exports.update_next_button = function(roomId,nextButton,callback){
     });
 };
 
-exports.set_room_state_of_roomid = function(roomId,state,callback){
+//___t_rooms 
+
+exports.updateRooms_room_state = function(roomId,state,callback){
     callback = callback == null? nop:callback;
     if(roomId != null){
         roomId = '"' + roomId + '"';
     }
-    var sql = 'UPDATE t_rooms SET room_state = '+ state + ' WHERE userid = "' + userId + '"';
+    var sql = 'UPDATE t_rooms SET room_state = '+ state + ' WHERE id = ' + roomId;
     query(sql, function(err, rows, fields) {
         if(err){
             console.log(err);

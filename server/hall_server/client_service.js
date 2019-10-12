@@ -66,7 +66,7 @@ app.post('/login',function(req,res){
 						}
 						else{
 							//如果房间不在了，表示信息不同步，清除掉用户记录
-							db.set_room_id_of_user(data.userid,"");
+							db.updateUsers_roomid(data.userid,"");
 						}
 						http.send(res,200,"ok",ret);
 					});

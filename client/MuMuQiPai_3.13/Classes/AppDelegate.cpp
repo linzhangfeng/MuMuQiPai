@@ -47,10 +47,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);
 //    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/MuMuQiPai/cocos2d/cocos/scripting/js-bindings");
     FileUtils::getInstance()->addSearchPath("StudioUI/");
-//    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
+    
+    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS");
 //    FileUtils::getInstance()->addSearchPath("/Users/linzhangfeng/Desktop/linzhangfeng/svn/MuMuQiPai/client/JS/output");
     
-    if(0){ //本地调试
+    if(1){ //本地调试
         CCHttpAgent::getInstance()->setAccountUrl("http://127.0.0.1:9000/");
         CCHttpAgent::getInstance()->setHallUrl("http://127.0.0.1:9001/");
         CCHttpAgent::getInstance()->setGameUrl("http://127.0.0.1:9003/");

@@ -6,7 +6,7 @@
       <ObjectData Name="Layer" Tag="3" ctype="GameLayerObjectData">
         <Size X="1280.0000" Y="720.0000" />
         <Children>
-          <AbstractNodeData Name="layout" CanEdit="False" ActionTag="-847462357" Tag="7" IconVisible="False" TouchEnable="True" ClipAble="False" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
+          <AbstractNodeData Name="layout" CanEdit="False" ActionTag="-847462357" Tag="7" IconVisible="False" TouchEnable="True" ClipAble="False" BackColorAlpha="102" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1280.0000" Y="720.0000" />
             <Children>
               <AbstractNodeData Name="bg" CanEdit="False" ActionTag="2141767873" Tag="4" IconVisible="False" HorizontalEdge="BothEdge" VerticalEdge="BothEdge" ctype="SpriteObjectData">
@@ -83,7 +83,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="notice" CanEdit="False" ActionTag="-1445971065" Tag="14" IconVisible="False" LeftMargin="29.8186" RightMargin="860.1814" TopMargin="176.0820" BottomMargin="93.9179" ctype="SpriteObjectData">
+              <AbstractNodeData Name="notice" CanEdit="False" ActionTag="-1445971065" Tag="14" IconVisible="False" LeftMargin="29.8186" RightMargin="860.1814" TopMargin="176.0821" BottomMargin="93.9179" ctype="SpriteObjectData">
                 <Size X="390.0000" Y="450.0000" />
                 <Children>
                   <AbstractNodeData Name="str" ActionTag="-182274611" Tag="15" IconVisible="False" LeftMargin="62.6016" RightMargin="62.3984" TopMargin="99.1567" BottomMargin="70.8433" FontSize="35" LabelText="珍爱生命&#xA;远离赌博&#xA;&#xA;&#xA;某某棋牌&#xA;专业服务&#xA;QQ：308127947" HorizontalAlignmentType="HT_Center" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
@@ -124,7 +124,7 @@
                 <Position X="348.6567" Y="0.0001" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.2724" />
+                <PrePosition X="0.2724" Y="0.0000" />
                 <PreSize X="0.1352" Y="0.1931" />
                 <TextColor A="255" R="65" G="65" B="70" />
                 <DisabledFileData Type="Normal" Path="StudioUI/GameHallUI/GameHall/zhanji.png" Plist="" />
@@ -139,7 +139,7 @@
                 <Position X="911.1522" Y="0.0001" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.7118" />
+                <PrePosition X="0.7118" Y="0.0000" />
                 <PreSize X="0.1133" Y="0.1847" />
                 <TextColor A="255" R="65" G="65" B="70" />
                 <DisabledFileData Type="Normal" Path="StudioUI/GameHallUI/GameHall/feedback.png" Plist="" />
@@ -154,7 +154,7 @@
                 <Position X="636.9047" Y="0.0001" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.4976" />
+                <PrePosition X="0.4976" Y="0.0000" />
                 <PreSize X="0.0914" Y="0.1847" />
                 <TextColor A="255" R="65" G="65" B="70" />
                 <DisabledFileData Type="Normal" Path="StudioUI/GameHallUI/GameHall/share.png" Plist="" />
@@ -193,7 +193,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="btn_addroom_2_2" ActionTag="47259073" Tag="23" IconVisible="False" LeftMargin="1199.6448" RightMargin="13.3552" TopMargin="9.0049" BottomMargin="631.9951" TouchEnable="True" FontSize="14" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="37" Scale9Height="57" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="btn_setting" ActionTag="47259073" Tag="23" IconVisible="False" LeftMargin="1199.6448" RightMargin="13.3552" TopMargin="9.0049" BottomMargin="631.9951" TouchEnable="True" FontSize="14" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="37" Scale9Height="57" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="67.0000" Y="79.0000" />
                 <AnchorPoint ScaleX="0.5000" />
                 <Position X="1233.1448" Y="631.9951" />

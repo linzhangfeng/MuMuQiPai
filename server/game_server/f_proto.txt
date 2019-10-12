@@ -1,0 +1,70 @@
+1 场景协议
+{
+    UserDisbandstate,//[]解散状态
+    UserOnlinestate,//[]在线状态
+    UserOvertime,//[]超时状态
+}
+
+2 桌面协议
+{
+    seatId,//当前玩家座位id
+    PlayersInfo,//[]玩家信息
+    playerNum,//几人模式
+}
+playersInfo = {
+    userId,//用户ID
+    seatId,//座位ID
+    ready,//准备
+    money,//金币
+    name,//名字
+    sex，//性别
+}
+//登录协议
+{
+    userId，//用户ID
+    roomId，//房间ID
+    name,//用户名
+    score,//分数
+    sex,//性别
+    token，//token
+    sign，//签名
+}
+
+//本地存储的room信息
+rooms
+{
+    uuid:"",
+    id:roomId,
+    numOfGames:0,
+    createTime:createTime,
+    nextButton:0,
+    UserDisbandstate:[],
+    UserOnlinestate:[],
+    UserOvertime:[],
+    seats:[{
+        userId:0,
+        score:0,
+        name:"",
+        ready:false,
+        seatId:i,
+    }],
+    conf:{
+        type:roomConf.type,
+        baseScore:DI_FEN[roomConf.difen],
+        zimo:roomConf.zimo,
+        jiangdui:roomConf.jiangdui,
+        hsz:roomConf.huansanzhang,
+        dianganghua:parseInt(roomConf.dianganghua),
+        menqing:roomConf.menqing,
+        tiandihu:roomConf.tiandihu,
+        maxFan:MAX_FAN[roomConf.zuidafanshu],
+        maxGames:JU_SHU[roomConf.jushuxuanze],
+        creator:creator,
+    }
+}
+
+userLocation[]
+{
+    roomId:roomId,
+    seatId:i
+};

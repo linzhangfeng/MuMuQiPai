@@ -29,7 +29,7 @@ app.all('*', function(req, res, next) {
 
 app.post('/create_room',function(req,res){
 	http.postCallback(req,res,function(jsonData){
-		http.httpLog(0,"game_server",JSON.stringify(jsonData));
+		http.httpLog(0,"game_server_create_room",JSON.stringify(jsonData));
 		var userId = jsonData.userId;
 		var conf = {};
 		conf.type = 1;
@@ -86,7 +86,7 @@ app.post('/check_room',function(req,res){
 					isRuning:isRoomRuning,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 					sign:sign
 				}
-				send(res,ret);		
+				send(res,ret);
 			}
 		});
 	});
@@ -94,13 +94,23 @@ app.post('/check_room',function(req,res){
 
 app.post('/get_room_info',function(req,res){
 	http.postCallback(req,res,function(jsonData){
-		http.httpLog(1,"game_server",JSON.stringify(jsonData));
+		http.httpLog(1,"game_server_get_room_info",JSON.stringify(jsonData));
 		var roomId = jsonData.roomId;
-		roomMgr.getRoomData(roomId,function(errcode,roomData){
+		var userId = jsonData.userId;
+		//判断本地有没有该房间好的房间信息
+		var room = roomMgr.getRoom(roomId);
+		
+		roomMgr.getRoomInfo(roomId,function(errcode,roomData){
 			var sign = crypto.md5(roomId + req.ip + config.ACCOUNT_PRI_KEY);
 			if(roomData == null){
 				http.send(res,errcode,"create failed.");	
 			}else{
+				if(room == null){
+					http.send(res,errcode,"create failed.");	
+					roomMgr.updateRoomStatus(roomId,0);
+					userMgr.updateUserRoomId(userId,"");
+					return;
+				}
 				var ret = {
 					status:200,
 					errmsg:"ok",
@@ -118,6 +128,44 @@ app.post('/add_room',function(req,res){
 	http.postCallback(req,res,function(jsonData){
 		var roomId = jsonData.roomId;
 		var userId = jsonData.userId;
+		http.httpLog(0,"http_server_add_room",JSON.stringify(jsonData));
+
+		//查看本地缓存是否有该房间
+		var room = roomMgr.getRoom(roomId);
+		if(!room){
+			var ret = {
+				status:-1,
+				errmsg:"房间已经不存在",
+				roomId:roomId,
+				sign:sign
+			}
+			send(res,ret);	
+			
+			//初始化用户
+			userMgr.updateUserRoomId(userId,"");
+
+			//解散房间
+			roomMgr.disbandRoom();
+			return;
+		}
+
+		if(roomMgr > 2){//检测房间是否已满
+			var ret = {
+				status:-1,
+				errmsg:"房间人数已满",
+				roomId:roomId,
+				sign:sign
+			}
+			send(res,ret);	
+			
+			//初始化用户
+			userMgr.updateUserRoomId(userId,"");
+
+			//解散房间
+			roomMgr.disbandRoom();
+			return;
+		}
+
 		//更新房间信息
 		roomMgr.updateRoomInfo(roomId,userId,function(reslut,seatId){
 			var roomInfo = roomMgr.getRoom(roomId);
@@ -136,7 +184,7 @@ app.post('/add_room',function(req,res){
 			//获取当前用户信息
 			userMgr.getUserDataByUserId(userId,function(userData){
 				if(userData != null){
-					seatInfo.userId = userId;
+					seatInfo.userId = userData["userid"];
 					seatInfo.score = userData["coins"];
 					seatInfo.name = userData["name"];
 				}
@@ -148,8 +196,6 @@ app.post('/add_room',function(req,res){
 				}
 				send(res,ret);	
 			});
-
-
 		});
 	});
 });

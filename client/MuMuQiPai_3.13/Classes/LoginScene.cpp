@@ -7,7 +7,7 @@
 #include "Net/TcpClient.h"
 //#include "HelloWorldScene.h"
 #include "socketioTest.h"
-
+#include "CommonModel.h"
 using namespace cocostudio::timeline;
 
 Scene* LoginLayer::createScene()
@@ -100,19 +100,8 @@ void LoginLayer::initData()
         Json::Value json;
         json["account"] = account;
         json["password"] = password;
-        CCHttpAgent::getInstance()->sendHttpPost([=](std::string tag){
-            CCHttpPacket* loginPacket = CCHttpAgent::getInstance()->packets[tag];
-            
-            if (this->getReferenceCount() <= 0 || this->getReferenceCount() > 10)return;
-            
-            if (loginPacket->status != 3)
-            {
-                setRegisterStatus(LoginLayer::Status::Register_Status_Fail);
-                PlatformHelper::showToast("网络连接错误，请求用户数据失败");
-                return;
-            }
-            
-            if (loginPacket->resultIsOK())
+        CommonModel::getInstance()->http_register([=](std::string str){
+            if(str == "normal")
             {
                 PlatformHelper::showToast("注册成功！");
                 setRegisterStatus(LoginLayer::Status::Register_Status_Ok);
@@ -120,8 +109,7 @@ void LoginLayer::initData()
                 setRegisterStatus(LoginLayer::Status::Register_Status_Fail);
                 PlatformHelper::showToast("账号已经存在，请重新设置");
             }
-        },"register",json.toStyledString(),"register");
-        return true;
+        }, account, password);
     });
     
     Button* cancleRegisterBtn = (Button*)Utils::findNode(m_registerNode,"btn_cancel_register");

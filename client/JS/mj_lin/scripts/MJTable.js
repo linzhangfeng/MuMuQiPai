@@ -26,7 +26,7 @@ var MJTable = cc.Layer.extend({
         this.addChild(this.roomAction, CommonOrder.BEST_TOP);
 
         MJModel.initData();
-        this.schedule(this.test, 1.0);
+        //this.schedule(this.test, 1.0);
     },
     onEnter: function () {
         this._super();
@@ -222,9 +222,9 @@ var MJTable = cc.Layer.extend({
                 break;
             case CMD.SERVER_GAME_SCENE:
                 //先处理当前缓存的 tableData
-                this.handler_server_table_info_uc(this.tableData);
-                var ackGameFree = parsePacket("proto.game.AckGameScene", jpacket);
-                this.handler_server_scene_info_uc(ackGameFree, canDelay);
+                //this.handler_server_table_info_uc(this.tableData);
+                //var ackGameFree = parsePacket("proto.game.AckGameScene", jpacket);
+                this.handler_server_scene_info_uc(data, canDelay);
                 break;
             case CMD.SERVER_TABLE_INFO_UC:
                 this.handler_server_table_info_uc(data, canDelay);
@@ -232,7 +232,9 @@ var MJTable = cc.Layer.extend({
         }
     },
     handler_server_scene_info_uc: function (data, canDelay) {
-        this.initPlayers();
+        cc.log("handler_server_scene_info_uc");
+        var data = parsePacket(data);
+
     },
     handler_server_table_info_uc: function (data, canDelay) {
         cc.log("handler_server_table_info_uc");
@@ -245,10 +247,10 @@ var MJTable = cc.Layer.extend({
             playerUI.logout(true);
         }
 
-        var players = data.players;
-        for (var i = 0; i < players.length; i++) {
-            var playData = players[i];
-            var uId = playData.uId;
+        var playersInfo = data.playersInfo;
+        for (var i = 0; i < playersInfo.length; i++) {
+            var playData = playersInfo[i];
+            var uId = playData.userId;
             var seatId = playData.seatId;
             if (uId == UserModel.getInstance().getUid()) {
                 MJModel.seatId = seatId;

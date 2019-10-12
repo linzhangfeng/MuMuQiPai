@@ -39,17 +39,10 @@ app.all('*', function(req, res, next) {
 });
 
 app.post('/register',function(req,res){
-	var str = "";
-
-    req.on('data', data => {
-		str += data
-	});
-  
-	http.callback(req,res,function(json){
-		var json = JSON.parse(str)
-		console.log(json)
-		var account = json.account;
-		var password = json.password;
+	http.postCallback(req,res,function(jsonData){
+		http.httpLog(0,"account_server",JSON.stringify(jsonData));
+		var account = jsonData.account;
+		var password = jsonData.password;
 		db.is_user_exist(account,function(exist){
 			if(!exist){
 				db.create_account(account,password,function(ret){
@@ -70,7 +63,7 @@ app.post('/register',function(req,res){
 				fnFailed();
 			}
 		});
-	});
+	})
 });
 app.get('/get_version',function(req,res){
 	var ret = {

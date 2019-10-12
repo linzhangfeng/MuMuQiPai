@@ -29,7 +29,10 @@ var sendPacket = function (packet, cmd) {
 var sendLogin = function () {
     var packet = {};
     packet.userId = UserModel.getInstance().getUid();
-    packet.roomid = MJModel.curRoomID;
+    packet.roomId = MJModel.curRoomID;
+    packet.name = UserModel.getInstance().getUserName();
+    packet.score = 1111;
+    packet.sex = UserModel.getInstance().getSex();
     packet.token = "test_token";
     packet.sign = "test_sign";
     sendPacket(packet, CMD.CLIENT_LOGIN_REQ);

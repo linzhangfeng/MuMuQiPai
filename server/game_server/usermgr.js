@@ -4,11 +4,21 @@ var CMD = require('./proto');
 var userList = {};
 var userOnline = 0;
 exports.bind = function(userId,socket){
+    var socketTemp = userList[userId];
+    if(socketTemp){
+        exports.del(userId);
+    }
     userList[userId] = socket;
     userOnline++;
 };
 
 exports.del = function(userId,socket){
+    var socket  = exports.get(userId);
+    if(socket){
+        socket.disconnect();
+        var heartBeatInterval = socket.heartBeatInterval;
+        if(heartBeatInterval)clearInterval(heartBeatInterval);
+    }
     delete userList[userId];
     userOnline--;
 };
@@ -30,7 +40,6 @@ exports.getOnlineCount = function(){
 }
 
 exports.sendMsg = function(userId,event,msgdata){
-    console.log(event);
     var userInfo = userList[userId];
     if(userInfo == null){
         return;
@@ -39,7 +48,6 @@ exports.sendMsg = function(userId,event,msgdata){
     if(socket == null){
         return;
     }
-
     socket.emit(event,msgdata);
 };
 
@@ -58,9 +66,10 @@ exports.upTable = function(socket){
         sex:1,
         avatar:"fasd",
     };
-    sendData.id = CMD.CMD.SERVER_UPTABLE_SUCCC_BC;
+    sendData.id = handlerCMD.CMD.SERVER_UPTABLE_SUCCC_BC;
     socket.emit('data', sendData);
 };
+
 exports.kickAllInRoom = function(roomId){
     if(roomId == null){
         return;
@@ -117,6 +126,11 @@ exports.getUserDataByUserId = function(userId,callback){
         }
     });
 };
+
+exports.updateUserRoomId = function(userId,roomId){
+    db.update_user_roomid(userId,roomId);
+};
+
 exports.disconnect = function(userId){
 	if(!userId){
 		return;
@@ -127,7 +141,7 @@ exports.disconnect = function(userId){
 	var data = {
 		userid:userId,
         online:false,
-        id:CMD.CMD.SERVER_USER_OFFLINE_BC,
+        id:handlerCMD.CMD.SERVER_USER_OFFLINE_BC,
 	};
 
 	//通知房间内其它玩家
@@ -137,9 +151,8 @@ exports.disconnect = function(userId){
 	exports.del(userId);
 	socket.userId = null;
 };
-
 exports.startHeartBeat = function(userId){
-	var socket = userList[userId];
+    var socket = userList[userId];
     //根据上一次件收到的时间检测是否连接超时，超时则断开连接
     var heartBeatInterval = setInterval(function () {
         if (socket) {
@@ -147,11 +160,12 @@ exports.startHeartBeat = function(userId){
              * 如果10秒内没有收到回应，则表明socket.io长连接失败，关闭socket.io连接
              * 因为socket.io会进行不断的断线重连，因此，强行关闭
              */
-            console.log("lin=socket=时间间隔="+(Date.now() - socket.lastRecieveTime ));
+            // console.log("lin=socket=时间间隔="+(Date.now() - socket.lastRecieveTime ));
             if (Date.now() - socket.lastRecieveTime > 10000) {
                 console.log("lin=socket="+socket.userId +" 断开连接");
                 exports.del(socket.userId);
                 socket.disconnect();
+                socket.heartBeatInterval = heartBeatInterval;
                 clearInterval(heartBeatInterval);
             }
         }

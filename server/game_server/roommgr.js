@@ -1,5 +1,5 @@
 ﻿var db = require('../utils/db');
-var CMD = require('./proto');
+var handlerCMD = require('./proto');
 var userMgr = require('./usermgr');
 
 var rooms = {};
@@ -131,6 +131,9 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 						createTime:createTime,
 						nextButton:0,
 						seats:[],
+						UserDisbandstate:[],
+						UserOnlinestate:[],
+						UserOvertime:[],
 						conf:{
 							type:roomConf.type,
 							baseScore:DI_FEN[roomConf.difen],
@@ -162,12 +165,6 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 							name:"",
 							ready:false,
 							seatId:i,
-							numZiMo:0,
-							numJiePao:0,
-							numDianPao:0,
-							numAnGang:0,
-							numMingGang:0,
-							numChaJiao:0,
 						});
 					}
 					
@@ -177,7 +174,6 @@ exports.createRoom = function(creator,roomConf,gems,ip,port,callback){
 						delete creatingRooms[roomId];
 						if(uuid != null){
 							roomInfo.uuid = uuid;
-							console.log(uuid);
 							rooms[roomId] = roomInfo;
 							totalRooms++;
 							callback(0,roomId);
@@ -208,7 +204,7 @@ exports.destroy = function(roomId){
 		var userId = roomInfo.seats[i].userId;
 		if(userId > 0){
 			delete userLocation[userId];
-			db.set_room_id_of_user(userId,null);
+			db.updateUsers_roomid(userId,null);
 		}
 	}
 	
@@ -235,7 +231,7 @@ exports.isCreator = function(roomId,userId){
 
 exports.updateRoomInfo = function (roomId,userId,callback) {
 	callback = callback == null? nop:callback;
-	exports.getRoomData(roomId,function(errcode,roomData){
+	exports.getRoomInfo(roomId,function(errcode,roomData){
 		if(roomData != null){
 			var seatId = -1;
 			var seatsStr = roomData["seats"];
@@ -301,7 +297,7 @@ exports.enterRoom = function(roomId,userId,userName,callback){
 	}
 };
 
-exports.getRoomData = function(roomId,callback){
+exports.getRoomInfo = function(roomId,callback){
 	db.get_room_data(roomId,function(dbdata){
 		if(dbdata == null){
 			//找不到房间
@@ -378,12 +374,12 @@ exports.getUserLocations = function(){
 exports.exitRoom = function(userId){
 	var location = userLocation[userId];
 	if(location == null){
-		db.set_room_id_of_user(userId,null,function(isOk){
+		db.updateUsers_roomid(userId,null,function(isOk){
 			console.log("isOk="+isOk);
 			if(isOk){
 				var sendData = {};
 				sendData.data = {"state":1};
-				sendData.id = CMD.CMD.SERVER_DISBAND_ROOM_SUCC_BC;
+				sendData.id = handlerCMD.CMD.SERVER_DISBAND_ROOM_SUCC_BC;
 				userMgr.sendMsg(userId,'data',sendData);
 			}
 		});
@@ -409,9 +405,54 @@ exports.exitRoom = function(userId){
 		}
 	}
 	
-	db.set_room_id_of_user(userId,null);
-	db.set_room_state_of_roomid(roomId,1);
+	db.updateUsers_roomid(userId,null);
+	db.updateRooms_room_state(roomId,1);
 	if(numOfPlayers == 0){
 		exports.destroy(roomId);
 	}
 };
+
+exports.setUserSeatId = function(userId,roomId){
+	//如果已经分配，
+	var seatId = exports.getUserSeatId(userId);
+	if(seatId != null){
+		return seatId;
+	}else{
+		var roomInfo = exports.getRoom(roomId);
+		var playersInfo = roomInfo.seats;
+		for(var i = 0;i < playersInfo.length;i++ ){
+			var info = playersInfo[i];
+			if(info.userId == 0){
+				return i;
+			}
+		}
+		return -1;//房间已满
+	}
+};
+
+//获取房间人数
+exports.getUserNum = function(roomId){
+	var count = 0;
+	var room = exports.getRoom(roomId);
+	var playersInfo  = room["playersInfo"];
+	for(var i = 0 ; i < playersInfo.length;i++){
+		var info = playersInfo[i];
+		if(info.userId != 0){
+			count++;
+		}
+	}
+	return count;
+};
+
+exports.disbandRoom = function(roomId){
+	exports.destroy(0);
+	exports.updateRoomStatus(roomId,0);
+};
+
+exports.updateRoomStatus = function(roomId,status){
+	db.updateRooms_room_state(roomId,status);
+}
+
+exports.checkRoomRunning = function(){
+
+}
