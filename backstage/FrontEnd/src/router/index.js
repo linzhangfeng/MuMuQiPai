@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
-import Page1 from '@/components/Page1'
+import UserInfo from '@/components/OnLineOperation/UserInfo'
+import GameInfo from '@/components/ProductManager/GameInfo'
 import Page2 from '@/components/Page2'
 import Page3 from '@/components/Page3'
 Vue.use(Router)
@@ -26,12 +27,12 @@ export default new Router({
       component: Home,
       children: [
         {
-          path: '/Page1',
-          component: Page1
+          path: '/UserInfo',
+          component: UserInfo
         },
         {
-          path: '/Page2',
-          component: Page2
+          path: '/GameInfo',
+          component: GameInfo
         },
         {
           path: '/Page3',
