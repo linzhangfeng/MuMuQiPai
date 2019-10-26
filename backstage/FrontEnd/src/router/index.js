@@ -4,7 +4,9 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 import UserInfo from '@/components/OnLineOperation/UserInfo'
-import GameInfo from '@/components/ProductManager/GameInfo'
+import GameGategory from '@/components/ProductManager/GameGategory'
+import DicType from '@/components/HelpDocument/DicType'
+import Dictionary from '@/components/HelpDocument/Dictionary'
 import Page2 from '@/components/Page2'
 import Page3 from '@/components/Page3'
 Vue.use(Router)
@@ -31,12 +33,16 @@ export default new Router({
           component: UserInfo
         },
         {
-          path: '/GameInfo',
-          component: GameInfo
+          path: '/GameGategory',
+          component: GameGategory
         },
         {
-          path: '/Page3',
-          component: Page3
+          path: '/DicType',
+          component: DicType
+        },
+        {
+          path: '/Dictionary',
+          component: Dictionary
         }
       ]
     }
