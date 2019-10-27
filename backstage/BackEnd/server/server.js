@@ -10,3 +10,4 @@ exports.start = function name(config) {
 }
 
 app.get('/getDicType',m_dictionaryCtl.getDicType);
+app.get('/operatorDicType',m_dictionaryCtl.operatorDicType);
