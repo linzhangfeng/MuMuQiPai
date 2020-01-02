@@ -51,43 +51,20 @@ function query(sql, callback) {
     });
 };
 
-
-//数据库的所有接口只支持增删改查操作，不进行任何逻辑判读 find add update delate
-exports.find_GameGategory = function (object, callback) {
-    var sql = 'SELECT * FROM Sys_DicType';
-    query(sql, function (rows, fields) {
+//获取房间信息
+exports.find_GameRoom = function (object, callback) {
+    var GR_ID = object["GR_ID"];
+    var sql = 'SELECT * FROM Game_Room WHERE GR_ID=' + GR_ID;
+    query(sql,function(rows){
         callback(rows);
     });
 }
 
-//删除 只通过ID删除
-exports.delate_GameGategory = function (object, callback) {
-    var DT_ID = object["DT_ID"];
-    var sql = 'DELETE FROM Sys_DicType WHERE DT_ID=' + DT_ID;
-    query(sql, function (rows, fields) {
-        callback(rows);
-    });
-}
-
-exports.update_GameGategory = function (object, callback) {
-    var DT_ID = object["DT_ID"];
-    var sql = "UPDATE Sys_DicType SET ";
-    for (var key in object) {
-        if (object[key]) {
-            sql += (key + "=" + object[key]+ ",");
-        }
-    }
-    sql = sql.substring(0, sql.lastIndexOf(','));
-    sql = sql + ' WHERE DT_ID=' + DT_ID;
-    query(sql, function (rows, fields) {
-        callback(rows);
-    });
-}
-
-exports.add_GameGategory = function (object, callback) {
-    var DT_ID = generateId();
-    object["DT_ID"] = DT_ID;
-    var sql = 'INSERT INTO Sys_DicType';
+//创建房间
+exports.addRoom = function(object,callback){
+    var GR_ID = generateId();
+    object["GR_ID"] = GR_ID;
+    var sql = 'INSERT INTO Game_Room';
     var keyStr = '(';
     var valueStr = '(';
 
@@ -101,6 +78,54 @@ exports.add_GameGategory = function (object, callback) {
     valueStr = valueStr.substring(0, valueStr.lastIndexOf(','));
 
     sql = sql + keyStr + ') VALUES' + valueStr + ')';
+    query(sql, function (rows, fields) {
+        var data = {};
+        if(rows){
+            data["GR_ID"] = GR_ID;
+        }else{
+            data = null;
+        }
+        callback(data);
+    });
+}
+
+//获取房间信息
+exports.update_GameRoom = function (object, callback) {
+    var GR_ID = object["GR_ID"];
+    var sql = "UPDATE Game_Room SET ";
+    for (var key in object) {
+        if (object[key]) {
+            sql += (key + "=" + object[key]+ ",");
+        }
+    }
+    sql = sql.substring(0, sql.lastIndexOf(','));
+    sql = sql + ' WHERE GR_ID=' + GR_ID;
+
+    query(sql,function(){
+        callback(rows);
+    });
+}
+
+//获取房间信息
+exports.update_UserInfo = function (object, callback) {
+    var UI_ID = object["UI_ID"];
+    var sql = "UPDATE User_Info SET ";
+    for (var key in object) {
+        if (object[key]) {
+            sql += (key + "=" + object[key]+ ",");
+        }
+    }
+    sql = sql.substring(0, sql.lastIndexOf(','));
+    sql = sql + ' WHERE UI_ID=' + UI_ID;
+
+    query(sql,function(rows){
+        callback(rows);
+    });
+}
+
+//数据库的所有接口只支持增删改查操作，不进行任何逻辑判读 find add update delate
+exports.find_GameGategory = function (object, callback) {
+    var sql = 'SELECT * FROM Sys_DicType';
     query(sql, function (rows, fields) {
         callback(rows);
     });

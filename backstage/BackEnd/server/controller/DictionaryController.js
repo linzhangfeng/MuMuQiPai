@@ -68,6 +68,19 @@ exports.operatorDicType = function (req, res) {
             res.send(reusltData.getDataStr());
         });
     } else if (type == 3) {    // 修改
+        m_db.update_GameGategory(sqlObject,function(data){
+            var code = -1;
+            var status = 0;
+            var message = "数据请求错误";
+            if (data) {
+                console.log("lin=data=" + JSON.stringify(data));
+                code = 100;
+                status = 1;
+                message = "操作成功";
+            }
 
+            var reusltData = m_resultData.init(code, status, message, JSON.stringify(sendData));
+            res.send(reusltData.getDataStr());
+        });
     }
 }

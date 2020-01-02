@@ -15,3 +15,5 @@ cocos2d.zip
 /server/.DS_Store
 nohup.out
 /backstage/BackEnd/node_modules
+node_modules
+.vscode
