@@ -158,7 +158,7 @@ void JsUtils::initLoad()
     sc->addRegisterCallback(JavaScriptObjCBridge::_js_register);
 #endif
     
-    sc->addRegisterCallback(register_all_lin);
+//    sc->addRegisterCallback(register_all_lin);
     
     CCLOG("t1:%lld",Utils::getCurrentTime()-b1);
     b1 =Utils::getCurrentTime();

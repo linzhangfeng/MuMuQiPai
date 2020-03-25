@@ -3,6 +3,8 @@
 #include <semaphore.h>
 #include "SocketClient.h"
 
+std::string SocketClient::m_url = "";
+
 static void *requestSocketThread(void *data)
 {
     SocketRequest *request = NULL;

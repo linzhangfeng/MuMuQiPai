@@ -11,6 +11,9 @@
 #endif
 
 static CCHttpAgent *self = NULL; // pointer to singleton
+std::string CCHttpAgent::m_gameUrl = "";
+std::string CCHttpAgent::m_hallUrl = "";
+std::string CCHttpAgent::m_accountUrl = "";
 
 CCHttpAgent* CCHttpAgent::getInstance()
 {
