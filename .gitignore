@@ -17,3 +17,7 @@ nohup.out
 /backstage/BackEnd/node_modules
 node_modules
 .vscode
+/client/MuMuQiPai_3.13
+/client/MuMuQiPai_3.15
+/MuMuQiPai_3.15.1
+/MuMuQiPai_3.15.2
