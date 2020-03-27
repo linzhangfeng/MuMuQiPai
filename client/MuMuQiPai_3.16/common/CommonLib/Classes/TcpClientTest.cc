@@ -7,7 +7,10 @@
 #include "Network.h"
 #include "TcpClientTest.h"
 
-
+void test()
+{
+    
+}
 
 static void *requestThread(void *data)
 {

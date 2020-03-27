@@ -36,6 +36,8 @@ struct MsgJsonHeader {
     unsigned int length;
 };
 
+void test();
+
 class MsgRequest
 {
 public:

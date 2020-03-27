@@ -8,10 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0306E7652429BF0400B1AADE /* common.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0306E7642429BF0400B1AADE /* common.h */; };
-		0306E7672429BF0400B1AADE /* common.m in Sources */ = {isa = PBXBuildFile; fileRef = 0306E7662429BF0400B1AADE /* common.m */; };
-		0306E77A2429C90600B1AADE /* JPacket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F6024285B41002A3424 /* JPacket.cc */; };
-		0306E77B2429C90600B1AADE /* Network.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F5C24285B41002A3424 /* Network.cc */; };
-		0306E77C2429C90600B1AADE /* TcpClientTest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F5B24285B41002A3424 /* TcpClientTest.cc */; };
+		03D0F0C3242C7F58000DE93D /* libjs_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03D0F0C1242C7F46000DE93D /* libjs_static.a */; };
+		03D0F0FE242CA971000DE93D /* JPacket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F6024285B41002A3424 /* JPacket.cc */; };
+		03D0F0FF242CA971000DE93D /* Network.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F5C24285B41002A3424 /* Network.cc */; };
+		03D0F100242CA971000DE93D /* TcpClientTest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F5B24285B41002A3424 /* TcpClientTest.cc */; };
+		03D0F101242CA996000DE93D /* JPacket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F6024285B41002A3424 /* JPacket.cc */; };
+		03D0F102242CA996000DE93D /* Network.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F5C24285B41002A3424 /* Network.cc */; };
+		03D0F103242CA996000DE93D /* TcpClientTest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 038E9F5B24285B41002A3424 /* TcpClientTest.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,10 +59,6 @@
 
 /* Begin PBXFileReference section */
 		0306E71024286A4800B1AADE /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
-		0306E7372429A1D700B1AADE /* js_common_auto_api.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js_common_auto_api.js; sourceTree = "<group>"; };
-		0306E7382429A1D700B1AADE /* js_common_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = js_common_auto.cpp; sourceTree = "<group>"; };
-		0306E7392429A1D700B1AADE /* js_common_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = js_common_auto.hpp; sourceTree = "<group>"; };
-		0306E7422429B1F800B1AADE /* libjs_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjs_static.a; sourceTree = "<group>"; };
 		0306E7482429BB7D00B1AADE /* libCommon  ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libCommon  ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0306E7552429BE5300B1AADE /* liblibjscommon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibjscommon.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0306E7622429BF0400B1AADE /* libcommon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcommon.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +72,7 @@
 		038E9F5E24285B41002A3424 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
 		038E9F5F24285B41002A3424 /* Queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Queue.h; sourceTree = "<group>"; };
 		038E9F6024285B41002A3424 /* JPacket.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JPacket.cc; sourceTree = "<group>"; };
+		03D0F0C1242C7F46000DE93D /* libjs_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjs_static.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03D0F0C3242C7F58000DE93D /* libjs_static.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,33 +108,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0306E7302429A0EF00B1AADE /* jsbind */ = {
-			isa = PBXGroup;
-			children = (
-				0306E7362429A1D700B1AADE /* api */,
-				0306E7382429A1D700B1AADE /* js_common_auto.cpp */,
-				0306E7392429A1D700B1AADE /* js_common_auto.hpp */,
-			);
-			path = jsbind;
-			sourceTree = "<group>";
-		};
-		0306E7362429A1D700B1AADE /* api */ = {
-			isa = PBXGroup;
-			children = (
-				0306E7372429A1D700B1AADE /* js_common_auto_api.js */,
-			);
-			path = api;
-			sourceTree = "<group>";
-		};
-		0306E7412429B1F800B1AADE /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				0306E7422429B1F800B1AADE /* libjs_static.a */,
-			);
-			name = ios;
-			path = ../../cocos2d/external/spidermonkey/prebuilt/ios;
-			sourceTree = "<group>";
-		};
 		0306E7632429BF0400B1AADE /* common */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,8 +120,7 @@
 		038E9F4424285AF1002A3424 = {
 			isa = PBXGroup;
 			children = (
-				0306E7412429B1F800B1AADE /* ios */,
-				0306E7302429A0EF00B1AADE /* jsbind */,
+				03D0F0C0242C7F46000DE93D /* ios */,
 				0306E71024286A4800B1AADE /* Common.h */,
 				038E9F5924285B41002A3424 /* Classes */,
 				0306E7632429BF0400B1AADE /* common */,
@@ -178,6 +151,14 @@
 				038E9F5D24285B41002A3424 /* TcpClientTest.h */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		03D0F0C0242C7F46000DE93D /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				03D0F0C1242C7F46000DE93D /* libjs_static.a */,
+			);
+			path = ios;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,10 +298,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0306E77A2429C90600B1AADE /* JPacket.cc in Sources */,
-				0306E77B2429C90600B1AADE /* Network.cc in Sources */,
-				0306E77C2429C90600B1AADE /* TcpClientTest.cc in Sources */,
-				0306E7672429BF0400B1AADE /* common.m in Sources */,
+				03D0F101242CA996000DE93D /* JPacket.cc in Sources */,
+				03D0F102242CA996000DE93D /* Network.cc in Sources */,
+				03D0F103242CA996000DE93D /* TcpClientTest.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +308,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03D0F0FE242CA971000DE93D /* JPacket.cc in Sources */,
+				03D0F0FF242CA971000DE93D /* Network.cc in Sources */,
+				03D0F100242CA971000DE93D /* TcpClientTest.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,33 +368,51 @@
 		0306E7692429BF0400B1AADE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ios",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../cocos2d/jsoncpp/include\" \"$(SRCROOT)/../../cocos2d/external/spidermonkey/include/ios\" \"$(SRCROOT)/../../cocos2d/cocos\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../cocos2d/external/spidermonkey/include/ios\" \"$(SRCROOT)/../../cocos2d/cocos/platform/ios\" \"$(SRCROOT)/../../cocos2d/external/curl/include/ios\" \"$(SRCROOT)/../../cocos2d/plugin/protocols/include\"";
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
 		};
 		0306E76A2429BF0400B1AADE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ios",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../cocos2d/jsoncpp/include\" \"$(SRCROOT)/../../cocos2d/external/spidermonkey/include/ios\" \"$(SRCROOT)/../../cocos2d/cocos\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../cocos2d/external/spidermonkey/include/ios\" \"$(SRCROOT)/../../cocos2d/cocos/platform/ios\" \"$(SRCROOT)/../../cocos2d/external/curl/include/ios\" \"$(SRCROOT)/../../cocos2d/plugin/protocols/include\"";
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
 		};
 		038E9F5424285AF1002A3424 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -445,18 +446,23 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../cocos2d/jsoncpp/include\"",
+					"\"$(SRCROOT)/../../cocos2d/cocos\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx10.11;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
 		038E9F5524285AF1002A3424 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -484,10 +490,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../cocos2d/jsoncpp/include\"",
+					"\"$(SRCROOT)/../../cocos2d/cocos\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx10.11;
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

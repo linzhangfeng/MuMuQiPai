@@ -42,8 +42,9 @@
 #include "cocos/scripting/js-bindings/manual/platform/ios/JavaScriptObjCBridge.h"
 #endif
 
-//#include "../jsbind/js_lin_auto.hpp"
-//#include "jsbind/js_common_auto.hpp"
+#include "../mmqpjsbind/js_lin_auto.hpp"
+#include "cocos/scripting/common-js-bindings/jsbind/js_common_auto.hpp"
+#include "Common.h"
 USING_NS_CC;
 
 #include "Utils.h"
@@ -159,8 +160,11 @@ void JsUtils::initLoad()
     sc->addRegisterCallback(JavaScriptObjCBridge::_js_register);
 #endif
     
-//    sc->addRegisterCallback(register_all_lin);
-//    sc->addRegisterCallback(register_all_js_common_auto);
+    sc->addRegisterCallback(register_all_lin);
+    
+    TcpClientTest::getInstance()->startConnect();
+    sc->addRegisterCallback(register_all_js_common_auto);
+    
     CCLOG("t1:%lld",Utils::getCurrentTime()-b1);
     b1 =Utils::getCurrentTime();
     
