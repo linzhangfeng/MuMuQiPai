@@ -1,0 +1,74 @@
+
+//package com.ihuizhi.network.mahjong.protobuf;
+
+package proto.game.jianlimj;
+
+import "gameproto.proto";
+
+message Hua
+{
+	optional int32 chairid = 1;					//座位号
+	repeated int32 hua = 2;						//花牌
+	repeated int32 getcard = 3;					//补花后获取的牌
+}
+//补花
+message AckBuHua
+{
+	optional Hua buhua = 1;						//补花信息
+	optional int32 leftcount = 2;				//牌墩剩余拍张
+}
+
+//开始选择飘
+message AckStartPiao
+{
+	repeated int32 piaonum = 1;					//每个人飘的数目
+}
+
+//选择飘的数
+message ReqChoosePiao
+{
+	optional int32 piaonum = 1;					//飘的大小，0表示不飘
+}
+
+//广播玩家选择的飘
+message AckBroadPiao
+{
+	optional int32 chairid = 1;					//椅子id
+	optional int32 piaonum = 2;					//椅子id对应玩家选择的飘的倍数或分数
+}
+
+//选择结束
+message AckChooseOver
+{
+	repeated int32 piaonum = 1;					//每个人飘的数目
+}
+
+//场景信息
+message tagCurGameScence
+{
+	optional proto.game.AckGameScene GameSence = 1;	//公共场景信息 
+	optional bool ispaotouing = 2;				//是否在跑头
+	repeated int32 ispaotouok = 3;				//每个人跑头是否完成
+	repeated int32 Userpaotou = 4;				//每个人跑头分数
+	repeated int32 mingloustate = 5;			//明楼状态
+
+}
+
+//补花
+//message HuaCard
+//{
+//	repeated int32 card = 1;					//花牌
+//}
+
+
+//单发游戏结束
+message AckCurGameEnd 
+{
+	optional proto.game.AckGameEnd gameend = 1;	//公共结算信息
+	repeated int32 userpaotou = 2;				//每个人跑头的分
+//	repeated HuaCard hualist = 3;				//每个人补花的牌
+	repeated int32 num = 3;						//每个人补花数
+	repeated int32 malist = 4;					//马牌
+	repeated int32 zhongmalist = 5;				//中马		
+}
+

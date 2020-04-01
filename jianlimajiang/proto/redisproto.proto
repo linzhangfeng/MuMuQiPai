@@ -1,0 +1,361 @@
+package proto.game.redis;
+
+message tagPlayers
+{
+	optional int32	uid = 1;
+	optional string tid = 2;
+	optional string skey = 3;
+	optional string name = 4;
+	optional string avatar = 5;
+	optional int32 seatid = 6;
+	optional int32 sex = 7;				
+	optional int32 exp = 8;
+	optional int32 rmb = 9;
+	optional int32 money = 10;
+	optional int32 coin = 11;
+	optional int32 pcount = 12;
+	optional int32 vlevel = 13;
+	optional int32 status = 14;
+	optional int32 logout_type = 15;
+	optional int32 down_tag = 16;
+	optional int32 usertype = 17;
+	optional int32 disbandcount = 18;
+}
+
+message Seat
+{
+	optional int32 state = 1;
+	optional int32 seatid = 2;
+	optional int32 action = 3;
+	optional int32 uid = 4;
+}
+
+message MJConfCommon
+{
+	optional bool m_bsupportchi = 1;			
+	optional bool m_bsupportwind = 2;		
+	optional bool m_bsupportting = 3;		
+	optional bool m_bzimohu = 4;             
+	optional bool m_byipaoduoxiang = 5;     
+	optional bool m_bqiangganghu = 6;      
+	optional bool m_bqiangzhigang = 7;
+	optional bool m_bqiangangang = 8;	
+	optional bool m_bqangshangpao = 9;
+	optional bool m_bhuanggang = 10;		
+	optional bool m_bzhuangxian = 11;	
+	optional bool m_bforcehuqiangganghu = 12;
+	optional bool m_bfourcehumutilhu = 13;
+	optional int32 m_angangpoint = 14;		
+	optional int32 m_wangangpoint = 15;
+	optional int32 m_zhigangpoint = 16;	
+}
+
+message MJConfPiao
+{
+	optional bool m_bsupportpiao = 1;
+	repeated int32 m_piao = 2;	
+}
+
+message MJConfBuyHorse
+{
+	optional bool m_bsupportbuyhorse = 1;
+	optional int32 m_horsenum = 2;	
+	optional int32 m_horsemaxnum = 3;
+	optional int32 m_nbuyhorseincnum = 4;	
+	optional bool m_buyhorsemojijiangji = 5;		
+}
+
+message MJConfZhuaniao
+{
+	optional bool m_bsupportzhuaniao = 1;
+	optional bool m_bcalcallniao = 2;
+	optional int32 m_zhuaniaonum = 3;
+	optional bool m_bjinniao = 4;
+	optional bool m_bmojijiangji = 5;
+}
+
+message MJHuType
+{
+	optional bool m_bhu7dui = 1;
+	optional bool m_bhu13yao = 2;
+	optional bool m_bnosupport_quanqiuren = 3;
+}
+
+message MJConfOther
+{
+	optional bool m_bsupportchangemode = 1;
+	optional bool m_bofflinedelayop = 2;
+	optional bool m_bmulitfirstopisover = 3;
+	optional bool m_bfastmode = 4;
+	optional bool m_bautodisband = 5;
+	optional bool m_bbankerfirst14 = 6;
+	optional bool m_bangangnoshow = 7;
+	optional bool m_bshowgangscore = 8;
+}
+
+message MJCustomizedConf
+{
+	optional MJConfCommon mjconfcommon = 1;
+	optional MJConfPiao mjconfpiao = 2;
+	optional MJConfBuyHorse mjconfbuyhorse = 3;
+	optional MJConfZhuaniao mjconfzhuaniao = 4;
+	optional MJHuType mjhutype = 5;
+	optional MJConfOther mjconfother = 6;
+}
+
+message RoundScore
+{
+	repeated int32 score = 1;	
+}
+
+message Table_TotalRecordInfo
+{
+	repeated int32 banker = 1;
+	repeated int32 hu = 2;
+	repeated int32 piao = 3;
+	repeated int32 timerout_op = 4;
+	repeated int32 total_score = 5;
+	repeated int32 paohu = 6;
+	repeated int32 zimo = 7;
+	repeated int32 dianpao = 8;
+	repeated int32 win_counts = 9;
+	repeated int32 gang_times = 10;
+	repeated int32 dian_gang_times = 11;
+	repeated int32 piao_count = 12;
+	repeated int32 hongzhonggang_count = 13;
+	repeated int32 dahu_count = 14;
+	repeated int32 laizipigang_count = 15;
+	repeated RoundScore round_score = 16;
+	repeated int32 mobao_count = 17;
+}
+
+message Shai_Set
+{
+	optional int32 num = 1;
+	repeated int32 shai = 2;	
+}
+
+message FixedCard
+{
+    required int32    CardData = 1;		   
+    optional int32    state = 2;			
+	optional int32    chairID = 3;  
+    repeated int32 	  OpCards = 4;
+}
+
+message HandCards
+{
+	required int32      ChangeableCardsLen = 1;
+    repeated int32      ChangeableCards = 2;
+    optional int32      FixedCardsLen = 3;
+	repeated FixedCard  stFixedCards = 4;
+}
+
+message CCardTypePool
+{
+	optional int32 m_jokercard = 1;
+	repeated int32 m_pool = 2;
+	optional int32 m_maxcount = 3;
+	optional int32 m_mode = 4;
+}
+
+message CCardPool
+{
+	optional CCardTypePool m_cardtypepool = 1;
+	optional int32 m_seedid = 2;
+	optional int32 m_mode = 3;
+	repeated int32 m_pool = 4;
+	optional int32 m_maxcount = 5;
+	optional int32 m_count = 6;
+	optional int32 m_current = 7;
+	optional int32 m_last = 8;
+	optional int32 m_jokercard = 9;
+	optional int32 m_jokercount = 10;
+}
+
+message MultiOpInfo
+{
+	optional int32 m_bmultiopusernum = 1;
+	optional int32 m_bmultidoneopnum = 2;
+	optional int32 m_bmultihuopecount = 3;
+	optional int32 m_bmultiophunum = 4;
+	optional int32 m_bmulitfirstoperate = 5;
+	repeated int32 m_bmultiuserdoneop = 6;
+	repeated int32 m_bmultiuserdoneopcard = 7;
+}
+
+message RobAddInfo
+{
+	optional int32 m_roboperatenum = 1;
+	optional int32 m_robhunum = 2;
+	optional int32 m_wanggangplayer = 3;
+	optional int32 m_wanggangplayeroptype = 4;
+	repeated int32 m_robhudoneop = 5;
+	repeated bool m_baddfanflag = 6;
+	optional int32 m_robwangangcard = 7;
+	optional bool m_brobwangang = 8;
+	optional bool m_brobhu = 9;
+	optional bool m_brobganghujudge = 10;
+}
+
+message LOWLEVELOPERATE
+{
+    optional int32 ioptype = 1;
+    optional int32 chairid = 2;
+    optional int32 bcard = 3;
+}
+
+message tagGangScore
+{
+	optional int32 card = 1;
+	optional int32 chairid = 2;
+	optional int32 itype = 3;	
+}
+
+message tagGangScoreInfo
+{
+	optional int32 itotalscore = 1;
+	repeated tagGangScore gang = 2;
+}
+
+message tagHuRecord
+{
+	optional int32 bhucard = 1;
+	optional int32 bpashuchairid = 2;
+	optional int32 btype = 3;
+	optional int32 ifannum = 4;
+}
+
+message tagHuInfo
+{
+	optional int32 itotalscore = 1;
+	repeated tagHuRecord sthu = 2;
+}
+
+message MJ_BUFFER
+{
+	repeated int32 card = 1;
+}
+
+message HuFanInfo
+{
+	repeated bool m_bishu = 1;
+	repeated int32 m_hufannums = 2;
+	repeated tagGangScoreInfo m_stgang = 3;
+	repeated tagHuInfo m_sthuscore = 4;
+	repeated MJ_BUFFER m_ofan = 5;
+}
+
+message CGameAccout
+{
+	optional int32 m_round = 1;
+	optional int32 m_roomid = 2;
+	repeated int32 m_paly_id = 3;
+	repeated int32 m_score = 4;
+	repeated int32 m_total_score = 5;
+}
+
+message ForbidWin
+{
+	repeated int32 m_lockcard = 1;
+	optional int32 m_lockpoints = 2;
+	optional bool m_lock = 3;	
+}
+
+message Fantype_to_FanNum
+{
+	repeated int32 fan_num = 1;
+	repeated int32 special_fan_num = 2;
+}
+
+message tagPlayerGPS
+{
+	optional double latitude = 1;
+	optional double longitude = 2;
+	optional string city = 3;
+}
+
+//redis存储信息
+message tagRedisInfo
+{
+	optional int32 tid = 1;
+	optional int32 vid = 2;
+	optional int32 zid = 3;
+	optional int32 base_money = 4;
+	optional int32 roomgold = 5;
+	optional int32 stand_money = 6;
+	optional int32 lose_exp = 7;
+	optional int32 win_exp = 8;
+	optional int32 m_basescore = 9;
+	optional MJCustomizedConf m_conf = 10;
+	optional int32 m_room_owner_uid = 11;
+	optional int32 m_room_status = 12;
+	optional Table_TotalRecordInfo m_totalrecordinfo = 13;
+	optional int32 m_game_player = 14;
+	repeated bool m_online_beat = 15;
+	optional string m_videostr = 16;
+	optional bool m_randomseat = 17;
+	optional bool m_offlinenoop = 18;
+	optional int32 m_bdelaytime = 19;
+	repeated Seat m_seatplayer = 20;
+	optional Shai_Set m_start_shai = 21;
+	optional int32 m_bcurplayers = 22;
+	optional int32 m_bgamestate = 23;
+	optional int32 m_disband_resuser = 24;
+	repeated HandCards m_handcard = 25;		
+	repeated bool m_isoffline = 26;
+	repeated bool m_bistrustee = 27;
+	repeated bool m_bautohu = 28;
+	optional bool m_bgangcalcimme = 29;
+	optional int32 m_bbanker = 30;
+	optional int32 m_last_banker = 31;
+	optional CCardPool m_cardpool = 32;
+	repeated int32 m_bgetcardcount = 33;
+	repeated int32 m_buseroperate = 34;
+	optional int32 m_bcurchairid = 35;
+	optional int32 m_boutcardchairid = 36;
+	optional int32 m_bcuroutcard = 37;
+	optional int32 m_bcurcard = 38;
+	repeated MJ_BUFFER m_stuseroutcard = 39; 
+	optional MultiOpInfo multiopinfo = 40;
+	repeated int32 m_passhuplayer = 41;
+	optional RobAddInfo robaddinfo = 42;
+	optional LOWLEVELOPERATE m_brecordmultiop = 43;
+	optional HuFanInfo hufaninfo = 44;
+	optional int32 m_applydisbandchairid = 45;
+	optional bool m_bisdisbandtable = 46;
+	repeated int32 m_disbandchoose = 47;
+	optional int32 m_bdisbandcount = 48;
+	repeated int32 m_bovertimestate = 49;
+	optional int32 m_nplayingtimes = 50;
+	optional CGameAccout m_account_info = 51;
+	repeated int32 m_userdissstate = 52;
+	optional bool m_bouttimer = 53;
+	repeated ForbidWin m_louhu = 54;
+	optional bool m_bdeletetable = 55;
+	optional bool m_bistestsvr = 56;
+	optional MJ_BUFFER m_room_config = 57;
+	optional MJ_BUFFER m_niao = 58;
+	optional MJ_BUFFER m_zhong_niao = 59;
+	optional int32 m_daniaoid = 60;
+	repeated MJ_BUFFER m_peng = 61;
+	optional Fantype_to_FanNum g_ft2fn = 62;
+	repeated tagPlayerGPS m_mapplayergps = 63;
+	repeated tagPlayers players = 64;	
+	repeated int32 m_useroperateid = 65;
+	optional int32 m_autodisband = 66;
+	optional bool m_bisautodisband = 67;
+	optional int32 m_tablebranchid = 68;
+	optional int32 m_ntotalcount = 69;
+	optional int32 m_ncurrentcount = 70;
+	repeated int32 m_userchoosemode = 71;
+	optional int32 m_voice_room = 72;
+	optional int32 m_start_time = 73;
+	repeated int32 m_vecopcards = 74;
+	repeated bool m_preofflinestate = 75;
+	optional int32 m_isclubroom = 76;
+	optional string m_public_channel_id = 77;
+	repeated string m_group_channel_ids = 78;
+	repeated int32 m_voice_status = 79;
+	optional int32 m_maxhandcardsize = 80;
+} 

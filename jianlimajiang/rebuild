@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cd common
+make clean && make lib -j8
+cd ..
+
+cd libnormalmahjong
+make clean && make lib -j8
+cd ..
+
+cd proto
+make makeproto
+make -j8
+cd ..
+
+make clean && make -j8
