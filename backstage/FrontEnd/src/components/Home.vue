@@ -58,7 +58,8 @@ Navigation.OnLineOperation = {
 };
 Navigation.ProductManager = {
   GameCategroy: "GameCategroy",
-  GameConfig: "GameConfig"
+  GameConfig: "GameConfig",
+  GameVersion: "GameVersion"
 };
 Navigation.Management = {
   ManagerInfo: "ManagerInfo",
@@ -83,7 +84,8 @@ export default {
         icon: "el-icon-star-off",
         childs: [
           { name: "游戏分类", tag: Navigation.ProductManager.GameCategroy },
-          { name: "游戏配置", tag: Navigation.ProductManager.GameConfig }
+          { name: "游戏配置", tag: Navigation.ProductManager.GameConfig },
+          { name: "游戏配置", tag: Navigation.ProductManager.GameVersion }
         ]
       },
       {
@@ -141,6 +143,11 @@ export default {
           break;
         }
         case Navigation.ProductManager.GameConfig: {
+          break;
+        }
+        
+        case Navigation.ProductManager.GameVersion: {
+          this.$router.push({ path: "/GameVersion" });
           break;
         }
 

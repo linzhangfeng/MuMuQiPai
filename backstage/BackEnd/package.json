@@ -14,7 +14,9 @@
     "babel-preset-stage-2": "^6.24.1"
   },
   "dependencies": {
+    "compressing": "^1.5.1",
     "express": "^4.17.1",
+    "formidable": "^1.2.2",
     "mysql": "^2.17.1"
   }
 }
