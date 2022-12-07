@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "compressing": "^1.5.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "formidable": "^1.2.2",
     "mysql": "^2.17.1"
   }
